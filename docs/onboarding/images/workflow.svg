@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="560" viewBox="0 0 1120 560" role="img" aria-labelledby="title desc">
+  <title id="title">一次功能开发如何流转</title><desc id="desc">提出目标，Agent 在本地开发并按需局部检查。开发者认为基本完成、准备 Git 时发起独立最终 Review，统一核对测试、教程和目录，授权提交上传，最后通过 PR 和 CI 合并。同伴批准不强制。</desc>
+  <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M0 0L10 5L0 10" fill="none" stroke="#7895af" stroke-width="1.5"/></marker></defs>
+  <rect width="1120" height="560" rx="24" fill="#101e30"/>
+  <g font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">
+    <text x="40" y="55" fill="#e5f6ff" font-size="28" font-weight="bold">一个功能，从想法到大家都能玩</text>
+    <text x="40" y="90" fill="#afc4d8" font-size="18">Agent 负责协助实现；你决定是否保存、上传与合并。</text>
+    <g fill="#1b334b" stroke="#46647d" stroke-width="1.5">
+      <rect x="40" y="130" width="300" height="120" rx="14"/><rect x="410" y="130" width="300" height="120" rx="14"/><rect x="780" y="130" width="300" height="120" rx="14"/>
+      <rect x="780" y="320" width="300" height="150" rx="14" fill="#213e3c" stroke="#79d8b0"/><rect x="410" y="320" width="300" height="150" rx="14"/><rect x="40" y="320" width="300" height="150" rx="14"/>
+    </g>
+    <g fill="#e5f6ff" font-size="23" font-weight="bold"><text x="60" y="168">1 说清楚目标</text><text x="430" y="168">2 在本机实现</text><text x="800" y="168">3 Git 前最终 Review</text><text x="800" y="360">4 由你明确授权</text><text x="430" y="360">5 上传后创建 PR</text><text x="60" y="360">6 检查 CI 后合并</text></g>
+    <g fill="#bfd3e5" font-size="18">
+      <text x="60" y="205">这次做什么？怎么算做好？</text><text x="60" y="232">先读状态与目录，再开分支。</text>
+      <text x="430" y="205">开发中可按需局部检查。</text><text x="430" y="232">准备提交时，由你发起收尾。</text>
+      <text x="800" y="205">统一检查测试、教程与目录。</text><text x="800" y="232">独立审查；不随每次小改触发。</text>
+      <text x="800" y="397">commit：本机保存一个版本。</text><text x="800" y="426">push：上传 GitHub。</text><text x="800" y="454">也可以选择暂不提交。</text>
+      <text x="430" y="397">PR 是请同伴检查这次改动。</text><text x="430" y="426">GitHub 再跑自动检查。</text><text x="430" y="454">Agent 创建 PR 也要授权。</text>
+      <text x="60" y="397">同伴检查可选，不强制批准。</text><text x="60" y="426">CI 通过后 Squash 合并。</text><text x="60" y="454">其他电脑同步 main 即可拿到。</text>
+    </g>
+    <g stroke="#7895af" stroke-width="2" fill="none" marker-end="url(#arrow)"><path d="M350 190H395"/><path d="M720 190H765"/><path d="M930 260V305"/><path d="M770 395H725"/><path d="M400 395H355"/></g>
+    <text x="40" y="523" fill="#8facbf" font-size="17">开发者准备提交 → 最终 Review → 授权 commit / push → GitHub PR / CI → main</text>
+  </g>
+</svg>

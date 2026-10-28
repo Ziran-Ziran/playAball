@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="540" viewBox="0 0 1120 540" role="img" aria-labelledby="title desc">
+  <title id="title">另一台电脑需要准备什么</title><desc id="desc">先确认本机设备与路径。必需 Git、Godot 4.7.1 和能操作仓库的 Agent。GitHub 用于同步和审查；可选 Node 与 Godot MCP 提供辅助工具，不影响游戏独立运行。</desc>
+  <rect width="1120" height="540" rx="24" fill="#101e30"/>
+  <g font-family="Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">
+    <text x="40" y="55" fill="#e5f6ff" font-size="28" font-weight="bold">另一台电脑：先调查，再补齐</text>
+    <text x="40" y="90" fill="#afc4d8" font-size="18">确认主机名、系统、用户、工作目录；每个路径都以这台电脑为准。</text>
+    <rect x="40" y="125" width="660" height="280" rx="16" fill="#1b334b" stroke="#72d3cd"/>
+    <rect x="740" y="125" width="340" height="280" rx="16" fill="#253047" stroke="#8f9bc3" stroke-dasharray="7 5"/>
+    <text x="65" y="163" fill="#88e1d8" font-size="23" font-weight="bold">必需：能运行并参与开发</text>
+    <g fill="#e5f6ff" font-size="21"><text x="65" y="211">Git</text><text x="65" y="278">Godot 4.7.1 stable 标准版</text><text x="65" y="345">能读写仓库的 Agent</text></g>
+    <g fill="#bfd3e5" font-size="17"><text x="65" y="240">克隆、分支、保存版本；使用本人身份与 GitHub 权限。</text><text x="65" y="307">导入 project.godot，按 F5；无需 .NET 或 Python。</text><text x="65" y="374">先读接手文档；准备 Git 时由开发者发起最终 Review。</text></g>
+    <text x="765" y="163" fill="#c0c9ef" font-size="23" font-weight="bold">可选：MCP 辅助</text>
+    <g fill="#bfd3e5" font-size="18"><text x="765" y="211">Node + Godot MCP</text><text x="765" y="247">辅助 Agent 读写场景与调试。</text><text x="765" y="283">必须核对当前项目路径。</text><text x="765" y="319">没有 MCP 也可以开发：</text><text x="765" y="355">文件编辑 + Godot CLI 即可。</text></g>
+    <rect x="40" y="430" width="1040" height="74" rx="12" fill="#213e3c"/>
+    <text x="65" y="460" fill="#a2ead2" font-size="20">验收：导入无错误 → 目录检查通过 → smoke 通过 → F5 试玩</text>
+    <text x="65" y="489" fill="#c6e3dc" font-size="17">开发中的局部检查独立进行；准备提交时统一最终 Review，按用户明确授权执行 commit / push。</text>
+  </g>
+</svg>
