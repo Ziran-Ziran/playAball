@@ -44,4 +44,4 @@ godot --headless --path . --script tests/smoke.gd
 
 必须检查日志无 SCRIPT ERROR/ERROR，smoke 输出 ALL CHECKS PASSED，退出码 0。然后手动试玩发射、R、机关切换。向开发者用短清单回报：设备；Git/Godot 路径与版本；GitHub 推送权限；MCP 已配置/未配置（可选）；测试结果和仍需人工完成的步骤。不要安装无关插件，不向聊天输出凭据。
 
-目录检查还须输出 PROJECT MAP CHECK PASSED。每次功能完成时同步教程、用途清单、FILE_MAP 和 STATUS，按 `docs/REVIEW.md` 做独立审查及复测。**这些工作完成后，询问用户是否 commit、是否 push，未授权不得执行；初始化上传授权不延续到新任务。** 环境安装、创建线上 Issue、创建 PR、合并也不能从讨论草案中推断授权。
+目录检查还须输出 PROJECT MAP CHECK PASSED。开发中持续维护教程、用途清单、FILE_MAP 和 STATUS。**仅当开发者认为功能基本完成、准备进入 Git 阶段并发起时，按 `docs/REVIEW.md` 统一做独立最终 Review 与适用复测；不因每次少量代码改动启动整套流程，开发中的局部 Review 与此独立。** 通过后询问用户是否 commit、是否 push；若用户已明确授权“检查无误后执行”，则按授权直接执行，不重复询问。本次或初始化上传授权均不延续到新任务。独立审查可由 Agent 完成，不强制另一 GitHub 账号批准。环境安装、创建线上 Issue、创建 PR、合并也不能从讨论草案中推断授权。

@@ -15,7 +15,7 @@
 - [当前状态](docs/STATUS.md)：已完成、未完成、下一步和验证证据。
 - [项目文件目录](docs/FILE_MAP.md)：自动生成的文件树、每个文件的用途及主要调用关系。
 - [Agent 规则](AGENTS.md)：所有 AI 接手必须先读。
-- [Review 与测试流程](docs/REVIEW.md)：如何检查代码、功能、教程和文件目录，以及何时请求提交授权。
+- [Git 前最终 Review](docs/REVIEW.md)：开发者准备提交时，统一检查代码、功能、教程和目录；与开发中的局部 Review 独立。
 - [Git 公约](CONTRIBUTING.md)：三人如何协作。
 - [另一位开发者快速入门](docs/onboarding/DEVELOPER.md)。
 - [交给另一台电脑的 AI](docs/onboarding/AI_SETUP.md)。
