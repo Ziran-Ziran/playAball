@@ -1,6 +1,6 @@
 # 三人 Git 公约
 
-记住一句话：**先同步 → 开分支 → 做一件事 → 验证和写教程 → 提 PR → 另一人检查 → 合并。**
+记住一句话：**先同步 → 开分支 → 做一件事 → 测试/教程/目录 → Review → 用户授权提交和上传 → PR → 同伴检查 → 合并。**
 
 ## 第一次
 
@@ -15,21 +15,30 @@ git config user.email "你自己的邮箱"
 
 ## 每天做任务
 
-先检查有无未保存修改，有修改就先提交到原任务分支，再切换。
+先检查有无未保存修改。有修改先确认来源，保留并让作者决定如何保存；Agent 不得自动提交或覆盖它们。本轮授权规则见下文。
 
 ```sh
 git status
 git switch main
 git pull --ff-only
 git switch -c feat/short-task-name
-# 开发、测试、更新教程和 docs/STATUS.md
+# 开发、测试、更新教程、FILE_MAP 和 STATUS，并完成 Review
 git diff
+```
+
+**Agent 此时必须先汇报 Review、测试、教程和目录结果，询问用户是否 commit、是否 push。用户明确同意对应动作后，才运行：**
+
+```sh
+# 用户授权 commit 后；只暂存本次审查通过的文件
 git add 本次改动的文件
 git commit -m "feat: 增加力度预览"
+# 用户另外授权 push 后（也可同时授权 commit 和 push）
 git push -u origin feat/short-task-name
 ```
 
 在 GitHub 点击 Compare & pull request。PR = 请别人检查后再放进主版本。另一位开发者读代码/教程并运行 F5；检查通过后使用 **Squash and merge**，删除远端任务分支。同步 main 后再开下一个分支。不另设 develop 分支。
+
+Agent 不得把初始化时的上传授权沿用到新任务。“可以提交”不等于“可以上传”。创建 PR、合并也需明确授权；没有回答就保留本地修改。正常 Review 流程见 [Review 与测试](docs/REVIEW.md)。
 
 分支前缀只用 `feat/`（新功能）、`fix/`（修错）、`docs/`（文档）。提交前缀用 `feat:`、`fix:`、`docs:`、`chore:`。每次提交只表达一个清楚的目的，不追求复杂格式。
 

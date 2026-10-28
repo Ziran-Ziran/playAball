@@ -2,6 +2,8 @@
 
 请在克隆的 playAball 根目录开始，先完整阅读 `AGENTS.md`，再读 README、项目概况、状态和 Git 公约。以下是接手指令，不代表你电脑的现有配置。
 
+![另一台电脑必需 Git、Godot、可读写仓库的 Agent；MCP 和 Node 是可选辅助](images/environment.svg)
+
 ## 必须检查并补齐
 
 1. 只读确认当前主机名、OS、用户和工作目录。不要把 `LAPTOP-8GS4N5SG` 或 `C:/Users/Ziran` 当作当前电脑。
@@ -36,7 +38,10 @@ Windows：
 macOS/Linux（将 godot 替换为实际可执行文件）：
 ```sh
 godot --headless --path . --editor --import
+godot --headless --path . --script tools/project_map.gd -- --check
 godot --headless --path . --script tests/smoke.gd
 ```
 
 必须检查日志无 SCRIPT ERROR/ERROR，smoke 输出 ALL CHECKS PASSED，退出码 0。然后手动试玩发射、R、机关切换。向开发者用短清单回报：设备；Git/Godot 路径与版本；GitHub 推送权限；MCP 已配置/未配置（可选）；测试结果和仍需人工完成的步骤。不要安装无关插件，不向聊天输出凭据。
+
+目录检查还须输出 PROJECT MAP CHECK PASSED。每次功能完成时同步教程、用途清单、FILE_MAP 和 STATUS，按 `docs/REVIEW.md` 做独立审查及复测。**这些工作完成后，询问用户是否 commit、是否 push，未授权不得执行；初始化上传授权不延续到新任务。** 环境安装、创建线上 Issue、创建 PR、合并也不能从讨论草案中推断授权。

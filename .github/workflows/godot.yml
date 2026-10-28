@@ -24,6 +24,9 @@ jobs:
           "$GODOT" --version
           "$GODOT" --headless --path . --editor --import 2>&1 | tee /tmp/import.log
           ! grep -E '^(SCRIPT ERROR|ERROR):' /tmp/import.log
+          "$GODOT" --headless --path . --script tools/project_map.gd -- --check 2>&1 | tee /tmp/map.log
+          ! grep -E '^(SCRIPT ERROR|ERROR):' /tmp/map.log
+          grep -q 'PROJECT MAP CHECK PASSED' /tmp/map.log
           "$GODOT" --headless --path . --script tests/smoke.gd 2>&1 | tee /tmp/smoke.log
           ! grep -E '^(SCRIPT ERROR|ERROR):' /tmp/smoke.log
           grep -q 'ALL CHECKS PASSED' /tmp/smoke.log

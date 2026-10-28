@@ -13,6 +13,7 @@ New-Item -ItemType Directory -Force -Path $logDirectory | Out-Null
 foreach ($step in @(
     @{ Name = 'version'; Arguments = '--version' },
     @{ Name = 'import'; Arguments = '--headless --path "' + $projectRoot + '" --editor --import' },
+    @{ Name = 'map'; Arguments = '--headless --path "' + $projectRoot + '" --script tools/project_map.gd -- --check' },
     @{ Name = 'smoke'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/smoke.gd' }
 )) {
     $outFile = Join-Path $logDirectory ($step.Name + '.out')
@@ -29,5 +30,8 @@ foreach ($step in @(
     if ($step.Name -eq 'smoke' -and $logText -notmatch 'ALL CHECKS PASSED') {
         throw '未获得测试完成标志。'
     }
+    if ($step.Name -eq 'map' -and $logText -notmatch 'PROJECT MAP CHECK PASSED') {
+        throw '未获得目录检查完成标志。'
+    }
 }
-Write-Output 'VERIFIED: import + smoke'
+Write-Output 'VERIFIED: import + project map + smoke'
