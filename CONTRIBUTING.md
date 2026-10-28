@@ -42,4 +42,6 @@ git push -u origin feat/short-task-name
 
 ## GitHub 设置
 
-建议维护者设置 main 分支保护：必须 PR、至少 1 人批准、必须通过 `Godot checks / smoke`、禁止 force push 和删除主分支。CI 首次运行后再选取该检查名称。公开仓库不等于允许他人使用你们的美术和代码；本项目尚未授予开源许可证，需要团队明确选择后再添加 LICENSE。
+已设置 main 分支保护：必须 PR、至少 1 人批准、必须通过 `smoke`（工作流名 Godot checks）、分支保持最新、解决审查对话，禁止 force push 和删除主分支，管理员也适用。仓库仅允许 Squash 合并，合并后自动删除远端任务分支。
+
+公开仓库不等于允许他人使用你们的美术和代码；本项目尚未授予开源许可证，需要团队明确选择后再添加 LICENSE。

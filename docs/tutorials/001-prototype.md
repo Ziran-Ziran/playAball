@@ -57,3 +57,5 @@ Windows 用 `tools/verify.ps1 -GodotExe '实际绝对路径'`。它导入工程�
 smoke 验证停稳、零拖拽、冲量上限、飞行中禁止发射、真实落地碰撞事件、复位、三种区域进入/离开、目标和胜利后禁止发射。它不代替人耳听音和主观手感判断。
 
 人工清单：F5 → 停稳后拖球发射 → 观察力度/方向 → 碰撞有闪光/火花 → R 可反复重试 → 切换三种机关 → 进入目标显示胜利 → 关闭声音/震动可生效。提交前按 `CONTRIBUTING.md` 更新状态和教程。
+
+继续学习可阅读 Godot 官方 [RigidBody2D](https://docs.godotengine.org/en/4.7/classes/class_rigidbody2d.html) 和 [Area2D](https://docs.godotengine.org/en/4.7/classes/class_area2d.html) 文档；注意选择与工程一致的 4.7 文档版本。
