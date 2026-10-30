@@ -1,0 +1,55 @@
+[gd_scene load_steps=5 format=3]
+[ext_resource type="Script" path="res://scripts/roguelite/run_hud.gd" id="1"]
+[sub_resource type="SystemFont" id="Font"]
+font_names = PackedStringArray("Microsoft YaHei", "PingFang SC", "Noto Sans CJK SC", "WenQuanYi Zen Hei")
+[sub_resource type="Theme" id="Theme"]
+default_font = SubResource("Font")
+default_font_size = 20
+[sub_resource type="StyleBoxFlat" id="PanelStyle"]
+content_margin_left = 24.0
+content_margin_right = 24.0
+content_margin_top = 20.0
+content_margin_bottom = 20.0
+bg_color = Color(0.04, 0.075, 0.11, 0.97)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.3, 0.65, 0.7, 1)
+[node name="RunHUD" type="CanvasLayer"]
+layer = 2
+process_mode = 3
+script = ExtResource("1")
+[node name="Overlay" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme = SubResource("Theme")
+[node name="Panel" type="PanelContainer" parent="Overlay"]
+visible = false
+offset_left = 350.0
+offset_top = 180.0
+offset_right = 930.0
+offset_bottom = 570.0
+theme_override_styles/panel = SubResource("PanelStyle")
+[node name="Content" type="VBoxContainer" parent="Overlay/Panel"]
+layout_mode = 2
+theme_override_constants/separation = 12
+[node name="Title" type="Label" parent="Overlay/Panel/Content"]
+layout_mode = 2
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 28
+[node name="Summary" type="Label" parent="Overlay/Panel/Content"]
+layout_mode = 2
+horizontal_alignment = 1
+[node name="Cards" type="VBoxContainer" parent="Overlay/Panel/Content"]
+layout_mode = 2
+theme_override_constants/separation = 10
+[node name="Restart" type="Button" parent="Overlay/Panel/Content"]
+layout_mode = 2
+text = "重新开局"
+custom_minimum_size = Vector2(0, 54)

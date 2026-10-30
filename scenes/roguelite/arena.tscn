@@ -1,0 +1,150 @@
+[gd_scene load_steps=13 format=3]
+[ext_resource type="Script" path="res://scripts/roguelite/arena.gd" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/roguelite/player_ball.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://scenes/roguelite/destructible.tscn" id="3"]
+[ext_resource type="Script" path="res://scripts/roguelite/launch_controller.gd" id="4"]
+[ext_resource type="Script" path="res://scripts/roguelite/collision_combat.gd" id="5"]
+[ext_resource type="Script" path="res://scripts/roguelite/companion_manager.gd" id="6"]
+[ext_resource type="Script" path="res://scripts/impact_feedback.gd" id="7"]
+[sub_resource type="RectangleShape2D" id="HorizontalBoundary"]
+size = Vector2(1200, 24)
+[sub_resource type="RectangleShape2D" id="Wall"]
+size = Vector2(24, 555)
+[sub_resource type="RectangleShape2D" id="Ramp"]
+size = Vector2(200, 22)
+[sub_resource type="SystemFont" id="Font"]
+font_names = PackedStringArray("Microsoft YaHei", "PingFang SC", "Noto Sans CJK SC", "WenQuanYi Zen Hei")
+[sub_resource type="Theme" id="Theme"]
+default_font = SubResource("Font")
+default_font_size = 16
+[node name="Arena" type="Node2D"]
+process_mode = 3
+script = ExtResource("1")
+[node name="BottomBoundary" type="StaticBody2D" parent="."]
+position = Vector2(640, 690)
+collision_mask = 6
+[node name="Shape" type="CollisionShape2D" parent="BottomBoundary"]
+shape = SubResource("HorizontalBoundary")
+[node name="Visual" type="Polygon2D" parent="BottomBoundary"]
+polygon = PackedVector2Array(-600,-12,600,-12,600,12,-600,12)
+color = Color(0.18,0.38,0.43,1)
+[node name="TopBoundary" type="StaticBody2D" parent="."]
+position = Vector2(640, 113)
+collision_mask = 6
+[node name="Shape" type="CollisionShape2D" parent="TopBoundary"]
+shape = SubResource("HorizontalBoundary")
+[node name="LeftWall" type="StaticBody2D" parent="."]
+position = Vector2(28, 402)
+collision_mask = 6
+[node name="Shape" type="CollisionShape2D" parent="LeftWall"]
+shape = SubResource("Wall")
+[node name="RightWall" type="StaticBody2D" parent="."]
+position = Vector2(1252, 402)
+collision_mask = 6
+[node name="Shape" type="CollisionShape2D" parent="RightWall"]
+shape = SubResource("Wall")
+[node name="LeftRamp" type="StaticBody2D" parent="."]
+position = Vector2(220, 400)
+rotation = 0.45
+collision_layer = 16
+collision_mask = 6
+[node name="Shape" type="CollisionShape2D" parent="LeftRamp"]
+shape = SubResource("Ramp")
+[node name="Visual" type="Polygon2D" parent="LeftRamp"]
+polygon = PackedVector2Array(-100,-11,100,-11,100,11,-100,11)
+color = Color(0.35,0.7,0.6,1)
+[node name="RightRamp" type="StaticBody2D" parent="."]
+position = Vector2(1060, 400)
+rotation = -0.45
+collision_layer = 16
+collision_mask = 6
+[node name="Shape" type="CollisionShape2D" parent="RightRamp"]
+shape = SubResource("Ramp")
+[node name="Visual" type="Polygon2D" parent="RightRamp"]
+polygon = PackedVector2Array(-100,-11,100,-11,100,11,-100,11)
+color = Color(0.35,0.7,0.6,1)
+[node name="Corners" type="StaticBody2D" parent="."]
+collision_mask = 6
+[node name="TopLeft" type="CollisionPolygon2D" parent="Corners"]
+polygon = PackedVector2Array(40,125,104,125,40,189)
+[node name="TopRight" type="CollisionPolygon2D" parent="Corners"]
+polygon = PackedVector2Array(1176,125,1240,125,1240,189)
+[node name="BottomLeft" type="CollisionPolygon2D" parent="Corners"]
+polygon = PackedVector2Array(40,614,104,678,40,678)
+[node name="BottomRight" type="CollisionPolygon2D" parent="Corners"]
+polygon = PackedVector2Array(1176,678,1240,614,1240,678)
+[node name="PlayerBall" parent="." instance=ExtResource("2")]
+process_mode = 1
+position = Vector2(640, 540)
+[node name="Targets" type="Node2D" parent="."]
+process_mode = 1
+[node name="LeftTarget" parent="Targets" instance=ExtResource("3")]
+position = Vector2(300, 570)
+[node name="HighTarget" parent="Targets" instance=ExtResource("3")]
+position = Vector2(640, 300)
+[node name="RightTarget" parent="Targets" instance=ExtResource("3")]
+position = Vector2(980, 570)
+[node name="LaunchController" type="Node" parent="."]
+script = ExtResource("4")
+[node name="CollisionCombat" type="Node" parent="."]
+process_mode = 1
+script = ExtResource("5")
+[node name="CompanionManager" type="Node2D" parent="."]
+process_mode = 1
+script = ExtResource("6")
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(640, 360)
+[node name="ImpactFeedback" type="Node2D" parent="."]
+process_mode = 1
+script = ExtResource("7")
+particle_gravity = Vector2(0, 0)
+[node name="HUD" type="CanvasLayer" parent="."]
+[node name="Status" type="Label" parent="HUD"]
+offset_left = 40.0
+offset_top = 12.0
+offset_right = 1240.0
+theme_override_fonts/font = SubResource("Font")
+theme_override_font_sizes/font_size = 22
+text = "碰撞试验场 P0–P2"
+[node name="Hint" type="Label" parent="HUD"]
+offset_left = 40.0
+offset_top = 48.0
+theme_override_fonts/font = SubResource("Font")
+text = "全屏空白处按住 → 向后拖 → 松开发射 · 始终正常速度 · 右键取消 · Esc 暂停/重置"
+[node name="Controls" type="HBoxContainer" parent="HUD"]
+offset_left = 40.0
+offset_top = 78.0
+theme_override_fonts/font = SubResource("Font")
+theme = SubResource("Theme")
+[node name="Count" type="OptionButton" parent="HUD/Controls"]
+selected = 0
+item_count = 3
+popup/item_0/text = "1 颗同伴"
+popup/item_0/id = 0
+popup/item_1/text = "2 颗同伴"
+popup/item_1/id = 1
+popup/item_2/text = "4 颗同伴"
+popup/item_2/id = 2
+[node name="Momentum" type="CheckButton" parent="HUD/Controls"]
+text = "B: 抵消60%反向动量"
+[node name="Mute" type="CheckButton" parent="HUD/Controls"]
+text = "静音"
+[node name="Shake" type="CheckButton" parent="HUD/Controls"]
+text = "关震动"
+[node name="Pause" type="Button" parent="HUD/Controls"]
+text = "暂停"
+[node name="Menu" type="PanelContainer" parent="HUD"]
+visible = false
+offset_left = 450.0
+offset_top = 240.0
+offset_right = 830.0
+offset_bottom = 420.0
+theme_override_fonts/font = SubResource("Font")
+theme = SubResource("Theme")
+[node name="Buttons" type="VBoxContainer" parent="HUD/Menu"]
+[node name="Title" type="Label" parent="HUD/Menu/Buttons"]
+text = "已暂停 · 三靶场测试"
+[node name="Resume" type="Button" parent="HUD/Menu/Buttons"]
+text = "继续（Esc）"
+[node name="Reset" type="Button" parent="HUD/Menu/Buttons"]
+text = "重置三靶场"

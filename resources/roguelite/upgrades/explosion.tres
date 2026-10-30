@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="DemoUpgrade" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/roguelite/upgrade_definition.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "explosion"
+title = "碰撞爆破"
+description = "每次发射首个小兵有效命中触发半径 80、伤害 1 的爆破。"
+max_level = 1
