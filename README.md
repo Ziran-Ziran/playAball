@@ -1,8 +1,8 @@
 # 玩个球
 
-一款 PC 端 2D 横版物理解谜游戏。像打台球一样选择方向和力度发射球，让球经过障碍和机关进入目标。当前阶段：单关卡碰撞手感原型。
+一款 PC 端 2D 物理碰撞游戏。当前建设方向是俯视平面、零环境重力的碰撞拆迁肉鸽：主动发射主球，撞出小兵接力清场。旧横版解谜实验原型继续保留；新 Demo 尚在迁移阶段，规则与接手提示见 [设计方案](docs/ideas/COLLISION_ROGUELITE_DEMO.md)。
 
-## 开始玩
+## 开始玩旧实验原型
 
 1. 安装 **Godot 4.7.1 stable 标准版**（无需 .NET）。两台电脑保持相同版本。
 2. 克隆本仓库，在 Godot 项目管理器中导入根目录 `project.godot`。
@@ -23,6 +23,8 @@
 - [目录维护与 Review 教程](docs/tutorials/002-project-map-and-review.md)。
 
 工程只依赖 Godot 内置功能；MCP 是可选的 Agent 辅助工具。没有 MCP 也能运行、修改和验证游戏。
+
+新玩法入口为 `scenes/roguelite/arena.tscn`，在编辑器打开后按 F6；已迁移为俯视零重力 P0～P2 三靶场，可在窗口全屏空白处拖动发射，全程正常速度，待真实玩家复验。F5 的旧实验入口保持原样。操作与调参见 [教程 003](docs/tutorials/003-collision-roguelite.md)，后续按 [分阶段计划](docs/plans/003-collision-roguelite.md) 推进。
 
 ## 讨论中的想法
 

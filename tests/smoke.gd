@@ -36,9 +36,12 @@ func _run() -> void:
 	check(ball.linear_velocity.length() <= ball.max_impulse / ball.mass + 20.0, "Shot strength is capped")
 	ball.impacted.connect(func(_point, _strength): impact_count += 1)
 	await frames(360)
+	var drop_points: Array[Vector2] = []
+	ball.impacted.connect(func(point: Vector2, _strength: float): drop_points.append(point))
 	ball.reset_ball(Vector2(240, 400))
 	await frames(180)
 	check(impact_count > 0, "Real physics collision emits impact event")
+	check(not drop_points.is_empty() and drop_points[0].distance_to(Vector2(240, 640)) < 20.0, "Prototype feedback uses actual floor contact coordinates")
 	await frames(300)
 	var settled_impacts: int = impact_count
 	await frames(120)

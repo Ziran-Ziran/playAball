@@ -76,7 +76,8 @@ func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
 		var strength: float = maxf(state.get_contact_impulse(index).length() / mass, -relative.dot(normal))
 		if strength > strongest:
 			strongest = strength
-			point = state.transform * state.get_contact_local_position(index)
+			# 返回的接触点已经是世界坐标，不重复变换。
+			point = state.get_contact_local_position(index)
 	_previous_velocity = state.linear_velocity
 	if strongest >= impact_threshold and _impact_cooldown <= 0.0:
 		_impact_cooldown = 0.09
