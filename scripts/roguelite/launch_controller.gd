@@ -24,11 +24,23 @@ func advance(battle_delta: float) -> void:
 	if not aiming and remaining > 0.0:
 		remaining = maxf(0.0, remaining - battle_delta)
 		if remaining == 0.0:
-			recharged.emit()
-			if input_held:
-				var last_pointer: Vector2 = pointer
-				begin(anchor)
-				pointer = last_pointer
+			finish_recharge()
+	if is_instance_valid(player):
+		player.energy_fraction = 1.0 - remaining / cooldown
+
+func finish_recharge() -> void:
+	recharged.emit()
+	if input_held:
+		var last_pointer: Vector2 = pointer
+		begin(anchor)
+		pointer = last_pointer
+
+func refund_cooldown(seconds: float) -> void:
+	if seconds <= 0.0 or remaining <= 0.0:
+		return
+	remaining = maxf(0.0, remaining - seconds)
+	if remaining == 0.0:
+		finish_recharge()
 	if is_instance_valid(player):
 		player.energy_fraction = 1.0 - remaining / cooldown
 

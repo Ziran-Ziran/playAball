@@ -5,6 +5,7 @@ signal broken(target: DemoTarget)
 var hp: int
 var dead: bool = false
 func _ready() -> void:
+	add_to_group("demo_damageable")
 	hp = hit_points
 func hurt(amount: int) -> void:
 	if dead or amount <= 0:

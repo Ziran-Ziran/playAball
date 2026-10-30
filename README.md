@@ -26,6 +26,14 @@
 
 新玩法入口为 `scenes/roguelite/arena.tscn`，在编辑器打开后按 F6；已迁移为俯视零重力 P0～P2 三靶场，可在窗口全屏空白处拖动发射，全程正常速度，待真实玩家复验。F5 的旧实验入口保持原样。操作与调参见 [教程 003](docs/tutorials/003-collision-roguelite.md)，后续按 [分阶段计划](docs/plans/003-collision-roguelite.md) 推进。
 
+## 试玩碰撞拆迁 Demo
+
+打开 `scenes/roguelite/run.tscn` 后按 F6：五波敌人、五次升级、首领与胜负重开；默认肥鱼/小鱼几何主题，白饭局部吸引与饱饭撞已接入。窗口标题为“玩个球 · 肥鱼碰撞 Demo”。旧三靶场仍是 `arena.tscn`，F5 默认侧视实验保持。
+
+全屏空白处左键向后拖、松开发射；运动中每2.2秒可再发射，右键取消，Esc暂停/菜单重开。小弟初始不跟随，取得跟随升级才会归队；墙/挡板/箱体始终实体碰撞。空心预警后才有危险攻击，生命归零后R重开。白饭靠近会弯曲主球轨迹，吃到返还冷却并强化之后新发射的一次有效命中。
+
+先读 [整局教程007](docs/tutorials/007-run-loop.md)，再看 [白饭008](docs/tutorials/008-rice.md)、[主题009](docs/tutorials/009-theme.md)。当前完成本地实现和自动检查，实际一局时长、难度、首领和白饭手感仍待玩家验收；不以headless状态测试冒充人工通关。
+
 ## 讨论中的想法
 
 [开发路线与 Issue 草案](docs/ideas/ROADMAP_DRAFT.md) 是供团队挑选的创意池，不代表已批准的需求、排期或工程规则。

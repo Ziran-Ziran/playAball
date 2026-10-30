@@ -138,6 +138,23 @@ func run() -> void:
 	arena.reset_range()
 	await frames(1)
 	check(arena.feedback._rings.is_empty() and arena.feedback.get_child_count() == 0, "Range reset clears lingering particles and audio nodes")
+	check(launch.has_method("refund_cooldown"), "Rice cooldown refund API exists")
+	if launch.has_method("refund_cooldown"):
+		launch.remaining = 0.4
+		launch.request_aim(Vector2(900, 400))
+		launch.pointer = Vector2(820, 400)
+		launch.refund_cooldown(0.6)
+		check(launch.remaining == 0.0 and launch.aiming and launch.pointer == Vector2(820, 400), "Refund reaching ready continues held drag without losing pointer")
+		launch.cancel()
+	arena.feedback.sound_enabled = true
+	for index in 20:
+		arena.feedback.play_cue(player.position)
+	check(arena.feedback.get_children().filter(func(child): return child is AudioStreamPlayer2D).size() <= 8, "Simultaneous sound voices are bounded")
+	arena.feedback.reset_feedback()
+	arena.feedback.volume = 0.0
+	arena.feedback.play_cue(player.position)
+	check(arena.feedback.get_child_count() == 0, "Zero volume allocates no audible voice")
+	arena.feedback.sound_enabled = false
 	arena.queue_free()
 	await process_frame
 	if failures == 0:

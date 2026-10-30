@@ -13,6 +13,8 @@ var slot: int = 0
 var slot_count: int = 1
 var active_left: float = 0.0
 var low_speed_time: float = 0.0
+const DEFAULT_THEME: DemoTheme = preload("res://resources/roguelite/themes/fat_fish.tres")
+@export var theme: DemoTheme = DEFAULT_THEME
 @onready var sensor: Area2D = $Sensor
 
 func attacking() -> bool:
@@ -70,11 +72,22 @@ func follow_offset() -> Vector2:
 	return Vector2.from_angle(-PI / 2.0 + TAU * slot / maxi(1, slot_count)) * follow_distance
 
 func _draw() -> void:
-	var color: Color = Color("ffd478") if mode == Mode.ACTIVE else Color("6ca8ac")
-	draw_circle(Vector2.ZERO, 14, color)
-	draw_arc(Vector2.ZERO, 18, 0, TAU, 24, color, 2, true)
+	var palette: DemoTheme = theme if theme != null else DEFAULT_THEME
+	var color: Color = palette.active_color if mode == Mode.ACTIVE else palette.companion_color
+	# 尾迹始终沿速度反向，脸保持正向，避免旋转表情干扰主球辨识。
 	if mode == Mode.ACTIVE:
-		draw_line(Vector2.ZERO, -linear_velocity.limit_length(36), Color("ffd478"), 4, true)
-	elif mode == Mode.RETURNING:
-		draw_line(Vector2(-5, 0), Vector2(5, 0), Color.WHITE, 2)
+		draw_line(Vector2.ZERO, -linear_velocity.limit_length(36), palette.active_color, 4, true)
+	draw_colored_polygon(PackedVector2Array([Vector2(-16, -6), Vector2(-8, 0), Vector2(-16, 6)]), color)
+	draw_circle(Vector2.ZERO, 14, color)
+	draw_circle(Vector2(1, 5), 7, palette.belly_color)
+	draw_arc(Vector2.ZERO, 14, 0, TAU, 28, palette.outline_color, 1, true)
+	for eye_x: float in [-4.0, 5.0]:
+		if _feedback_left > 0.0:
+			draw_line(Vector2(eye_x - 2, -4), Vector2(eye_x + 1, -2), palette.outline_color, 1.5, true)
+		else:
+			draw_circle(Vector2(eye_x, -3), 2.5, palette.outline_color)
+	draw_arc(Vector2.ZERO, 18, 0, TAU, 28, color, 2 if mode == Mode.ACTIVE else 1, true)
+	if mode == Mode.RETURNING:
+		draw_line(Vector2(-4, 8), Vector2(0, 11), palette.outline_color, 1.5, true)
+		draw_line(Vector2(0, 11), Vector2(4, 8), palette.outline_color, 1.5, true)
 

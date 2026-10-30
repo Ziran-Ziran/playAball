@@ -53,7 +53,7 @@ func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
 		# API 名称中的 local 指本体，返回值已经是世界坐标，不能再乘 transform。
 		var point: Vector2 = state.get_contact_local_position(index)
 		# 目标受击由统一战斗信号反馈，避免同一接触播放两次。
-		if not other is DemoTarget and speed >= 75.0 and _feedback_left <= 0.0:
+		if not (other is DemoTarget or other.is_in_group("demo_damageable")) and speed >= 75.0 and _feedback_left <= 0.0:
 			_feedback_left = 0.09
 			publish_impact.call_deferred(point, speed, _reset_revision)
 		if attacking():

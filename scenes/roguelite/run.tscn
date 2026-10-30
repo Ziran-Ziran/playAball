@@ -1,0 +1,15 @@
+[gd_scene load_steps=5 format=3]
+[ext_resource type="PackedScene" path="res://scenes/roguelite/arena.tscn" id="1"]
+[ext_resource type="Script" path="res://scripts/roguelite/run_arena.gd" id="2"]
+[ext_resource type="Script" path="res://scripts/roguelite/run_director.gd" id="3"]
+[ext_resource type="PackedScene" path="res://scenes/roguelite/run_hud.tscn" id="4"]
+[node name="Run" instance=ExtResource("1")]
+script = ExtResource("2")
+[node name="RunDirector" type="Node2D" parent="."]
+process_mode = 3
+script = ExtResource("3")
+[node name="Enemies" type="Node2D" parent="."]
+process_mode = 1
+[node name="Hazards" type="Node2D" parent="."]
+process_mode = 1
+[node name="RunHUD" parent="." instance=ExtResource("4")]

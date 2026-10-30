@@ -16,6 +16,12 @@ foreach ($step in @(
     @{ Name = 'map'; Arguments = '--headless --path "' + $projectRoot + '" --script tools/project_map.gd -- --check' },
     @{ Name = 'roguelite'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_smoke.gd' },
     @{ Name = 'input_feedback'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_input_feedback.gd' },
+    @{ Name = 'enemies'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_enemies.gd' },
+    @{ Name = 'build'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_build.gd' },
+    @{ Name = 'boss'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_boss.gd' },
+    @{ Name = 'run'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_run.gd' },
+    @{ Name = 'rice'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_rice.gd' },
+    @{ Name = 'theme'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_theme.gd' },
     @{ Name = 'smoke'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/smoke.gd' }
 )) {
     $outFile = Join-Path $logDirectory ($step.Name + '.out')
@@ -38,8 +44,12 @@ foreach ($step in @(
     if ($step.Name -eq 'input_feedback' -and $logText -notmatch 'INPUT FEEDBACK CHECKS PASSED') {
         throw '未获得输入与反馈回归测试完成标志。'
     }
+    $completionMarkers = @{ enemies = 'ENEMY CHECKS PASSED'; build = 'BUILD CHECKS PASSED'; boss = 'ROGUELITE BOSS: \d+ checks, 0 failures'; run = 'RUN CHECKS PASSED'; rice = 'RICE CHECKS PASSED'; theme = 'ROGUELITE THEME: \d+ checks, 0 failures' }
+    if ($completionMarkers.ContainsKey($step.Name) -and $logText -notmatch $completionMarkers[$step.Name]) {
+        throw ($step.Name + ' 未获得测试完成标志。')
+    }
     if ($step.Name -eq 'map' -and $logText -notmatch 'PROJECT MAP CHECK PASSED') {
         throw '未获得目录检查完成标志。'
     }
 }
-Write-Output 'VERIFIED: import + project map + roguelite + input feedback + smoke'
+Write-Output 'VERIFIED: import + map + roguelite + input + enemies + build + boss + run + rice + theme + smoke'

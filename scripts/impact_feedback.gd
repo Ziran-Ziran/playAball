@@ -5,6 +5,8 @@ extends Node2D
 @export var sound_enabled: bool = true
 @export var shake_enabled: bool = true
 @export var particle_gravity: Vector2 = Vector2(0, 450)
+@export_range(0.0, 1.0) var volume: float = 1.0
+@export_range(1, 16) var max_sound_voices: int = 8
 var _rings: Array[Dictionary] = []
 var _shake: float = 0.0
 var _sound: AudioStreamWAV
@@ -27,6 +29,8 @@ func _ready() -> void:
 func play_impact(point: Vector2, strength: float) -> void:
 	var intensity: float = clampf(strength / 800.0, 0.12, 1.0)
 	_rings.append({"point": point, "life": 1.0, "intensity": intensity})
+	if _rings.size() > 64:
+		_rings.pop_front()
 	_shake = maxf(_shake, intensity * shake_amount)
 	var sparks := CPUParticles2D.new()
 	sparks.position = point
@@ -46,14 +50,30 @@ func play_impact(point: Vector2, strength: float) -> void:
 	sparks.finished.connect(sparks.queue_free)
 	sparks.emitting = true
 	if sound_enabled:
-		var player := AudioStreamPlayer2D.new()
-		player.stream = _sound
-		player.position = point
-		player.volume_db = lerpf(-25.0, -10.0, intensity)
-		player.pitch_scale = lerpf(1.5, 0.7, intensity)
-		add_child(player)
-		player.finished.connect(player.queue_free)
-		player.play()
+		play_sound(point, intensity, lerpf(1.5, 0.7, intensity))
+
+func play_cue(point: Vector2) -> void:
+	# 食物消耗轻提示，不生成看起来像碰撞的粒子。
+	if sound_enabled:
+		play_sound(point, 0.35, 2.0)
+
+func play_sound(point: Vector2, intensity: float, pitch: float) -> void:
+	if volume <= 0.0:
+		return
+	var voices: int = 0
+	for child in get_children():
+		if child is AudioStreamPlayer2D:
+			voices += 1
+	if voices >= max_sound_voices:
+		return
+	var player := AudioStreamPlayer2D.new()
+	player.stream = _sound
+	player.position = to_local(point)
+	player.volume_db = lerpf(-25.0, -10.0, intensity) + linear_to_db(maxf(0.0001, volume))
+	player.pitch_scale = pitch
+	add_child(player)
+	player.finished.connect(player.queue_free)
+	player.play()
 
 func reset_feedback() -> void:
 	_rings.clear()

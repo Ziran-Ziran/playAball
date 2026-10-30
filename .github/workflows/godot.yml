@@ -36,3 +36,13 @@ jobs:
           "$GODOT" --headless --path . --script tests/roguelite_input_feedback.gd 2>&1 | tee /tmp/input-feedback.log
           ! grep -E '^(SCRIPT ERROR|ERROR):' /tmp/input-feedback.log
           grep -q 'INPUT FEEDBACK CHECKS PASSED' /tmp/input-feedback.log
+          for spec in enemies build boss run rice theme; do
+            "$GODOT" --headless --path . --script "tests/roguelite_${spec}.gd" 2>&1 | tee "/tmp/${spec}.log"
+            ! grep -E '^(SCRIPT ERROR|ERROR):' "/tmp/${spec}.log"
+          done
+          grep -q 'ENEMY CHECKS PASSED' /tmp/enemies.log
+          grep -q 'BUILD CHECKS PASSED' /tmp/build.log
+          grep -qE 'ROGUELITE BOSS: [0-9]+ checks, 0 failures' /tmp/boss.log
+          grep -q 'RUN CHECKS PASSED' /tmp/run.log
+          grep -q 'RICE CHECKS PASSED' /tmp/rice.log
+          grep -qE 'ROGUELITE THEME: [0-9]+ checks, 0 failures' /tmp/theme.log
