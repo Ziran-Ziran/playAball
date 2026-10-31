@@ -31,6 +31,7 @@ func run() -> void:
 	arena.feedback.sound_enabled = false
 	var director = arena.director
 	director.set_process(false)
+	director.enable_stage_breaks = false
 	check(director.wave == 1 and director.health.hp == 5, "Run starts at wave one with full health")
 	check(director.companions.members.size() == 1 and not director.companions.follow_enabled, "Base run starts with one non-following companion")
 	check(director.pending.size() > 0 and director.enemies.get_child_count() == 0, "Spawn warning precedes enemy creation")

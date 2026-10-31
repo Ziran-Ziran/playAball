@@ -36,7 +36,7 @@ jobs:
           "$GODOT" --headless --path . --script tests/roguelite_input_feedback.gd 2>&1 | tee /tmp/input-feedback.log
           ! grep -E '^(SCRIPT ERROR|ERROR):' /tmp/input-feedback.log
           grep -q 'INPUT FEEDBACK CHECKS PASSED' /tmp/input-feedback.log
-          for spec in enemies build boss run rice theme kill_rewards kill_run launch_rewards reward_effects; do
+          for spec in enemies build boss run rice theme kill_rewards kill_run launch_rewards reward_effects audio hud feedback_integration stage_flow shop_events crowd difficulty damage_contacts enemy_readability splitting; do
             "$GODOT" --headless --path . --script "tests/roguelite_${spec}.gd" 2>&1 | tee "/tmp/${spec}.log"
             ! grep -E '^(SCRIPT ERROR|ERROR):' "/tmp/${spec}.log"
           done
@@ -50,3 +50,13 @@ jobs:
           grep -q 'KILL RUN CHECKS PASSED' /tmp/kill_run.log
           grep -qE 'ROGUELITE LAUNCH REWARDS: [0-9]+ checks, 0 failures' /tmp/launch_rewards.log
           grep -q 'REWARD EFFECTS CHECKS PASSED' /tmp/reward_effects.log
+          grep -qE 'Audio checks: [0-9]+, failures: 0' /tmp/audio.log
+          grep -q 'HUD CHECKS PASSED' /tmp/hud.log
+          grep -q 'FEEDBACK INTEGRATION CHECKS PASSED' /tmp/feedback_integration.log
+          grep -q 'STAGE FLOW CHECKS PASSED' /tmp/stage_flow.log
+          grep -q 'SHOP EVENT CHECKS PASSED' /tmp/shop_events.log
+          grep -q 'CROWD CHECKS PASSED' /tmp/crowd.log
+          grep -q 'DIFFICULTY CHECKS PASSED' /tmp/difficulty.log
+          grep -q 'DAMAGE CONTACT CHECKS PASSED' /tmp/damage_contacts.log
+          grep -q 'ENEMY READABILITY CHECKS PASSED' /tmp/enemy_readability.log
+          grep -q 'SPLITTING CHECKS PASSED' /tmp/splitting.log

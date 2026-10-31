@@ -40,4 +40,14 @@
 
 新版奖励：击杀6/8/10…只怪逐次获得三选一，运筹升级后四选一；同帧连锁可排队领奖，清波不重复赠奖。详见 [教程010](docs/tutorials/010-kill-rewards.md)。
 
-当前音效单一且体验不合格，生命仅有文字、缺少血条，UI/主题仍是占位。下一轮优先按 [音效/生命面板/阶段节奏计划006](docs/plans/006-feedback-and-run-rhythm.md)整改，[UI与美术计划007](docs/plans/007-ui-art-direction.md)另行推进；阶段商店/事件尚未实现。可复制 [下一对话提示词](docs/onboarding/NEXT_SESSION.md)接手。
+计划006已进入本地功能实现：玩家生命面板、事件音组、三阶段商店/补给原型。打开 `scenes/roguelite/audio_preview.tscn` 后F6可单独试听；用户认为首版音色太温和，仍在整改，音质未验收。完整UI样板被用户否定，暂停全面美术替换，先完成功能。详见 [当前状态](docs/STATUS.md)、[生命面板011](docs/tutorials/011-health-panel.md)、[事件音频012](docs/tutorials/012-event-audio.md)、[阶段休息013](docs/tutorials/013-stage-rest.md)。此前开发阶段仅本地；最新用户已另行授权本批导出、分工文档与通过最终Review后的PR/merge，实际结果见STATUS/GitHub。
+
+最新试玩整改：已放缓逐波刷怪与强敌加入，减少敌人质量/弹性并增加受击硬直和主球有限撞敌续力，详见[怪群碰撞014](docs/tutorials/014-crowd-impact.md)、[难度调参015](docs/tutorials/015-difficulty.md)。本次难度与手感仍待真人复玩。
+
+最新敌人整改：修复橙色方块被撞飞却漏伤；出攻击范围立即取消蓄力，敌人按剩余生命青绿1／金黄2～3／紫红4～6并显示数字。顶栏可勾选“击破分裂”（默认关闭），规则与调参见[016](docs/tutorials/016-enemy-range-and-health.md)、[017](docs/tutorials/017-enemy-splitting.md)、[018](docs/tutorials/018-contact-damage.md)。
+
+## 给策划试玩与下一阶段分工
+
+Windows导出方法见[教程019](docs/tutorials/019-windows-export.md)，包内[试玩说明](docs/playtest/PLANNER_README.txt)面向策划，不需安装Godot。导出只在暂存副本切换到run入口，源码F5旧侧视保留，成品位于忽略的builds目录。
+
+用户拟负责A线（美术/UI/粒子/声音表现）及最终审阅merge，B线负责玩法创新/实验室与集成协调。整文件所有权、接口契约、阶段计划与验收见[计划008](docs/plans/008-parallel-development.md)和[教程020](docs/tutorials/020-parallel-workflow.md)。目前只落文档，表现拆分/实验室/下一机制尚未实现；B不自动获得合并权限。

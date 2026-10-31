@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=8 format=3]
 [ext_resource type="Script" path="res://scripts/roguelite/run_hud.gd" id="1"]
 [sub_resource type="SystemFont" id="Font"]
 font_names = PackedStringArray("Microsoft YaHei", "PingFang SC", "Noto Sans CJK SC", "WenQuanYi Zen Hei")
@@ -16,6 +16,28 @@ border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
 border_color = Color(0.3, 0.65, 0.7, 1)
+[sub_resource type="StyleBoxFlat" id="HealthPanelStyle"]
+content_margin_left = 12.0
+content_margin_right = 12.0
+content_margin_top = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0.04, 0.075, 0.11, 0.96)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_left = 10
+corner_radius_bottom_right = 10
+[sub_resource type="StyleBoxFlat" id="HealthTrack"]
+bg_color = Color(0.13, 0.2, 0.24, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_left = 5
+corner_radius_bottom_right = 5
+[sub_resource type="StyleBoxFlat" id="HealthFill"]
+bg_color = Color(0.3, 0.79, 0.63, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_left = 5
+corner_radius_bottom_right = 5
 [node name="RunHUD" type="CanvasLayer"]
 layer = 2
 process_mode = 3
@@ -29,6 +51,45 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 theme = SubResource("Theme")
+[node name="PlayerPanel" type="PanelContainer" parent="Overlay"]
+offset_left = 40.0
+offset_top = 12.0
+offset_right = 300.0
+offset_bottom = 106.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("HealthPanelStyle")
+[node name="Content" type="VBoxContainer" parent="Overlay/PlayerPanel"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+[node name="Heading" type="HBoxContainer" parent="Overlay/PlayerPanel/Content"]
+layout_mode = 2
+mouse_filter = 2
+[node name="Name" type="Label" parent="Overlay/PlayerPanel/Content/Heading"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+text = "肥鱼 · 生命"
+theme_override_font_sizes/font_size = 18
+[node name="HealthValue" type="Label" parent="Overlay/PlayerPanel/Content/Heading"]
+layout_mode = 2
+mouse_filter = 2
+text = "— / —"
+theme_override_font_sizes/font_size = 22
+[node name="HealthBar" type="ProgressBar" parent="Overlay/PlayerPanel/Content"]
+custom_minimum_size = Vector2(0, 18)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/background = SubResource("HealthTrack")
+theme_override_styles/fill = SubResource("HealthFill")
+max_value = 5.0
+value = 5.0
+show_percentage = false
+[node name="HealthState" type="Label" parent="Overlay/PlayerPanel/Content"]
+layout_mode = 2
+mouse_filter = 2
+text = "等待生命数据"
+theme_override_font_sizes/font_size = 15
 [node name="Panel" type="PanelContainer" parent="Overlay"]
 visible = false
 offset_left = 280.0

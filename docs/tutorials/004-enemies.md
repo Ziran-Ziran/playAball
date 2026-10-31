@@ -12,7 +12,7 @@
 
 ## 输入 → 逻辑 → 输出
 
-场景组织者在把敌人加入树之前设置 `kind`、`player`、`health` 和 `hazards`。其中 `hazards` 是专门装危险弹的 `Node2D` 容器。敌人 `_ready()` 根据类型设置 1/4/2 HP，重罐头质量为 2.8，其他为 0.85；所有敌人零重力、layer=8、mask=31，并进入 `demo_damageable` 组。
+场景组织者在把敌人加入树之前设置 `kind`、`player`、`health` 和 `hazards`。其中 `hazards` 是专门装危险弹的 `Node2D` 容器。敌人 `_ready()` 根据类型设置 1/4/2 HP，重罐头质量为 0.55，其他为 0.2（按扎堆撞停反馈下调，详见教程014）；所有敌人零重力、layer=8、mask=31，并进入 `demo_damageable` 组。
 
 脆皮和重罐头通过 `apply_central_force()` 缓慢靠近主球，不每帧改位置。进入范围后保存当时方向，画空心橙色预警，等待 `warning_duration=0.8` 秒。脆皮在半径 90 内发出持续 0.16 秒的实心脉冲；重罐头一次注入冲量，开启 0.4 秒的接触危险窗口。普通身体接触不会伤主球。两者攻击后都有冷却，不能贴着玩家每帧开始新攻击。
 
@@ -61,3 +61,7 @@ Get-Content .local/enemies.out,.local/enemies.err
 - 测试把玩家 `freeze=true` 又继续运行危险弹：冻结刚体不等同正常游戏状态，Area2D 不保证检测它；暂停应暂停战斗进程，清波/结算应清危险物。
 
 生命组件由 RunDirector 在运行时创建。调试时使用 Godot 的 Remote 场景树找到该节点，在远程检查器调整只能临时生效；持久修改 max_hp/invulnerability 应改 player_health.gd 的导出默认值，或今后将节点序列化进场景。Local 场景树目前没有这个生命节点。
+
+有效受伤后默认0.65秒硬直，暂不追踪/攻击，保留击退惯性。主球主动撞击另有短时有限续力，规则和调参见[014](014-crowd-impact.md)。
+
+最新：离开各自攻击范围立即取消蓄力与危险窗口，重新进入完整蓄力；生命按剩余值分色并显示数字，详见[016](016-enemy-range-and-health.md)。普通敌人被撞飞不扣血的帧顺序问题见[018](018-contact-damage.md)。

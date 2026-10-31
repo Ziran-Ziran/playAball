@@ -3,6 +3,14 @@ extends DemoBody
 @export var max_impulse: float = 1050.0
 @export var max_drag: float = 160.0
 @export_range(0.0, 1.0) var cancel_opposing_momentum: float = 0.0
+@export var impact_drive_duration: float = 0.6
+@export_range(0.0, 1.0) var impact_drive_retention: float = 0.65
+@export_range(0.0, 1.0) var impact_drive_budget_ratio: float = 0.75
+var _drive_left: float = 0.0
+var _drive_budget: float = 0.0
+var _drive_speed: float = 0.0
+var _drive_direction: Vector2
+var _drive_targets: Dictionary = {}
 var energy_fraction: float = 1.0
 const DEFAULT_THEME: DemoTheme = preload("res://resources/roguelite/themes/fat_fish.tres")
 @export var theme: DemoTheme = DEFAULT_THEME
@@ -28,9 +36,39 @@ func launch(drag: Vector2, new_chain: int) -> bool:
 	var direction: Vector2 = drag.normalized()
 	var opposing_speed: float = minf(0.0, linear_velocity.dot(direction))
 	apply_central_impulse(-direction * opposing_speed * mass * cancel_opposing_momentum)
-	apply_central_impulse(direction * max_impulse * lerpf(0.45, 1.0, ratio))
+	var impulse: float = max_impulse * lerpf(0.45, 1.0, ratio)
+	apply_central_impulse(direction * impulse)
+	_drive_left = maxf(0.0, impact_drive_duration)
+	_drive_budget = impulse * clampf(impact_drive_budget_ratio, 0.0, 1.0)
+	_drive_speed = minf(speed_limit, impulse / mass)
+	_drive_direction = direction
+	_drive_targets.clear()
 	sleeping = false
 	return true
+
+func _physics_process(delta: float) -> void:
+	_drive_left = maxf(0.0, _drive_left - delta)
+
+func sustain_enemy_impact(target_id: int, toward_target: Vector2) -> bool:
+	# 有效主动撞敌才兑现短时续力；每敌/每发一次，总预算有限，不给墙或首领。
+	if reset_pending or chain_id <= 0 or _drive_left <= 0.0 or _drive_budget <= 0.0 or _drive_targets.has(target_id):
+		return false
+	if toward_target.normalized().dot(_drive_direction) < 0.4:
+		return false
+	_drive_targets[target_id] = true
+	var missing: float = _drive_speed * impact_drive_retention - linear_velocity.dot(_drive_direction)
+	var impulse: float = minf(_drive_budget, maxf(0.0, missing) * mass)
+	if impulse <= 0.0:
+		return false
+	apply_central_impulse(_drive_direction * impulse)
+	_drive_budget -= impulse
+	return true
+
+func reset_body(point: Vector2) -> void:
+	_drive_left = 0.0
+	_drive_budget = 0.0
+	_drive_targets.clear()
+	super.reset_body(point)
 
 func _draw() -> void:
 	var palette: DemoTheme = theme if theme != null else DEFAULT_THEME

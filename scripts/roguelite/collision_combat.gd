@@ -68,6 +68,8 @@ func resolve(actor: DemoBody, other: Node, speed: float, point: Vector2) -> void
 		other.call("hurt_at", amount, point)
 	else:
 		other.call("hurt", amount)
+	if actor is DemoPlayer and other is DemoEnemy:
+		actor.sustain_enemy_impact(other.get_instance_id(), other.global_position - actor.global_position)
 	# 冲量只作为一次明确击退，速度上限仍由刚体基类控制。
 	if other is RigidBody2D and not bool(other.get("dead")):
 		var direction: Vector2 = (other.global_position - actor.global_position).normalized()
