@@ -16,9 +16,13 @@ var rice_bonus: Node
 var exploded_chains: Dictionary = {}
 var relay_bonuses: Dictionary = {}
 var projectile_targets: Dictionary = {}
+var echo_history: Dictionary = {}
+var pending_echoes: Array[Dictionary] = []
+var _echo_revision: int = 0
 
 func _physics_process(delta: float) -> void:
 	elapsed += delta
+	_advance_echoes(delta)
 	# 只保留近期配对和有限诊断记录，长时间试玩不会增长无界。
 	for key: String in pairs.keys():
 		if elapsed - float(pairs[key]) > 1.0:
@@ -55,8 +59,8 @@ func resolve(actor: DemoBody, other: Node, speed: float, point: Vector2) -> void
 		actor.set("projectile_hits_left", maxi(0, int(actor.get("projectile_hits_left")) - 1))
 		trim_history(projectile_targets)
 	var amount: int = damage_for(speed)
-	if actor is DemoPlayer and upgraded("heavy"):
-		amount += 1
+	if actor is DemoPlayer and build != null:
+		amount += clampi(int(build.levels.get("heavy", 0)), 0, 3)
 	# 饱饭只属于吃饭后发起的新链，敌人投射物/爆炸不提前消费它。
 	if is_instance_valid(rice_bonus) and (actor is DemoPlayer or actor is DemoCompanion):
 		amount += int(rice_bonus.consume_bonus(actor.chain_id))
@@ -72,10 +76,53 @@ func resolve(actor: DemoBody, other: Node, speed: float, point: Vector2) -> void
 			other.call("make_projectile", actor.chain_id)
 	record({"chain": actor.chain_id, "source": actor.get_instance_id(), "target": other.get_instance_id(), "generation": actor.generation, "damage": amount})
 	hit.emit(point, speed)
+	if (actor is DemoPlayer or actor is DemoCompanion) and upgraded("echo"):
+		_schedule_echo(actor, other, speed)
 	if actor is DemoCompanion and upgraded("explosion") and not exploded_chains.has(actor.chain_id):
 		exploded_chains[actor.chain_id] = true
 		trim_history(exploded_chains)
 		explode(actor, point)
+
+func _schedule_echo(actor: DemoBody, target: Node, speed: float) -> void:
+	if not target.is_inside_tree() or target.is_queued_for_deletion() or not damageable(target):
+		return
+	var key: String = "%d:%d:%d" % [actor.get_instance_id(), target.get_instance_id(), actor.chain_id]
+	if echo_history.has(key) or pending_echoes.size() >= 256:
+		return
+	echo_history[key] = true
+	trim_history(echo_history)
+	pending_echoes.append({"left": 0.12, "target": target.get_instance_id(), "source": actor.get_instance_id(), "chain": actor.chain_id, "generation": actor.generation, "speed": speed})
+	# 即使同一节点被移走后重新加入，也不能把旧命中带进新一局。
+	if not target.tree_exiting.is_connected(_cancel_target_echoes.bind(target.get_instance_id())):
+		target.tree_exiting.connect(_cancel_target_echoes.bind(target.get_instance_id()), CONNECT_ONE_SHOT)
+
+func _cancel_target_echoes(target_id: int) -> void:
+	for index in range(pending_echoes.size() - 1, -1, -1):
+		if int(pending_echoes[index].target) == target_id:
+			pending_echoes.remove_at(index)
+
+func _advance_echoes(delta: float) -> void:
+	var ready: Array[Dictionary] = []
+	for index in range(pending_echoes.size() - 1, -1, -1):
+		pending_echoes[index].left -= delta
+		if float(pending_echoes[index].left) <= 0.0:
+			ready.push_front(pending_echoes[index])
+			pending_echoes.remove_at(index)
+	var revision: int = _echo_revision
+	for event in ready:
+		# 伤害信号可能触发整局重置，已取出的本帧旧队列也必须一起作废。
+		if revision != _echo_revision:
+			return
+		var target: Object = instance_from_id(int(event.target))
+		if not is_instance_valid(target) or not target is Node2D or not target.is_inside_tree() or target.is_queued_for_deletion() or not damageable(target):
+			continue
+		var point: Vector2 = target.global_position
+		# 只直接追加一次伤害；不经过 resolve，不消费白饭或触发其它升级。
+		target.call("hurt", 1)
+		if revision != _echo_revision:
+			return
+		record({"chain": event.chain, "source": event.source, "target": event.target, "generation": event.generation, "damage": 1, "effect": "echo"})
+		hit.emit(point, float(event.speed))
 
 func upgraded(id: String) -> bool:
 	return build != null and build.has_upgrade(id)
@@ -126,6 +173,9 @@ func record(event: Dictionary) -> void:
 		events.pop_front()
 
 func reset_combat() -> void:
+	_echo_revision += 1
+	pending_echoes.clear()
+	echo_history.clear()
 	pairs.clear()
 	events.clear()
 	longest_chain = 0

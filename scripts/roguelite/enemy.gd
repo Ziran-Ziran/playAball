@@ -26,6 +26,11 @@ var projectile_left: float = 0.0
 var projectile_hits_left: int = 0
 const HAZARD_SCENE: PackedScene = preload("res://scenes/roguelite/hazard_ball.tscn")
 
+func apply_attack_scale(scale: float) -> void:
+	# 从基准重算，重复应用升级不会把半径指数压小，也不触碰实体形状。
+	pulse_radius = 90.0 * clampf(scale, 0.7, 1.0)
+	queue_redraw()
+
 func _ready() -> void:
 	super._ready()
 	add_to_group("demo_damageable")

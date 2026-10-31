@@ -39,13 +39,14 @@ func run() -> void:
 	for index in 3:
 		check(build.choose("companion"), "Companion rank accepted")
 	check(build.companion_count() == 4 and not build.choose("companion"), "Companion cap is four")
-	build.choose("cooldown")
-	build.choose("cooldown")
-	check(is_equal_approx(build.launch_cooldown(), 1.7) and not build.choose("cooldown"), "Cooldown cap is 1.7 seconds")
-	for id in ["follow", "heavy", "relay", "bowling", "explosion"]:
+	for index in 4:
+		check(build.choose("cooldown"), "Cooldown accepts four ranks")
+	check(is_equal_approx(build.launch_cooldown(), 1.2) and not build.choose("cooldown"), "Cooldown cap is 1.2 seconds")
+	for index in 3:
+		check(build.choose("heavy"), "Heavy accepts three ranks")
+	check(not build.choose("heavy"), "Heavy stops at rank three")
+	for id in ["follow", "relay", "bowling", "explosion"]:
 		check(build.choose(id) and not build.choose(id), "One-rank upgrade cap: " + id)
-	var fallback = build.candidates(rng, false, 5, 5)
-	check(fallback.size() == 1 and fallback[0].id == "heal", "Exhausted pool provides heal fallback even at full health")
 	check(build.choose("heal") and build.choose("heal") and not build.choose("unknown"), "Heal repeats and unknown IDs are rejected")
 	build.reset_build()
 	check(build.levels.is_empty() and build.companion_count() == 1, "Restart clears all build ranks")
@@ -55,6 +56,10 @@ func run() -> void:
 		for card in cards:
 			ids.append(card.id)
 		check(cards.size() == 3 and ids.has("companion") and not ids.has("heal") and ids.size() == _unique(ids), "First wave unique cards guarantee companion without full-health heal")
+	check(build.has_method("choice_count"), "Build exposes expanded reward APIs")
+	if build.has_method("choice_count"):
+		new_reward_rules(build, rng)
+	build.reset_build()
 	await combat_upgrades(build)
 	print("BUILD CHECKS PASSED: ", checks) if failures == 0 else print("BUILD CHECKS FAILED: ", failures)
 	quit(0 if failures == 0 else 1)
@@ -64,6 +69,86 @@ func _unique(ids: Array[String]) -> int:
 	for id in ids:
 		found[id] = true
 	return found.size()
+
+func new_reward_rules(build, rng: RandomNumberGenerator) -> void:
+	check(build.definitions.size() == 15, "Standard pool contains fifteen upgrades, excluding fallback")
+	check(build.choice_count() == 3 and build.launch_capacity() == 1 and build.max_health() == 5, "Base choice, capacity and max health")
+	check(is_equal_approx(build.launch_multiplier(), 1.0) and is_equal_approx(build.damping_multiplier(), 1.0) and is_equal_approx(build.friction_multiplier(), 1.0) and is_equal_approx(build.attack_radius_scale(), 1.0), "Base derived modifiers are neutral")
+	var known_categories: Array[String] = ["机动", "火力", "伙伴", "生存", "节奏"]
+	for upgrade in build.definitions:
+		check(known_categories.has(upgrade.category) and upgrade.weight > 0.0, "Resource has category and weight: " + upgrade.id)
+	for index in 60:
+		var ids: Array[String] = card_ids(build.candidates(rng, false, 5, 5))
+		check(not ids.has("relay") and not ids.has("heal") and not ids.has("vigor"), "Base eligibility excludes relay, full-health heal and fallback")
+	build.choose("companion")
+	var saw_relay: bool = false
+	var saw_heal: bool = false
+	for index in 100:
+		var cards = build.candidates(rng, false, 2, 5)
+		saw_relay = saw_relay or card_ids(cards).has("relay")
+		saw_heal = saw_heal or card_ids(cards).has("heal")
+		var categories: Dictionary = {}
+		for card in cards:
+			categories[card.category] = true
+		check(cards.size() == 3 and categories.size() == 3, "Three cards favor distinct available categories")
+	check(saw_relay and saw_heal, "Two companions unlock relay, injured player can draw heal")
+	build.choose("choices")
+	build.choose("double_launch")
+	check(build.choice_count() == 4 and build.launch_capacity() == 2, "Choices and double launch change capacities")
+	var four = build.candidates(rng, false, 5, 5)
+	var four_categories: Dictionary = {}
+	for card in four:
+		four_categories[card.category] = true
+	check(four.size() == 4 and card_ids(four).size() == _unique(card_ids(four)) and four_categories.size() == 4, "Four choices are unique and diverse")
+	for id in ["launch_power", "glide"]:
+		for index in 3:
+			check(build.choose(id), "Three modifier ranks: " + id)
+		check(not build.choose(id), "Modifier rank cap: " + id)
+	build.choose("shrink")
+	build.choose("shrink")
+	check(not build.choose("shrink") and is_equal_approx(build.attack_radius_scale(), 0.7), "Shrink stops at two ranks with 70 percent radius")
+	check(is_equal_approx(build.launch_multiplier(), 1.45) and is_equal_approx(build.damping_multiplier(), pow(0.75, 3)) and is_equal_approx(build.friction_multiplier(), pow(0.7, 3)), "Modifiers derive from fixed base without repeated application")
+	for upgrade in build.definitions:
+		if upgrade.max_level > 0:
+			while build.choose(upgrade.id):
+				pass
+	var fallback = build.candidates(rng, false, 5, 5)
+	check(fallback.size() == 1 and fallback[0].id == "vigor", "Exhausted standard pool returns single vigor")
+	build.levels["heavy"] = 2
+	var partial = build.candidates(rng, true, 5, 5)
+	check(partial.size() == 1 and partial[0].id == "heavy", "Partial pool returns remaining valid card without duplicate or fallback padding")
+	build.choose("heavy")
+	check(build.choose("vigor") and build.choose("vigor") and build.max_health() == 7, "Vigor is repeatable and raises max health")
+	var injured = build.candidates(rng, false, 4, 7)
+	check(injured.size() == 1 and injured[0].id == "heal", "Remaining repeatable heal prevents fallback when injured")
+	build.reset_build()
+	check(build.max_health() == 5 and build.choice_count() == 3 and build.launch_capacity() == 1 and is_equal_approx(build.launch_multiplier(), 1.0), "Reset clears expanded modifiers and max health")
+	# 同一随机序列比较火力已投点前后抽到火力卡的次数，避免用单抽断言权重。
+	var base_fire: int = 0
+	var focused_fire: int = 0
+	for focused in [false, true]:
+		build.reset_build()
+		if focused:
+			build.choose("heavy")
+		rng.seed = 20261031
+		for index in 1000:
+			for card in build.candidates(rng, false, 5, 5):
+				if card.category == "火力":
+					if focused:
+						focused_fire += 1
+					else:
+						base_fire += 1
+	check(focused_fire > base_fire, "Existing build gently increases matching category draw rate")
+	var repeated_rng := RandomNumberGenerator.new()
+	rng.seed = 123456
+	repeated_rng.seed = 123456
+	check(card_ids(build.candidates(rng, false, 5, 5)) == card_ids(build.candidates(repeated_rng, false, 5, 5)), "Same build and RNG seed reproduce reward candidates")
+
+func card_ids(cards) -> Array[String]:
+	var ids: Array[String] = []
+	for card in cards:
+		ids.append(card.id)
+	return ids
 
 func combat_upgrades(build) -> void:
 	var combat := DemoCombat.new()

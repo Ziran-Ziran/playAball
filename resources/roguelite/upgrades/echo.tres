@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="DemoUpgrade" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/roguelite/upgrade_definition.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "echo"
+title = "二次撞击"
+description = "主球或小弟有效命中后 0.12 秒追加 1 伤害；每球、目标、链一次，不递归。"
+max_level = 1
+category = "火力"
+weight = 0.9

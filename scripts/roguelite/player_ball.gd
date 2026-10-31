@@ -7,6 +7,16 @@ var energy_fraction: float = 1.0
 const DEFAULT_THEME: DemoTheme = preload("res://resources/roguelite/themes/fat_fish.tres")
 @export var theme: DemoTheme = DEFAULT_THEME
 var well_fed: bool = false
+var _launch_material_local: bool = false
+
+func apply_launch_stats(impulse_multiplier: float, damping_multiplier: float, friction_multiplier: float) -> void:
+	# 从固定原值重算，避免每次选择/同步构筑时反复相乘。
+	max_impulse = 1050.0 * maxf(0.0, impulse_multiplier)
+	linear_damp = 0.12 * maxf(0.0, damping_multiplier)
+	if not _launch_material_local:
+		physics_material_override = physics_material_override.duplicate() if physics_material_override != null else PhysicsMaterial.new()
+		_launch_material_local = true
+	physics_material_override.friction = 0.05 * maxf(0.0, friction_multiplier)
 
 func launch(drag: Vector2, new_chain: int) -> bool:
 	if drag.length() < 8.0 or reset_pending:

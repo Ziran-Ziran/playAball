@@ -8,3 +8,5 @@ id = "bowling"
 title = "保龄球"
 description = "被击退的敌人可在 0.6 秒内伤害另外两敌人，不传代。"
 max_level = 1
+category = "火力"
+weight = 0.9

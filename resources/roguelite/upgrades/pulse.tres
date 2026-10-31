@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="DemoUpgrade" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/roguelite/upgrade_definition.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "pulse"
+title = "护身震退"
+description = "每 4 战斗秒弹开半径 150 内敌人一次，不直接伤害或触发升级。"
+max_level = 1
+category = "生存"
+weight = 0.9

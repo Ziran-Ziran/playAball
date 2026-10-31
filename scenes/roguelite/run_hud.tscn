@@ -31,10 +31,10 @@ mouse_filter = 2
 theme = SubResource("Theme")
 [node name="Panel" type="PanelContainer" parent="Overlay"]
 visible = false
-offset_left = 350.0
-offset_top = 180.0
-offset_right = 930.0
-offset_bottom = 570.0
+offset_left = 280.0
+offset_top = 130.0
+offset_right = 1000.0
+offset_bottom = 620.0
 theme_override_styles/panel = SubResource("PanelStyle")
 [node name="Content" type="VBoxContainer" parent="Overlay/Panel"]
 layout_mode = 2

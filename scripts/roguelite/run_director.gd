@@ -5,6 +5,9 @@ enum State { BATTLE, UPGRADE, PAUSED, VICTORY, DEFEAT }
 @export var spawn_interval: float = 3.4
 @export var enemy_limit: int = 24
 @export var run_seed: int = 31030
+@export var reward_first: int = 6
+@export var reward_increment: int = 2
+@export var reward_cap: int = 16
 @export_range(1, 6) var debug_start_wave: int = 1
 @export var debug_upgrades: PackedStringArray = []
 var arena: Node2D
@@ -17,7 +20,15 @@ var hazards: Node2D
 var hud: CanvasLayer
 var health: Node
 var rice: Node2D
+var assists: Node
 var build
+var rewards = preload("res://scripts/roguelite/kill_rewards.gd").new()
+var chosen_rewards: int = 0
+var _run_revision: int = 0
+var _choice_revision: int = 0
+var _pulse_left: float = 0.0
+var _pulse_point: Vector2
+var _pulse_radius: float = 150.0
 var boss: Node2D
 var state: State = State.BATTLE
 var wave: int = 1
@@ -52,6 +63,16 @@ func setup(owner_arena: Node2D) -> void:
 	combat.rice_bonus = rice
 	launcher.fired.connect(rice.bind_launch)
 	rice.eaten.connect(arena.feedback.play_cue)
+	assists = load("res://scripts/roguelite/assist_effects.gd").new()
+	assists.player = player
+	assists.enemies = enemies
+	assists.build = build
+	add_child(assists)
+	assists.pulsed.connect(func(point: Vector2, radius: float):
+		_pulse_point = point
+		_pulse_radius = radius
+		_pulse_left = 0.3
+	)
 	hud.upgrade_selected.connect(choose_upgrade)
 	hud.restart_requested.connect(restart)
 
@@ -61,6 +82,8 @@ func clear_container(container: Node) -> void:
 		child.queue_free()
 
 func restart() -> void:
+	_run_revision += 1
+	_choice_revision += 1
 	get_tree().paused = false
 	arena.paused = false
 	arena.menu.hide()
@@ -69,6 +92,8 @@ func restart() -> void:
 	boss = null
 	pending.clear()
 	rice.reset_rice()
+	assists.reset_effects()
+	_pulse_left = 0.0
 	current_choices.clear()
 	hud.close()
 	arena.feedback.reset_feedback()
@@ -78,11 +103,18 @@ func restart() -> void:
 	combat.reset_combat()
 	build.reset_build()
 	launcher.cooldown = build.launch_cooldown()
+	player.apply_launch_stats(1.0, 1.0, 1.0)
+	health.max_hp = build.max_health()
 	health.reset_health()
 	companions.set_follow_enabled(false)
 	companions.set_count(1)
 	rng.seed = run_seed
 	kills = 0
+	rewards.first_target = reward_first
+	rewards.increment = reward_increment
+	rewards.target_cap = reward_cap
+	rewards.reset_progress()
+	chosen_rewards = 0
 	debug_build(debug_upgrades)
 	start_wave(debug_start_wave)
 
@@ -99,6 +131,8 @@ func start_wave(number: int) -> void:
 
 func _process(delta: float) -> void:
 	advance(delta)
+	if state == State.BATTLE:
+		_pulse_left = maxf(0.0, _pulse_left - delta)
 	queue_redraw()
 
 func advance(delta: float) -> void:
@@ -106,6 +140,9 @@ func advance(delta: float) -> void:
 		return
 	if health.hp <= 0:
 		finish(false)
+		return
+	if rewards.pending > 0:
+		open_upgrade()
 		return
 	wave_elapsed += delta
 	for warning: Dictionary in pending:
@@ -121,7 +158,7 @@ func advance(delta: float) -> void:
 				queue_batch()
 				spawn_left = maxf(2.1, spawn_interval - (wave - 1) * 0.2)
 		elif alive_count() == 0 and pending.is_empty():
-			open_upgrade()
+			start_wave(wave + 1)
 
 func alive_count() -> int:
 	var count: int = 0
@@ -165,42 +202,76 @@ func spawn_enemy(kind: int, point: Vector2) -> void:
 	enemy.hazards = hazards
 	enemy.position = point
 	enemies.add_child(enemy)
+	apply_enemy_build(enemy)
 	enemy.contact_report.connect(combat.resolve)
+	var revision: int = _run_revision
 	enemy.died.connect(func(defeated):
-		if defeated.is_inside_tree() and state == State.BATTLE:
-			kills += 1
+		if revision == _run_revision and defeated.is_inside_tree():
+			register_kill(defeated.get_instance_id())
 	)
 
+func register_kill(instance_id: int) -> void:
+	if state in [State.VICTORY, State.DEFEAT]:
+		return
+	if rewards.add_kill(instance_id):
+		kills = rewards.kills
+
 func open_upgrade() -> void:
+	if rewards.pending <= 0 or state not in [State.BATTLE, State.UPGRADE]:
+		return
 	state = State.UPGRADE
 	launcher.set_blocked(true)
-	clear_container(hazards)
-	current_choices = build.candidates(rng, wave == 1, health.hp, health.max_hp)
-	hud.show_choices(current_choices)
+	# 战斗中领奖只暂停，不删除飞行中的弹/球或改变它们的动量。
+	current_choices = build.candidates(rng, chosen_rewards == 0, health.hp, health.max_hp)
+	_choice_revision += 1
+	hud.show_choices(current_choices, build.levels, rewards.pending, _choice_revision)
 	get_tree().paused = true
 
-func choose_upgrade(id: String) -> void:
+func choose_upgrade(id: String, offer_id: int = -1) -> void:
 	if state != State.UPGRADE:
+		return
+	if offer_id >= 0 and offer_id != _choice_revision:
 		return
 	if not current_choices.any(func(choice): return choice.id == id):
 		return
 	if not build.choose(id):
 		return
+	if not rewards.consume_reward():
+		return
+	chosen_rewards += 1
 	if id == "heal":
 		health.hp = mini(health.max_hp, health.hp + 2)
-		health.changed.emit(health.hp)
 	apply_build()
-	get_tree().paused = false
 	hud.close()
 	current_choices.clear()
-	start_wave(wave + 1)
+	if rewards.pending > 0:
+		open_upgrade()
+		return
+	get_tree().paused = false
+	state = State.BATTLE
+	launcher.set_blocked(false)
 
 func apply_build() -> void:
+	var old_cooldown: float = launcher.cooldown
 	launcher.cooldown = build.launch_cooldown()
+	# 缩冷却保留当前恢复百分比；重复同步构筑不会再额外减一次。
+	launcher.remaining *= launcher.cooldown / maxf(0.001, old_cooldown)
+	launcher.set_capacity(build.launch_capacity())
+	player.apply_launch_stats(build.launch_multiplier(), build.damping_multiplier(), build.friction_multiplier())
+	var old_max: int = health.max_hp
+	health.max_hp = build.max_health()
+	health.hp = mini(health.max_hp, health.hp + maxi(0, health.max_hp - old_max))
+	health.changed.emit(health.hp)
 	companions.set_follow_enabled(int(build.levels.get("follow", 0)) > 0)
 	# 增员保留已有球的位置和动量，不能每次选升级都重摆全队。
 	while companions.members.size() < build.companion_count():
 		companions.add_member()
+	for enemy in enemies.get_children():
+		apply_enemy_build(enemy)
+
+func apply_enemy_build(enemy: Node) -> void:
+	if enemy.has_method("apply_attack_scale"):
+		enemy.apply_attack_scale(build.attack_radius_scale())
 
 func debug_build(ids: PackedStringArray) -> void:
 	build.reset_build()
@@ -215,11 +286,12 @@ func spawn_boss() -> void:
 	boss.health = health
 	boss.position = Vector2(640, 240)
 	enemies.add_child(boss)
+	apply_enemy_build(boss)
 	boss.contact_report.connect(combat.resolve)
 	var encounter: Node2D = boss
 	boss.died.connect(func(defeated):
 		if defeated == boss and encounter.is_inside_tree():
-			kills += 1
+			register_kill(defeated.get_instance_id())
 			finish(true)
 	)
 	boss.summon_requested.connect(func(point: Vector2):
@@ -233,6 +305,8 @@ func finish(won: bool) -> void:
 	state = State.VICTORY if won else State.DEFEAT
 	launcher.set_blocked(true)
 	pending.clear()
+	rewards.pending = 0
+	current_choices.clear()
 	rice.reset_rice()
 	get_tree().paused = true
 	arena.menu.hide()
@@ -260,12 +334,14 @@ func debug_wave(number: int) -> void:
 	start_wave(clampi(number, 1, 6))
 
 func status_text() -> String:
-	var energy: String = "就绪" if launcher.remaining == 0.0 else "冷却 %.1f" % (ceilf(launcher.remaining * 10.0) / 10.0)
+	var energy: String = "%d/%d次可发" % [launcher.charges, launcher.capacity] if launcher.available() else "冷却 %.1f" % (ceilf(launcher.remaining * 10.0) / 10.0)
 	if rice.stored_bonus:
 		energy += " · 饱饭"
-	return "生命 %d/%d · %s · 第 %s 波 · %s · 剩余 %d · 击破 %d" % [health.hp, health.max_hp, energy, "首领" if wave == 6 else str(wave), "刷怪 %.0fs" % maxf(0.0, spawn_duration - wave_elapsed) if wave < 6 and wave_elapsed < spawn_duration else "清场", alive_count(), kills]
+	return "生命%d/%d · %s · %s波 · 发射%d · 敌%d · 击杀%d · 奖励%d/%d（待选%d）" % [health.hp, health.max_hp, energy, "首领" if wave == 6 else str(wave), launcher.shots, alive_count(), kills, rewards.progress, rewards.next_target(), rewards.pending]
 
 func _draw() -> void:
+	if _pulse_left > 0.0:
+		draw_arc(to_local(_pulse_point), _pulse_radius * (1.0 - _pulse_left / 0.3), 0, TAU, 48, Color(0.4, 0.9, 1.0, _pulse_left / 0.3), 3, true)
 	for warning: Dictionary in pending:
 		draw_arc(warning.point, 26, 0, TAU, 24, Color("ffb35c"), 3, true)
 		draw_line(warning.point - Vector2(10, 0), warning.point + Vector2(10, 0), Color("ffb35c"), 2)

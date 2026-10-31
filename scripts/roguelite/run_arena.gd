@@ -6,7 +6,7 @@ var _hurt_flash: float = 0.0
 func _ready() -> void:
 	super._ready()
 	if DisplayServer.get_name() != "headless":
-		get_window().title = "玩个球 · 肥鱼碰撞 Demo"
+		get_window().title = "玩个球 · 击杀奖励 Demo"
 	for target in $Targets.get_children():
 		$Targets.remove_child(target)
 		target.queue_free()
@@ -25,7 +25,7 @@ func _ready() -> void:
 	$HUD/Controls.add_child(volume)
 	$HUD/Menu/Buttons/Reset.text = "重新开局"
 	$HUD/Menu/Buttons/Title.text = "已暂停"
-	$HUD/Hint.text = "空白拖动发射 · 空心预警/实心危险 · 小弟初始不跟随 · 白饭近处吸鱼，吃饭强化下一撞 · Esc 暂停"
+	$HUD/Hint.text = "空白拖动发射 · 击杀达标领奖 · 空心预警/实心危险 · 小弟初始不跟随 · 白饭吸鱼 · Esc 暂停"
 	director = $RunDirector
 	director.setup(self)
 	director.health.changed.connect(func(hp: int):

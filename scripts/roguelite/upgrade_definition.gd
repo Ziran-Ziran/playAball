@@ -5,3 +5,5 @@ extends Resource
 @export var title: String = ""
 @export_multiline var description: String = ""
 @export var max_level: int = 1
+@export_enum("机动", "火力", "伙伴", "生存", "节奏") var category: String = "火力"
+@export_range(0.01, 10.0) var weight: float = 1.0

@@ -32,6 +32,11 @@ var _charge_revision: int = 0
 var _wave_safe_direction: Vector2 = Vector2.UP
 var _fight_elapsed: float = 0.0
 
+func apply_attack_scale(scale: float) -> void:
+	# 缩小远程震波范围；冲撞仍按模块/核心的真实刚体接触伤害。
+	wave_max_radius = 330.0 * clampf(scale, 0.7, 1.0)
+	queue_redraw()
+
 func _ready() -> void:
 	super._ready()
 	add_to_group("demo_damageable")
