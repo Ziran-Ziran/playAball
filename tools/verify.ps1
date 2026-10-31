@@ -26,6 +26,16 @@ foreach ($step in @(
     @{ Name = 'kill_run'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_kill_run.gd' },
     @{ Name = 'launch_rewards'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_launch_rewards.gd' },
     @{ Name = 'reward_effects'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_reward_effects.gd' },
+    @{ Name = 'audio'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_audio.gd' },
+    @{ Name = 'hud'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_hud.gd' },
+    @{ Name = 'feedback_integration'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_feedback_integration.gd' },
+    @{ Name = 'stage_flow'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_stage_flow.gd' },
+    @{ Name = 'shop_events'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_shop_events.gd' },
+    @{ Name = 'crowd'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_crowd.gd' },
+    @{ Name = 'difficulty'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_difficulty.gd' },
+    @{ Name = 'damage_contacts'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_damage_contacts.gd' },
+    @{ Name = 'enemy_readability'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_enemy_readability.gd' },
+    @{ Name = 'splitting'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_splitting.gd' },
     @{ Name = 'smoke'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/smoke.gd' }
 )) {
     $outFile = Join-Path $logDirectory ($step.Name + '.out')
@@ -53,6 +63,16 @@ foreach ($step in @(
     $completionMarkers.kill_run = 'KILL RUN CHECKS PASSED'
     $completionMarkers.launch_rewards = 'ROGUELITE LAUNCH REWARDS: \d+ checks, 0 failures'
     $completionMarkers.reward_effects = 'REWARD EFFECTS CHECKS PASSED'
+    $completionMarkers.audio = 'Audio checks: \d+, failures: 0'
+    $completionMarkers.hud = 'HUD CHECKS PASSED'
+    $completionMarkers.feedback_integration = 'FEEDBACK INTEGRATION CHECKS PASSED'
+    $completionMarkers.stage_flow = 'STAGE FLOW CHECKS PASSED'
+    $completionMarkers.shop_events = 'SHOP EVENT CHECKS PASSED'
+    $completionMarkers.crowd = 'CROWD CHECKS PASSED'
+    $completionMarkers.difficulty = 'DIFFICULTY CHECKS PASSED'
+    $completionMarkers.damage_contacts = 'DAMAGE CONTACT CHECKS PASSED'
+    $completionMarkers.enemy_readability = 'ENEMY READABILITY CHECKS PASSED'
+    $completionMarkers.splitting = 'SPLITTING CHECKS PASSED'
     if ($completionMarkers.ContainsKey($step.Name) -and $logText -notmatch $completionMarkers[$step.Name]) {
         throw ($step.Name + ' 未获得测试完成标志。')
     }
@@ -60,4 +80,4 @@ foreach ($step in @(
         throw '未获得目录检查完成标志。'
     }
 }
-Write-Output 'VERIFIED: import + map + all 13 behavior suites including kill rewards'
+Write-Output 'VERIFIED: import + map + all 23 behavior suites including contact damage range and splitting'

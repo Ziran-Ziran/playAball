@@ -10,6 +10,7 @@ extends Node2D
 var _rings: Array[Dictionary] = []
 var _shake: float = 0.0
 var _sound: AudioStreamWAV
+var audio_director: Node
 @onready var camera: Camera2D = $"../Camera2D"
 
 func _ready() -> void:
@@ -50,12 +51,18 @@ func play_impact(point: Vector2, strength: float) -> void:
 	sparks.finished.connect(sparks.queue_free)
 	sparks.emitting = true
 	if sound_enabled:
-		play_sound(point, intensity, lerpf(1.5, 0.7, intensity))
+		if is_instance_valid(audio_director):
+			audio_director.play_event(&"heavy" if strength >= 500.0 else &"light", intensity)
+		else:
+			play_sound(point, intensity, lerpf(1.5, 0.7, intensity))
 
 func play_cue(point: Vector2) -> void:
 	# 食物消耗轻提示，不生成看起来像碰撞的粒子。
 	if sound_enabled:
-		play_sound(point, 0.35, 2.0)
+		if is_instance_valid(audio_director):
+			audio_director.play_event(&"rice")
+		else:
+			play_sound(point, 0.35, 2.0)
 
 func play_sound(point: Vector2, intensity: float, pitch: float) -> void:
 	if volume <= 0.0:
@@ -76,6 +83,8 @@ func play_sound(point: Vector2, intensity: float, pitch: float) -> void:
 	player.play()
 
 func reset_feedback() -> void:
+	if is_instance_valid(audio_director):
+		audio_director.reset_audio()
 	_rings.clear()
 	_shake = 0.0
 	camera.offset = Vector2.ZERO

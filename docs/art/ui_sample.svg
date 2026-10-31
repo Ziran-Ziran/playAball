@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="900" viewBox="0 0 1280 900">
+<rect width="1280" height="900" fill="#172c33"/>
+<g font-family="Microsoft YaHei, sans-serif" fill="#f4e9d5">
+<text x="44" y="45" font-size="25">肥鱼拆迁队 · UI 方向样板（待确认，尚未全面替换）</text>
+<rect x="32" y="68" width="1216" height="360" rx="20" fill="#203c43"/>
+<rect x="52" y="88" width="278" height="98" rx="16" fill="#f4e9d5"/>
+<text x="72" y="117" fill="#25434b" font-size="19">肥鱼 · 生命                    3 / 5</text>
+<rect x="72" y="133" width="238" height="16" rx="8" fill="#d0c8b8"/>
+<rect x="72" y="133" width="143" height="16" rx="8" fill="#318c83"/>
+<text x="72" y="174" fill="#645d53" font-size="14">受伤保护中 · 发射储能 ▰ ▱</text>
+<text x="368" y="120" font-size="20">阶段 2 / 3 · 第 3 波</text>
+<text x="368" y="151" font-size="16" fill="#becdc8">击杀奖励 5 / 10 · 钱币 12</text>
+<rect x="1004" y="92" width="220" height="56" rx="14" fill="#32545b"/>
+<text x="1030" y="127" font-size="18">声音    暂停</text>
+<ellipse cx="577" cy="301" rx="40" ry="29" fill="#68c5c0"/><path d="M610 301L644 280L644 322Z" fill="#68c5c0"/><circle cx="562" cy="293" r="5" fill="#172c33"/>
+<ellipse cx="484" cy="345" rx="15" ry="11" fill="#a5dad0"/>
+<circle cx="876" cy="299" r="28" fill="none" stroke="#e38c72" stroke-width="4" stroke-dasharray="9 6"/>
+<text x="54" y="404" font-size="15" fill="#becdc8">战斗：生命优先，成长次之；空白拖动。危险同时使用暖色与空心预警轮廓。</text>
+<rect x="32" y="452" width="586" height="356" rx="20" fill="#f4e9d5"/>
+<text x="58" y="493" font-size="24" fill="#25434b">击杀奖励 · 选择下一步成长</text>
+<g fill="#e4d7bf"><rect x="55" y="517" width="169" height="218" rx="14"/><rect x="240" y="517" width="169" height="218" rx="14"/><rect x="425" y="517" width="169" height="218" rx="14"/></g>
+<g fill="#25434b" font-size="19"><text x="72" y="552">强力发射</text><text x="257" y="552">新同伴</text><text x="442" y="552">饱餐</text></g>
+<g fill="#655c4c" font-size="15"><text x="72" y="585">机动 · 1 → 2级</text><text x="72" y="617">主动冲量 +15%</text><text x="257" y="585">伙伴 · 0 → 1级</text><text x="257" y="617">增加一颗小弟</text><text x="442" y="585">生存 · 可重复</text><text x="442" y="617">恢复 2 点生命</text></g>
+<g fill="#d7ad5b"><rect x="70" y="672" width="138" height="42" rx="10"/><rect x="255" y="672" width="138" height="42" rx="10"/><rect x="440" y="672" width="138" height="42" rx="10"/></g>
+<g fill="#25434b" font-size="16"><text x="123" y="699">选择</text><text x="308" y="699">选择</text><text x="493" y="699">选择</text></g>
+<text x="58" y="780" fill="#655c4c" font-size="15">卡片保留类别、等级、具体收益；四选一使用等宽布局。</text>
+<rect x="642" y="452" width="606" height="356" rx="20" fill="#f4e9d5"/>
+<text x="668" y="493" fill="#25434b" font-size="24">阶段休息 · 补给摊</text><text x="1090" y="493" fill="#7b6030" font-size="18">钱币 12</text>
+<g fill="#e4d7bf"><rect x="666" y="518" width="558" height="68" rx="12"/><rect x="666" y="600" width="558" height="68" rx="12"/></g>
+<g fill="#25434b" font-size="18"><text x="686" y="548">热饭 · 恢复 2 血</text><text x="686" y="630">成长机会 · 独立三/四选一</text></g>
+<g fill="#655c4c" font-size="14"><text x="686" y="572">4 币 · 本次限购一次 · 满血禁用</text><text x="686" y="654">8 币 · 本次限购一次 · 保留击杀奖励进度</text></g>
+<rect x="969" y="701" width="255" height="54" rx="13" fill="#d7ad5b"/><text x="1001" y="736" fill="#25434b" font-size="19">继续 · 3 秒准备</text>
+<text x="668" y="784" fill="#655c4c" font-size="15">允许跳过；不自动恢复，不要求花光货币。</text>
+<text x="44" y="852" font-size="17">方向：浅暖面板 / 深色围场 / 蓝青伙伴 / 暖红危险 / 金色奖励。图形与中文状态共同传达信息。</text>
+<text x="44" y="880" font-size="14" fill="#becdc8">本图为代码绘制的布局建议；角色、障碍和全界面美术仍待用户看样板后决定。</text>
+</g></svg>

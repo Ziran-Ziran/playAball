@@ -53,6 +53,9 @@ func run() -> void:
 	for kind in 3:
 		var enemy = load("res://scenes/roguelite/enemy.tscn").instantiate()
 		enemy.kind = kind
+		# 此夹具专测远距炮弹与方向锁定；默认480范围另由readability套件验证。
+		if kind == DemoEnemy.Kind.TURRET:
+			enemy.attack_range = 2000.0
 		enemy.player = player
 		enemy.health = health
 		enemy.hazards = hazards

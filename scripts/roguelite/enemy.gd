@@ -9,12 +9,16 @@ enum Kind { FRAGILE, HEAVY, TURRET }
 @export var approach_speed: float = 75.0
 @export var pulse_radius: float = 90.0
 @export var charge_range: float = 180.0
+@export var attack_range: float = 480.0
+@export var hit_points_override: int = 0
 @export var charge_speed: float = 420.0
 @export var hazard_speed: float = 180.0
 @export var hazard_limit: int = 12
 var player: DemoPlayer
 var health: DemoHealth
 var hazards: Node2D
+@export var hit_stagger: float = 0.65
+var stagger_left: float = 0.0
 var hp: int = 1
 var dead: bool = false
 var warning_left: float = 0.0
@@ -34,8 +38,8 @@ func apply_attack_scale(scale: float) -> void:
 func _ready() -> void:
 	super._ready()
 	add_to_group("demo_damageable")
-	hp = [1, 4, 2][kind]
-	mass = 2.8 if kind == Kind.HEAVY else 0.85
+	hp = hit_points_override if hit_points_override > 0 else [1, 4, 2][kind]
+	mass = 0.55 if kind == Kind.HEAVY else 0.2
 	if kind == Kind.HEAVY:
 		$Shape.shape = $Shape.shape.duplicate()
 		$Shape.shape.radius = 30.0
@@ -58,6 +62,7 @@ func hurt(amount: int) -> void:
 	if dead or amount <= 0:
 		return
 	hp = maxi(0, hp - amount)
+	stagger_left = maxf(0.0, hit_stagger)
 	# 有效命中打断敌人的预警/冲撞，给主动撞击一个防守用途。
 	warning_left = 0.0
 	attack_active = false
@@ -81,10 +86,17 @@ func _physics_process(delta: float) -> void:
 			chain_id = 0
 			projectile_hits_left = 0
 		return
+	# 受击后保留击退惯性，不立刻用追踪力刹住击退并贴回玩家。
+	if stagger_left > 0.0:
+		stagger_left = maxf(0.0, stagger_left - delta)
+		queue_redraw()
+		return
 	if not is_instance_valid(player) or not is_instance_valid(health) or health.hp <= 0:
 		return
 	attack_left = maxf(0.0, attack_left - delta)
 	var offset: Vector2 = player.global_position - global_position
+	if not _within_attack_range(offset) and (warning_left > 0.0 or charge_left > 0.0 or attack_active):
+		_cancel_attack()
 	if charge_left > 0.0:
 		charge_left = maxf(0.0, charge_left - delta)
 		attack_active = charge_left > 0.0
@@ -94,7 +106,7 @@ func _physics_process(delta: float) -> void:
 		warning_left = maxf(0.0, warning_left - delta)
 		if warning_left <= 0.0:
 			_release_attack(offset)
-	elif attack_left <= 0.0 and (kind == Kind.TURRET or offset.length() < (charge_range if kind == Kind.HEAVY else pulse_radius)):
+	elif attack_left <= 0.0 and _within_attack_range(offset):
 		warning_left = warning_duration
 		aim_direction = offset.normalized() if not offset.is_zero_approx() else Vector2.RIGHT
 	elif kind != Kind.TURRET:
@@ -103,7 +115,23 @@ func _physics_process(delta: float) -> void:
 		apply_central_force(((desired - linear_velocity) * mass * 3.0).limit_length(approach_force))
 	queue_redraw()
 
+func _within_attack_range(offset: Vector2) -> bool:
+	var radius: float = pulse_radius if kind == Kind.FRAGILE else charge_range if kind == Kind.HEAVY else attack_range
+	return offset.length() <= maxf(0.0, radius)
+
+func _cancel_attack() -> void:
+	# 离开范围立即撤销危险资格；保留真实惯性，不用强制改速度来停冲撞。
+	warning_left = 0.0
+	attack_active = false
+	charge_left = 0.0
+	attack_left = 0.0
+	queue_redraw()
+
 func _release_attack(offset: Vector2) -> void:
+	# 释放点再次确认，不能把已经过期的预警带到范围外。
+	if not _within_attack_range(offset):
+		_cancel_attack()
+		return
 	attack_left = attack_cooldown
 	match kind:
 		Kind.FRAGILE:
@@ -126,22 +154,35 @@ func _release_attack(offset: Vector2) -> void:
 			shot.linear_velocity = aim_direction * hazard_speed
 			hazards.add_child(shot)
 
+func tier_color() -> Color:
+	# 形状区分敌人行为，色阶与数字只表达当前还剩多少生命。
+	if hp <= 1:
+		return Color("62d6ac")
+	if hp <= 3:
+		return Color("f3c568")
+	return Color("d78ad8")
+
 func _draw() -> void:
-	var color := Color("df866b")
+	var color: Color = tier_color()
 	match kind:
 		Kind.FRAGILE:
 			draw_rect(Rect2(-19, -19, 38, 38), color)
-			draw_line(Vector2(-14, -14), Vector2(14, 14), Color("ffd3a8"), 3)
+			draw_line(Vector2(-14, -14), Vector2(14, 14), Color("203139"), 3)
 		Kind.HEAVY:
-			draw_circle(Vector2.ZERO, 30, Color("b8a383"))
-			draw_rect(Rect2(-23, -11, 46, 22), Color("695973"))
-			for index in hp:
-				draw_circle(Vector2(-15 + index * 10, 0), 3, Color("fff1c9"))
+			draw_circle(Vector2.ZERO, 30, color)
+			draw_rect(Rect2(-23, -11, 46, 22), color.darkened(0.4))
 		Kind.TURRET:
-			draw_colored_polygon(PackedVector2Array([Vector2(-22, 20), Vector2(22, 20), Vector2(0, -25)]), Color("c39ac9"))
-			draw_line(Vector2.ZERO, aim_direction * 33, Color("f1c6df"), 9)
+			draw_colored_polygon(PackedVector2Array([Vector2(-22, 20), Vector2(22, 20), Vector2(0, -25)]), color)
+			draw_line(Vector2.ZERO, aim_direction * 33, color.lightened(0.2), 9)
 	if warning_left > 0.0 or attack_active:
 		var radius: float = pulse_radius if kind == Kind.FRAGILE else 40.0
 		draw_circle(Vector2.ZERO, radius, Color(1, 0.35, 0.25, 0.22) if attack_active else Color("ffac64"), attack_active, -1.0 if attack_active else 2.0, true)
 		if kind != Kind.FRAGILE:
 			draw_line(aim_direction * 40, aim_direction * 115, Color("ffac64"), 3)
+	# 高对比数字始终最后绘制，不能被预警或炮管盖住，也不只靠颜色辨血量。
+	var font: Font = ThemeDB.fallback_font
+	var text: String = str(hp)
+	var font_size: int = 18
+	var text_width: float = font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x
+	draw_circle(Vector2.ZERO, maxf(11.0, text_width * 0.5 + 3.0), Color("17232d"))
+	draw_string(font, Vector2(-text_width * 0.5, 6), text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, Color("fff7df"))

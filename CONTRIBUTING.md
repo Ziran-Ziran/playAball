@@ -57,3 +57,7 @@ Agent 不得把初始化时的上传授权沿用到新任务。“可以提交�
 已设置 main 分支保护：必须 PR、必须通过 `smoke`（工作流名 Godot checks）、分支保持最新、解决审查对话，禁止 force push 和删除主分支，管理员也适用。**不强制另一位 GitHub 用户批准**（required approving reviews = 0）；代码最终 Review 仍按项目流程执行。仓库仅允许 Squash 合并，合并后自动删除远端任务分支。
 
 公开仓库不等于允许他人使用你们的美术和代码；本项目尚未授予开源许可证，需要团队明确选择后再添加 LICENSE。
+
+## 两位开发者分工
+
+文件职责、共享接口与S0～S4顺序见[计划008](docs/plans/008-parallel-development.md)，操作见[教程020](docs/tutorials/020-parallel-workflow.md)。仓库owner始终为用户，可兼任A，最终审阅与合并权不随A角色分配转移；B负责玩法/实验室和集成协调，不因协调获得长期merge权限。各自独立checkout和feat/分支，从同一已核验基线开始；当前混合文件先登记唯一写入者，必要拆分后再全面并行。
