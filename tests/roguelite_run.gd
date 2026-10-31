@@ -46,14 +46,18 @@ func run() -> void:
 		enemy.hurt(999)
 	await frames(2)
 	director.advance(0.1)
-	check(director.state == director.State.UPGRADE and paused and arena.launcher.blocked, "Clear wave opens upgrade and blocks battle input")
+	check(director.wave == 2 and director.state == director.State.BATTLE and not paused, "Clear wave advances without giving an extra reward")
+	for id in range(1000, 1003):
+		director.register_kill(id)
+	director.advance(0.01)
+	check(director.state == director.State.UPGRADE and paused and arena.launcher.blocked, "Kill threshold opens upgrade and blocks battle input")
 	check(arena.get_node("RunHUD").cards.get_child_count() == 3, "Upgrade presents three cards")
 	director.set_paused(false)
 	check(paused and director.state == director.State.UPGRADE, "Escape cannot bypass upgrade selection")
 	var choices: Array = director.current_choices
 	check(choices.any(func(choice): return choice.id == "companion"), "First upgrade guarantees new companion choice")
 	director.choose_upgrade("companion")
-	check(not paused and director.wave == 2 and director.companions.members.size() == 2, "Choosing upgrade begins next wave and applies new companion")
+	check(not paused and director.wave == 2 and director.companions.members.size() == 2, "Choosing upgrade resumes current wave and applies new companion")
 	director.set_paused(true)
 	var time_before: float = director.wave_elapsed
 	director.advance(10.0)
@@ -67,10 +71,10 @@ func run() -> void:
 	check(director.companions.members.size() == 1 and director.enemies.get_child_count() == 0, "Restart removes old combatants and companions")
 	# 跳到首领仅用于复现，不伪称真实玩家通关。
 	director.debug_wave(6)
-	check(director.boss != null, "Fifth upgrade leads to dedicated boss encounter")
+	check(director.boss != null, "Dedicated boss encounter remains available")
 	director.boss.hurt(999)
 	await frames(1)
-	check(director.state == director.State.VICTORY, "Boss death produces victory")
+	check(director.state == director.State.VICTORY and director.rewards.pending == 0, "Boss death produces victory without post-victory rewards")
 	for attempt in 10:
 		director.restart()
 		await frames(2)
@@ -79,9 +83,8 @@ func run() -> void:
 		director.wave_elapsed = director.spawn_duration + 1.0
 		director.pending.clear()
 		director.advance(0.1)
-		check(director.state == director.State.UPGRADE, "Wave %d ends with its own upgrade" % number)
-		director.choose_upgrade(director.current_choices[0].id)
-	check(director.wave == 6 and director.boss != null, "All five upgrade transitions reach boss without skipped selection")
+		check(director.state == director.State.BATTLE and director.wave == number + 1, "Wave %d transitions without a free reward" % number)
+	check(director.wave == 6 and director.boss != null and director.chosen_rewards == 0, "Five clears reach boss independently of kill rewards")
 	for preset in [PackedStringArray(["companion", "companion", "companion"]), PackedStringArray(["heavy", "bowling"]), PackedStringArray(["relay", "explosion", "follow"])]:
 		director.restart()
 		director.debug_build(preset)

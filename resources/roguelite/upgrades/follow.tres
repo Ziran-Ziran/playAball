@@ -8,3 +8,5 @@ id = "follow"
 title = "跟随"
 description = "小兵待命时跟随，出击结束后限速归队；仍会被障碍挡住。"
 max_level = 1
+category = "伙伴"
+weight = 1

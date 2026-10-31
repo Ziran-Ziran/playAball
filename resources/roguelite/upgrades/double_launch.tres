@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="DemoUpgrade" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/roguelite/upgrade_definition.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "double_launch"
+title = "双发"
+description = "最多储存两次主动发射，分别消耗并逐次恢复。"
+max_level = 1
+category = "节奏"
+weight = 0.9

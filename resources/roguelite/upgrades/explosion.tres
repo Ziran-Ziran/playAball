@@ -8,3 +8,5 @@ id = "explosion"
 title = "碰撞爆破"
 description = "每次发射首个小兵有效命中触发半径 80、伤害 1 的爆破。"
 max_level = 1
+category = "伙伴"
+weight = 1

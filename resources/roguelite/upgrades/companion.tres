@@ -8,3 +8,5 @@ id = "companion"
 title = "新同伴"
 description = "新增一颗小兵，最多四颗。"
 max_level = 3
+category = "伙伴"
+weight = 1.2

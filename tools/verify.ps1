@@ -22,6 +22,10 @@ foreach ($step in @(
     @{ Name = 'run'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_run.gd' },
     @{ Name = 'rice'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_rice.gd' },
     @{ Name = 'theme'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_theme.gd' },
+    @{ Name = 'kill_rewards'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_kill_rewards.gd' },
+    @{ Name = 'kill_run'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_kill_run.gd' },
+    @{ Name = 'launch_rewards'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_launch_rewards.gd' },
+    @{ Name = 'reward_effects'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_reward_effects.gd' },
     @{ Name = 'smoke'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/smoke.gd' }
 )) {
     $outFile = Join-Path $logDirectory ($step.Name + '.out')
@@ -45,6 +49,10 @@ foreach ($step in @(
         throw '未获得输入与反馈回归测试完成标志。'
     }
     $completionMarkers = @{ enemies = 'ENEMY CHECKS PASSED'; build = 'BUILD CHECKS PASSED'; boss = 'ROGUELITE BOSS: \d+ checks, 0 failures'; run = 'RUN CHECKS PASSED'; rice = 'RICE CHECKS PASSED'; theme = 'ROGUELITE THEME: \d+ checks, 0 failures' }
+    $completionMarkers.kill_rewards = 'KILL REWARD CHECKS PASSED'
+    $completionMarkers.kill_run = 'KILL RUN CHECKS PASSED'
+    $completionMarkers.launch_rewards = 'ROGUELITE LAUNCH REWARDS: \d+ checks, 0 failures'
+    $completionMarkers.reward_effects = 'REWARD EFFECTS CHECKS PASSED'
     if ($completionMarkers.ContainsKey($step.Name) -and $logText -notmatch $completionMarkers[$step.Name]) {
         throw ($step.Name + ' 未获得测试完成标志。')
     }
@@ -52,4 +60,4 @@ foreach ($step in @(
         throw '未获得目录检查完成标志。'
     }
 }
-Write-Output 'VERIFIED: import + map + roguelite + input + enemies + build + boss + run + rice + theme + smoke'
+Write-Output 'VERIFIED: import + map + all 13 behavior suites including kill rewards'

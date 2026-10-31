@@ -19,25 +19,31 @@ playAball/
 │   │   │   ├── environment.svg  # 另一台电脑的必需环境与可选 MCP 的关系图。
 │   │   │   └── workflow.svg  # 开发者从提出功能到 Review、授权提交和 PR 合并的流程图。
 │   │   ├── AI_SETUP.md  # 另一电脑 AI 的环境调查、工具补齐、可选 MCP 和验证步骤。
-│   │   └── DEVELOPER.md  # 新开发者如何用 Agent、Git、GitHub、Godot 完成一次协作。
+│   │   ├── DEVELOPER.md  # 新开发者如何用 Agent、Git、GitHub、Godot 完成一次协作。
+│   │   └── NEXT_SESSION.md  # 下一对话可复制提示词：现状、最新体验问题、实施顺序与环境/Git授权边界。
 │   ├── plans/  # 具体工作的范围与执行清单
 │   │   ├── 001-bootstrap.md  # 首次建仓、原型实现和交接的已执行计划。
 │   │   ├── 002-workflow.md  # 本轮目录维护、Review、交接配图与路线草案的执行清单。
 │   │   ├── 003-collision-roguelite.md  # P0～P2 俯视迁移执行清单、验证与玩家门槛。
-│   │   └── 004-roguelite-run.md  # P3并行分工、整局实现/验证清单与未完成人工验收。
+│   │   ├── 004-roguelite-run.md  # P3并行分工、整局实现/验证清单与未完成人工验收。
+│   │   ├── 005-kill-rewards.md  # 用户批准的击杀领奖/十五项发育池计划、并行分工与验收清单。
+│   │   ├── 006-feedback-and-run-rhythm.md  # 用户反馈后的音效、玩家血条、阶段商店事件建议与分项验收计划，尚未实现。
+│   │   └── 007-ui-art-direction.md  # UI与肥鱼美术专项方向、样板、文件边界和视觉验收计划，尚未实现。
 │   ├── reviews/  # 重要改动的审查证据与交接
 │   │   ├── 2026-10-28-workflow.md  # 本轮独立最终审查、测试证据、问题处理、用户授权与交接记录。
+│   │   ├── 2026-10-31-kill-rewards.md  # 击杀奖励原型最终独立Review、验证限制、最新体验缺陷与本轮上传范围。
 │   │   └── collision-demo-final.md  # 当前Demo最终独立Review、首领真实接触修复、验证与人工未测证据。
 │   ├── tutorials/  # 每个功能的实现原理和手动修改教程
 │   │   ├── 001-prototype.md  # 球发射、碰撞表现、机关、目标和手动调参的初始教程。
 │   │   ├── 002-project-map-and-review.md  # 文件目录生成/检查的实现和 Review/授权流程的操作教程。
 │   │   ├── 003-collision-roguelite.md  # 俯视 P0～P2 输入、冲量、接力、归队、检查器调参与玩家验收教程。
 │   │   ├── 004-enemies.md  # 三敌人/生命/危险弹的状态、节点、检查器与回归教程。
-│   │   ├── 005-build.md  # 构筑候选与八升级收益、资源调参、接力上限和复现教程。
+│   │   ├── 005-build.md  # 十五项奖励候选/权重/等级与碰撞收益、资源调参和扩展教程。
 │   │   ├── 006-boss.md  # 首领模块/弱点/危险弧、物理接口、调参与验证教程。
 │   │   ├── 007-run-loop.md  # 完整战斗入口、波次/升级/结算、调试构筑及人工验证教程。
 │   │   ├── 008-rice.md  # 白饭力场/周期/拾取/强化链路、调参与复现教程。
-│   │   └── 009-theme.md  # 几何肥鱼/小鱼、主题资源、饱饭外观与物理隔离教程。
+│   │   ├── 009-theme.md  # 几何肥鱼/小鱼、主题资源、饱饭外观与物理隔离教程。
+│   │   └── 010-kill-rewards.md  # 击杀奖励队列、三选四选、真实收益、调参与扩展教程。
 │   ├── .gdignore  # 让 Godot 跳过文档目录的资源导入，避免把交接图当作游戏素材。
 │   ├── FILE_MAP.md  # 自动生成的项目文件树、每个文件的用途及主要调用关系。
 │   ├── PROJECT.md  # 已采纳的游戏目标、技术选择、原型范围与模块边界。
@@ -48,15 +54,23 @@ playAball/
 │   └── roguelite/  # 肉鸽构筑与主题数据
 │       ├── themes/  # 只影响绘图配色的角色主题资源
 │       │   └── fat_fish.tres  # 肥鱼主球、小鱼、能量与饱饭符号的默认配色。
-│       └── upgrades/  # 八项升级的标题、说明与等级上限
+│       └── upgrades/  # 十五项普通奖励和独立强身兜底的说明、分类、权重与等级上限
 │           ├── bowling.tres  # 升级 bowling 的标题、效果说明与等级上限。
+│           ├── choices.tres  # 三选变四选的说明、类别与一级上限。
 │           ├── companion.tres  # 升级 companion 的标题、效果说明与等级上限。
 │           ├── cooldown.tres  # 升级 cooldown 的标题、效果说明与等级上限。
+│           ├── double_launch.tres  # 双发容量的说明、类别与一级上限。
+│           ├── echo.tres  # 有限二次撞击的说明、类别与一级上限。
 │           ├── explosion.tres  # 升级 explosion 的标题、效果说明与等级上限。
 │           ├── follow.tres  # 升级 follow 的标题、效果说明与等级上限。
+│           ├── glide.tres  # 滑行的自身阻尼/摩擦增益、类别和三级上限。
 │           ├── heal.tres  # 升级 heal 的标题、效果说明与等级上限。
 │           ├── heavy.tres  # 升级 heavy 的标题、效果说明与等级上限。
-│           └── relay.tres  # 升级 relay 的标题、效果说明与等级上限。
+│           ├── launch_power.tres  # 强力发射的冲量增益、类别、权重与三级上限。
+│           ├── pulse.tres  # 无伤护身震退的说明、类别和一级上限。
+│           ├── relay.tres  # 升级 relay 的标题、效果说明与等级上限。
+│           ├── shrink.tres  # 敌人脉冲/首领震波缩范围的说明与两级上限。
+│           └── vigor.tres  # 普通池耗尽时本局生命上限+1的独立可重复兜底。
 ├── scenes/  # Godot 可编辑场景与节点结构
 │   ├── roguelite/  # 俯视零重力三靶场与可复用刚体场景
 │   │   ├── arena.tscn  # 可编辑俯视三靶场、四边围墙、斜切角、平面挡板与 HUD。
@@ -68,7 +82,7 @@ playAball/
 │   │   ├── player_ball.tscn  # 零重力主球刚体、圆形形状与弹性材质。
 │   │   ├── rice_lure.tscn  # 白饭Area2D与玩家拾取形状，不改变刚体碰撞。
 │   │   ├── run.tscn  # 保留旧入口的新五波升级/首领战斗场景。
-│   │   └── run_hud.tscn  # 可编辑的升级三选一卡片和胜负重开面板。
+│   │   └── run_hud.tscn  # 可编辑的三/四选一卡片和胜负重开面板；玩家血条尚未实现。
 │   ├── ball.tscn  # 可复用的球刚体、圆形碰撞形状与物理材质。
 │   ├── main.tscn  # 实验关卡的障碍、球、机关、目标、镜头和 HUD 节点布局。
 │   └── mechanism.tscn  # 可复用的区域机关入口，运行时按参数生成检测形状。
@@ -76,9 +90,11 @@ playAball/
 │   ├── roguelite/  # 新肉鸽物理、发射、碰撞与同伴逻辑
 │   │   ├── arena.gd  # 全屏拖动与按钮隔离、HUD 就绪状态、暂停/重置与单球越界回收。
 │   │   ├── arena.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
+│   │   ├── assist_effects.gd  # 可暂停的无伤护身震退、有限冲量与表现事件。
+│   │   ├── assist_effects.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
 │   │   ├── boss.gd  # 首领预警冲刺、真实撞墙弱点、可碎模块、缺口震波与召唤。
 │   │   ├── boss.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
-│   │   ├── collision_combat.gd  # 统一接近速度伤害、目标/首领接触点、有限接力、爆破和敌人投射。
+│   │   ├── collision_combat.gd  # 统一碰撞伤害、重击/二连撞/接力/爆破/保龄球预算与旧局清理。
 │   │   ├── collision_combat.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
 │   │   ├── combat_body.gd  # 零重力刚体接触报告、世界接触点、复位事件失效与物理状态接口。
 │   │   ├── combat_body.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
@@ -92,7 +108,9 @@ playAball/
 │   │   ├── enemy.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
 │   │   ├── hazard_ball.gd  # 慢危险弹、玩家检测、寿命和旧事件保护。
 │   │   ├── hazard_ball.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
-│   │   ├── launch_controller.gd  # 正常速度发射、冷却/白饭返还、跨冷却手势接续与取消。
+│   │   ├── kill_rewards.gd  # 死亡去重、递增门槛、击杀溢出和排队奖励的独立资源。
+│   │   ├── kill_rewards.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
+│   │   ├── launch_controller.gd  # 单发/双发容量、串行冷却、白饭返还与跨恢复输入手势。
 │   │   ├── launch_controller.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
 │   │   ├── player_ball.gd  # 主球冲量/反向动量、能量环与肥鱼/饱饭几何绘图。
 │   │   ├── player_ball.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
@@ -104,11 +122,11 @@ playAball/
 │   │   ├── rice_manager.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
 │   │   ├── run_arena.gd  # 继承三靶场的整局入口，接合波次、输入/暂停与生命反馈。
 │   │   ├── run_arena.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
-│   │   ├── run_build.gd  # 本局八升级等级、去重候选、首轮同伴保证与派生数值。
+│   │   ├── run_build.gd  # 十五项候选的类别/权重/资格、等级与全部派生数值及强身兜底。
 │   │   ├── run_build.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
-│   │   ├── run_director.gd  # 五波/预警刷怪/清残敌、升级应用、首领、胜负/重开与调试配置。
+│   │   ├── run_director.gd  # 击杀领奖队列/旧卡保护、即时构筑应用、五波首领与胜负/重开。
 │   │   ├── run_director.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
-│   │   ├── run_hud.gd  # 升级卡与结算展示，派发选择和重开信号。
+│   │   ├── run_hud.gd  # 三选四选类别/等级/换行卡片、报价版本与结算展示。
 │   │   ├── run_hud.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
 │   │   ├── theme_definition.gd  # 肥鱼主题ID/名字/绘图配色数据，不携带物理参数。
 │   │   ├── theme_definition.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
@@ -125,15 +143,23 @@ playAball/
 ├── tests/  # 无需测试插件的游戏行为检查
 │   ├── roguelite_boss.gd  # 首领真实撞墙/模块接触、弱点时序、护甲、缺口与死亡回归。
 │   ├── roguelite_boss.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
-│   ├── roguelite_build.gd  # 八升级候选/上限/重置与重击、接力、保龄球、爆破边界回归。
+│   ├── roguelite_build.gd  # 十五项池资格/权重/上限、派生参数与碰撞升级预算边界回归。
 │   ├── roguelite_build.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
 │   ├── roguelite_enemies.gd  # 三敌人预警/攻击、生命无敌、危险弹与旧事件回归。
 │   ├── roguelite_enemies.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
 │   ├── roguelite_input_feedback.gd  # 全屏真实鼠标事件、冷却临界帧、正常速度、接触反馈位置与复位清理回归。
 │   ├── roguelite_input_feedback.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
+│   ├── roguelite_kill_rewards.gd  # 击杀门槛/溢出/去重/排队/复位与非法调参回归。
+│   ├── roguelite_kill_rewards.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
+│   ├── roguelite_kill_run.gd  # 真实死亡领奖、保留弹体暂停、连续奖励/旧卡保护、胜负和整局重置。
+│   ├── roguelite_kill_run.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
+│   ├── roguelite_launch_rewards.gd  # 双发容量/串行恢复/幂等应用与滑行独立材质回归。
+│   ├── roguelite_launch_rewards.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
+│   ├── roguelite_reward_effects.gd  # 分级重击、有限二连撞、攻击缩圈、无伤震退与旧局事件回归。
+│   ├── roguelite_reward_effects.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
 │   ├── roguelite_rice.gd  # 平面吸力限幅、生成/过期/暂停、冷却返还与强化链路检查。
 │   ├── roguelite_rice.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
-│   ├── roguelite_run.gd  # 整局波次、升级暂停优先级、五次选择、胜负和十次重开检查。
+│   ├── roguelite_run.gd  # 整局清残敌、击杀升级/暂停优先级、五次清波到首领、胜负与十次重开检查。
 │   ├── roguelite_run.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
 │   ├── roguelite_smoke.gd  # 俯视发射/接力、默认不跟随、三态障碍反弹、可选引导与回收检查。
 │   ├── roguelite_smoke.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
@@ -168,11 +194,11 @@ scenes/roguelite/arena.tscn → arena.gd（独立俯视三靶场）
   ├─ collision_combat → destructible（去重伤害）
   └─ impact_feedback（共用表现，新场景粒子零重力）
 
-scenes/roguelite/run.tscn → run_arena → run_director（五波/升级/胜负）
+scenes/roguelite/run.tscn → run_arena → run_director（五波/击杀领奖/胜负）
   ├─ enemy / player_health / hazard_ball（三敌人与可预警危险）
-  ├─ run_build → resources/roguelite/upgrades（八升级）
+  ├─ run_build → resources/roguelite/upgrades（十五项池/分类权重）
   ├─ boss（可碎模块/撞墙弱点/缺口震波）
-  ├─ run_hud（升级卡/结算/重开）
+  ├─ run_hud（3/4选卡/结算/重开）
   └─ rice_manager → rice_lure / theme_definition（白饭平面力/肥鱼绘图）
 
 tools/verify.ps1 / GitHub CI
@@ -181,7 +207,8 @@ tools/verify.ps1 / GitHub CI
   ├─ tests/smoke.gd（旧侧视行为回归）
   ├─ tests/roguelite_smoke.gd（俯视发射/碰撞/接力/归队）
   ├─ tests/roguelite_input_feedback.gd（全屏手势/冷却临界/反馈坐标）
-  └─ tests/roguelite_{enemies,build,boss,run,rice,theme}.gd（整局/白饭/主题规则）
+  ├─ tests/roguelite_{enemies,build,boss,run,rice,theme}.gd（整局/白饭/主题规则）
+  └─ tests/roguelite_{kill_rewards,kill_run,launch_rewards,reward_effects}.gd（击杀发育雏形）
 ```
 
 图中关系是人工维护的架构摘要，文件树由工具生成；改变模块关系时也要更新生成器中的摘要，并通过 Review。维护方法见 [教程 002](tutorials/002-project-map-and-review.md)。
