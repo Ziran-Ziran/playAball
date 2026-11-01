@@ -2,6 +2,8 @@ class_name DemoCombat
 extends Node
 signal hit(point: Vector2, speed: float)
 signal relay(point: Vector2, generation: int)
+## 逻辑判定证据；实验室只消费，不重新执行伤害或去重。
+signal contact_outcome(event: Dictionary)
 @export var minimum_speed: float = 180.0
 @export var medium_speed: float = 450.0
 @export var heavy_speed: float = 850.0
@@ -41,24 +43,44 @@ func accept_pair(a: Node, b: Node) -> bool:
 	return true
 
 func resolve(actor: DemoBody, other: Node, speed: float, point: Vector2) -> void:
-	if not is_instance_valid(actor) or not is_instance_valid(other) or not actor.attacking() or actor.reset_pending:
+	if not is_instance_valid(actor):
+		_report_outcome(actor, other, speed, point, "rejected", "invalid_actor")
 		return
-	if not damageable(other) or damage_for(speed) == 0:
+	if not is_instance_valid(other):
+		_report_outcome(actor, other, speed, point, "rejected", "invalid_target")
+		return
+	if actor.reset_pending:
+		_report_outcome(actor, other, speed, point, "rejected", "resetting")
+		return
+	if not actor.attacking():
+		_report_outcome(actor, other, speed, point, "rejected", "no_attack_qualification")
+		return
+	if not damageable(other):
+		_report_outcome(actor, other, speed, point, "rejected", "target_not_damageable")
+		return
+	var base_damage: int = damage_for(speed)
+	if base_damage == 0:
+		_report_outcome(actor, other, speed, point, "rejected", "speed_below_minimum")
 		return
 	if not accept_pair(actor, other):
+		_report_outcome(actor, other, speed, point, "rejected", "pair_cooldown")
 		return
 	# 敌人投射物只消费自己的两次资格，不能继续制造下一代。
 	var enemy_projectile: bool = actor.has_method("make_projectile")
 	if enemy_projectile:
 		var projectile_key: String = "%d:%d" % [actor.get_instance_id(), actor.chain_id]
 		var struck: Array = projectile_targets.get(projectile_key, [])
-		if struck.has(other.get_instance_id()) or struck.size() >= 2:
+		if struck.has(other.get_instance_id()):
+			_report_outcome(actor, other, speed, point, "rejected", "projectile_target_repeat")
+			return
+		if struck.size() >= 2:
+			_report_outcome(actor, other, speed, point, "rejected", "projectile_hit_budget_exhausted")
 			return
 		struck.append(other.get_instance_id())
 		projectile_targets[projectile_key] = struck
 		actor.set("projectile_hits_left", maxi(0, int(actor.get("projectile_hits_left")) - 1))
 		trim_history(projectile_targets)
-	var amount: int = damage_for(speed)
+	var amount: int = base_damage
 	if actor is DemoPlayer and build != null:
 		amount += clampi(int(build.levels.get("heavy", 0)), 0, 3)
 	# 饱饭只属于吃饭后发起的新链，敌人投射物/爆炸不提前消费它。
@@ -77,6 +99,7 @@ func resolve(actor: DemoBody, other: Node, speed: float, point: Vector2) -> void
 		if not enemy_projectile and (actor is DemoPlayer or actor is DemoCompanion) and upgraded("bowling") and other.has_method("make_projectile"):
 			other.call("make_projectile", actor.chain_id)
 	record({"chain": actor.chain_id, "source": actor.get_instance_id(), "target": other.get_instance_id(), "generation": actor.generation, "damage": amount})
+	_report_outcome(actor, other, speed, point, "accepted", "valid_damage", amount)
 	hit.emit(point, speed)
 	if (actor is DemoPlayer or actor is DemoCompanion) and upgraded("echo"):
 		_schedule_echo(actor, other, speed)
@@ -173,6 +196,20 @@ func record(event: Dictionary) -> void:
 	events.append(event)
 	if events.size() > 256:
 		events.pop_front()
+
+func _report_outcome(actor: Node, other: Node, speed: float, point: Vector2, result: String, reason: String, damage: int = 0) -> void:
+	contact_outcome.emit({
+		"result": result,
+		"reason": reason,
+		"source": actor.get_instance_id() if is_instance_valid(actor) else 0,
+		"target": other.get_instance_id() if is_instance_valid(other) else 0,
+		"source_chain": int(actor.get("chain_id")) if is_instance_valid(actor) else 0,
+		"source_generation": int(actor.get("generation")) if is_instance_valid(actor) else 0,
+		"speed": maxf(0.0, speed),
+		"point": point,
+		"damage": damage,
+		"time": elapsed,
+	})
 
 func reset_combat() -> void:
 	_echo_revision += 1

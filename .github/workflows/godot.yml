@@ -36,6 +36,12 @@ jobs:
           "$GODOT" --headless --path . --script tests/roguelite_input_feedback.gd 2>&1 | tee /tmp/input-feedback.log
           ! grep -E '^(SCRIPT ERROR|ERROR):' /tmp/input-feedback.log
           grep -q 'INPUT FEEDBACK CHECKS PASSED' /tmp/input-feedback.log
+          "$GODOT" --headless --path . --script tests/roguelite_presentation_interface.gd 2>&1 | tee /tmp/presentation-interface.log
+          ! grep -E '^(SCRIPT ERROR|ERROR):' /tmp/presentation-interface.log
+          grep -q 'PRESENTATION INTERFACE CHECKS PASSED' /tmp/presentation-interface.log
+          "$GODOT" --headless --path . --script tests/roguelite_gameplay_lab.gd 2>&1 | tee /tmp/gameplay-lab.log
+          ! grep -E '^(SCRIPT ERROR|ERROR):' /tmp/gameplay-lab.log
+          grep -q 'GAMEPLAY LAB CHECKS PASSED' /tmp/gameplay-lab.log
           for spec in enemies build boss run rice theme kill_rewards kill_run launch_rewards reward_effects audio hud feedback_integration stage_flow shop_events crowd difficulty damage_contacts enemy_readability splitting; do
             "$GODOT" --headless --path . --script "tests/roguelite_${spec}.gd" 2>&1 | tee "/tmp/${spec}.log"
             ! grep -E '^(SCRIPT ERROR|ERROR):' "/tmp/${spec}.log"

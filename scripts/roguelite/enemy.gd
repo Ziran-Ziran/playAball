@@ -1,6 +1,9 @@
 class_name DemoEnemy
 extends DemoBody
 signal died(enemy: DemoEnemy)
+## 玩法只发布只读快照；表现组件不得通过它修改生命、碰撞或攻击状态。
+signal presentation_changed(snapshot: Dictionary)
+signal presentation_event(event: StringName, payload: Dictionary)
 enum Kind { FRAGILE, HEAVY, TURRET }
 @export var kind: Kind = Kind.FRAGILE
 @export var warning_duration: float = 0.8
@@ -28,21 +31,58 @@ var charge_left: float = 0.0
 var aim_direction: Vector2 = Vector2.RIGHT
 var projectile_left: float = 0.0
 var projectile_hits_left: int = 0
+var max_hp: int = 1
 const HAZARD_SCENE: PackedScene = preload("res://scenes/roguelite/hazard_ball.tscn")
+@onready var presentation: Node2D = $Presentation
 
 func apply_attack_scale(scale: float) -> void:
 	# 从基准重算，重复应用升级不会把半径指数压小，也不触碰实体形状。
 	pulse_radius = 90.0 * clampf(scale, 0.7, 1.0)
-	queue_redraw()
+	_notify_presentation(&"range_changed")
 
 func _ready() -> void:
 	super._ready()
 	add_to_group("demo_damageable")
 	hp = hit_points_override if hit_points_override > 0 else [1, 4, 2][kind]
+	max_hp = hp
 	mass = 0.55 if kind == Kind.HEAVY else 0.2
 	if kind == Kind.HEAVY:
 		$Shape.shape = $Shape.shape.duplicate()
 		$Shape.shape.radius = 30.0
+	_attach_presentation(presentation)
+	_notify_presentation(&"initialized")
+
+func _attach_presentation(view: Node2D) -> void:
+	if not is_instance_valid(view):
+		return
+	presentation = view
+	if view.has_method("bind_source"):
+		view.call("bind_source", self)
+
+func presentation_snapshot() -> Dictionary:
+	# 这是表现层唯一需要的 actor 数据面；不暴露可写的生命或物理引用。
+	return {
+		"entity_id": get_instance_id(),
+		"kind": int(kind),
+		"kind_name": ["fragile", "heavy", "turret"][kind],
+		"hp": hp,
+		"max_hp": max_hp,
+		"dead": dead,
+		"warning_left": warning_left,
+		"warning_fraction": warning_left / maxf(0.001, warning_duration),
+		"attack_active": attack_active,
+		"stagger_left": stagger_left,
+		"aim_direction": aim_direction,
+		"linear_velocity": linear_velocity,
+		"pulse_radius": pulse_radius,
+		"attack_range": pulse_radius if kind == Kind.FRAGILE else charge_range if kind == Kind.HEAVY else attack_range,
+	}
+
+func _notify_presentation(event: StringName, payload: Dictionary = {}) -> void:
+	if not is_inside_tree():
+		return
+	presentation_changed.emit(presentation_snapshot())
+	presentation_event.emit(event, payload)
 
 func attacking() -> bool:
 	return not dead and chain_id > 0 and projectile_left > 0.0 and projectile_hits_left > 0
@@ -68,13 +108,14 @@ func hurt(amount: int) -> void:
 	attack_active = false
 	charge_left = 0.0
 	attack_left = attack_cooldown
+	_notify_presentation(&"hurt", {"amount": amount, "hp": hp})
 	if hp == 0:
 		dead = true
 		set_deferred("collision_layer", 0)
 		set_deferred("collision_mask", 0)
+		_notify_presentation(&"died", {"point": global_position, "entire_family": false})
 		died.emit(self)
 		queue_free()
-	queue_redraw()
 
 func _physics_process(delta: float) -> void:
 	if dead:
@@ -89,14 +130,13 @@ func _physics_process(delta: float) -> void:
 	# 受击后保留击退惯性，不立刻用追踪力刹住击退并贴回玩家。
 	if stagger_left > 0.0:
 		stagger_left = maxf(0.0, stagger_left - delta)
-		queue_redraw()
 		return
 	if not is_instance_valid(player) or not is_instance_valid(health) or health.hp <= 0:
 		return
 	attack_left = maxf(0.0, attack_left - delta)
 	var offset: Vector2 = player.global_position - global_position
 	if not _within_attack_range(offset) and (warning_left > 0.0 or charge_left > 0.0 or attack_active):
-		_cancel_attack()
+		_cancel_attack(&"out_of_range")
 	if charge_left > 0.0:
 		charge_left = maxf(0.0, charge_left - delta)
 		attack_active = charge_left > 0.0
@@ -109,30 +149,31 @@ func _physics_process(delta: float) -> void:
 	elif attack_left <= 0.0 and _within_attack_range(offset):
 		warning_left = warning_duration
 		aim_direction = offset.normalized() if not offset.is_zero_approx() else Vector2.RIGHT
+		_notify_presentation(&"warning_started")
 	elif kind != Kind.TURRET:
 		var speed: float = approach_speed * (0.6 if kind == Kind.HEAVY else 1.0)
 		var desired: Vector2 = offset.normalized() * speed
 		apply_central_force(((desired - linear_velocity) * mass * 3.0).limit_length(approach_force))
-	queue_redraw()
 
 func _within_attack_range(offset: Vector2) -> bool:
 	var radius: float = pulse_radius if kind == Kind.FRAGILE else charge_range if kind == Kind.HEAVY else attack_range
 	return offset.length() <= maxf(0.0, radius)
 
-func _cancel_attack() -> void:
+func _cancel_attack(reason: StringName = &"cancelled") -> void:
 	# 离开范围立即撤销危险资格；保留真实惯性，不用强制改速度来停冲撞。
 	warning_left = 0.0
 	attack_active = false
 	charge_left = 0.0
 	attack_left = 0.0
-	queue_redraw()
+	_notify_presentation(&"attack_cancelled", {"reason": String(reason)})
 
 func _release_attack(offset: Vector2) -> void:
 	# 释放点再次确认，不能把已经过期的预警带到范围外。
 	if not _within_attack_range(offset):
-		_cancel_attack()
+		_cancel_attack(&"out_of_range_release")
 		return
 	attack_left = attack_cooldown
+	_notify_presentation(&"attack_released")
 	match kind:
 		Kind.FRAGILE:
 			attack_active = true
@@ -153,36 +194,3 @@ func _release_attack(offset: Vector2) -> void:
 			shot.position = hazards.to_local(global_position + aim_direction * 43.0)
 			shot.linear_velocity = aim_direction * hazard_speed
 			hazards.add_child(shot)
-
-func tier_color() -> Color:
-	# 形状区分敌人行为，色阶与数字只表达当前还剩多少生命。
-	if hp <= 1:
-		return Color("62d6ac")
-	if hp <= 3:
-		return Color("f3c568")
-	return Color("d78ad8")
-
-func _draw() -> void:
-	var color: Color = tier_color()
-	match kind:
-		Kind.FRAGILE:
-			draw_rect(Rect2(-19, -19, 38, 38), color)
-			draw_line(Vector2(-14, -14), Vector2(14, 14), Color("203139"), 3)
-		Kind.HEAVY:
-			draw_circle(Vector2.ZERO, 30, color)
-			draw_rect(Rect2(-23, -11, 46, 22), color.darkened(0.4))
-		Kind.TURRET:
-			draw_colored_polygon(PackedVector2Array([Vector2(-22, 20), Vector2(22, 20), Vector2(0, -25)]), color)
-			draw_line(Vector2.ZERO, aim_direction * 33, color.lightened(0.2), 9)
-	if warning_left > 0.0 or attack_active:
-		var radius: float = pulse_radius if kind == Kind.FRAGILE else 40.0
-		draw_circle(Vector2.ZERO, radius, Color(1, 0.35, 0.25, 0.22) if attack_active else Color("ffac64"), attack_active, -1.0 if attack_active else 2.0, true)
-		if kind != Kind.FRAGILE:
-			draw_line(aim_direction * 40, aim_direction * 115, Color("ffac64"), 3)
-	# 高对比数字始终最后绘制，不能被预警或炮管盖住，也不只靠颜色辨血量。
-	var font: Font = ThemeDB.fallback_font
-	var text: String = str(hp)
-	var font_size: int = 18
-	var text_width: float = font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x
-	draw_circle(Vector2.ZERO, maxf(11.0, text_width * 0.5 + 3.0), Color("17232d"))
-	draw_string(font, Vector2(-text_width * 0.5, 6), text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, Color("fff7df"))

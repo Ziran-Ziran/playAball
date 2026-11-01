@@ -103,6 +103,10 @@ func release(point: Vector2) -> bool:
 		return false
 	var drag: Vector2 = (anchor - point).limit_length(player.max_drag)
 	cancel()
+	return launch_with_drag(drag)
+
+func launch_with_drag(drag: Vector2) -> bool:
+	# 实验夹具也走本函数，共享阻塞、双发、冷却、正式冲量和事件规则。
 	_sync_single_charge()
 	if blocked or not available() or not player.launch(drag, shots + 1):
 		return false

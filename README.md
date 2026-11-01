@@ -26,6 +26,10 @@
 
 新玩法入口为 `scenes/roguelite/arena.tscn`，在编辑器打开后按 F6；已迁移为俯视零重力 P0～P2 三靶场，可在窗口全屏空白处拖动发射，全程正常速度，待真实玩家复验。F5 的旧实验入口保持原样。操作与调参见 [教程 003](docs/tutorials/003-collision-roguelite.md)，后续按 [分阶段计划](docs/plans/003-collision-roguelite.md) 推进。
 
+B线开发夹具入口为 `scenes/roguelite/gameplay_lab.tscn`，在编辑器打开后 F6；不替换正式 `run.tscn`。首版提供单敌、怪群、墙角、伙伴、范围、炮台、分裂和首领八种固定夹具，以及白名单参数、正式固定发射、读数、拒伤日志、本地预设和复现记录。操作见[教程 022](docs/tutorials/022-gameplay-lab.md)。
+
+敌人默认绘制和正式生命面板已有最小可替换接口：玩法发布只读快照和真实事件，表现只消费；UI请求仍由规则层校验。A线接入边界与示例见[教程 021](docs/tutorials/021-gameplay-presentation-interface.md)。
+
 ## 试玩碰撞拆迁 Demo
 
 打开 `scenes/roguelite/run.tscn` 后按 F6：五波敌人、击杀门槛领奖、十五项发育池、首领与胜负重开；默认肥鱼/小鱼几何主题，白饭局部吸引与饱饭撞已接入。窗口标题为“玩个球 · 击杀奖励 Demo”。旧三靶场仍是 `arena.tscn`，F5 默认侧视实验保持。
@@ -50,4 +54,4 @@
 
 Windows导出方法见[教程019](docs/tutorials/019-windows-export.md)，包内[试玩说明](docs/playtest/PLANNER_README.txt)面向策划，不需安装Godot。导出只在暂存副本切换到run入口，源码F5旧侧视保留，成品位于忽略的builds目录。
 
-用户拟负责A线（美术/UI/粒子/声音表现）及最终审阅merge，B线负责玩法创新/实验室与集成协调。整文件所有权、接口契约、阶段计划与验收见[计划008](docs/plans/008-parallel-development.md)和[教程020](docs/tutorials/020-parallel-workflow.md)。目前只落文档，表现拆分/实验室/下一机制尚未实现；B不自动获得合并权限。
+用户拟负责A线（美术/UI/粒子/声音表现）及最终审阅merge，B线负责玩法创新、实验室与集成协调。整文件所有权、接口契约、阶段计划与验收见[计划008](docs/plans/008-parallel-development.md)和[教程020](docs/tutorials/020-parallel-workflow.md)。S1最小表现接口和首版八类玩法实验室已实现；玩家/伙伴/首领等其余表现拆分及下一机制尚未实施，B不自动获得合并权限。

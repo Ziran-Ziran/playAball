@@ -2,6 +2,8 @@ class_name DemoBody
 extends RigidBody2D
 ## 所有位置修复只在物理状态接口执行；正常运动只受力和冲量驱动。
 signal contact_report(actor: DemoBody, other: Node, speed: float, point: Vector2)
+## 所有真实接触的诊断样本；攻击资格与伤害取舍仍由 DemoCombat 决定。
+signal contact_sampled(actor: DemoBody, other: Node, speed: float, point: Vector2, attacking: bool)
 signal impacted(point: Vector2, strength: float)
 @export var speed_limit: float = 1500.0
 var chain_id: int = 0
@@ -13,6 +15,8 @@ var reset_pending: bool = false
 var reset_point: Vector2
 var _feedback_left: float = 0.0
 var _reset_revision: int = 0
+## 默认关闭完整拒伤诊断；实验室打开后，无攻击资格接触也交给规则层记录原因。
+var contact_diagnostics_enabled: bool = false
 
 func _ready() -> void:
 	# 新玩法派生刚体统一禁用环境重力，旧原型不继承此类。
@@ -56,11 +60,12 @@ func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
 		var speed: float = maxf(0.0, -(incoming_velocity - other_velocity).dot(state.get_contact_local_normal(index)))
 		# API 名称中的 local 指本体，返回值已经是世界坐标，不能再乘 transform。
 		var point: Vector2 = state.get_contact_local_position(index)
+		contact_sampled.emit(self, other, speed, point, attacking())
 		# 目标受击由统一战斗信号反馈，避免同一接触播放两次。
 		if not (other is DemoTarget or other.is_in_group("demo_damageable")) and speed >= 75.0 and _feedback_left <= 0.0:
 			_feedback_left = 0.09
 			publish_impact.call_deferred(point, speed, _reset_revision)
-		if attacking():
+		if attacking() or contact_diagnostics_enabled:
 			# 延后避开物理锁，并保留事件产生时的发射编号，丢弃复位前的过期事件。
 			publish_contact.call_deferred(other.get_instance_id(), speed, point, chain_id, _reset_revision)
 	_previous_velocity = incoming_velocity

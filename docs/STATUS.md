@@ -1,6 +1,17 @@
 # 当前状态
 
-更新：2026-10-31。当前本地开发：计划006的音效、生命面板与阶段休息功能；奖励基线为46d0aa3。用户最新否定温和音色与UI样板，停止完整美术工作，优先功能。用户最新已明确授权本批导出、分工文档及最终Review通过后的commit/push/PR/merge；此前无授权记录是历史事实，不延续为本轮禁止。
+更新：2026-11-01。当前B线在`feat/gameplay-lab`本地开发，从`origin/main=935b9b8`建立独立checkout；原checkout的`project.godot`编辑器规范化差异未带入或提交。
+
+## 2026-11-01 B线接管：最小表现接口与玩法实验室（本地开发）
+
+- 本机重新核验为`LS111`、Windows10.0.26200、AMD64、用户`liu13`；工作目录`D:\playAball\B\playAball`。Git2.56.0.windows.4，Godot4.7.1.stable.official.a13da4feb标准版。原checkout有长期保留的`project.godot`编辑器规范化差异；本轮另从`origin/main=935b9b8`建立`feat/gameplay-lab`独立worktree，打开Godot后当前B checkout也产生同类编辑器规范化差异，继续保留但排除提交。
+- S1最小拆分完成：敌人玩法保留生命/预警/攻击/硬直/物理，发布`presentation_snapshot()`、`presentation_changed`与`presentation_event`；默认绘制在`DemoEnemyView`。正式生命面板在`DemoHealthView`，`RunHUD`只委托绑定。玩家重开按钮改为玩法校验请求；接触、伤害和拒伤结果可由表现/实验室只读消费。
+- 独立`scenes/roguelite/gameplay_lab.tscn`F6运行，不替换正式`run.tscn`。首版八类夹具为单敌、怪群、墙角、伙伴、范围、炮台、分裂和首领；参数只影响实验重建，固定发射走`DemoLaunch.launch_with_drag()`正式规则。
+- 实验室显示速度、接触相对速度、伤害、冷却、发射链、续力剩余、目标生命、危险弹、分裂预警和清场时间；无伤原因来自实际战斗分支。日志固定上限160条，预设/复现记录写入被忽略的`.local/`，不覆盖正式资源。
+- 本项目已纳入`tests/roguelite_presentation_interface.gd`和`tests/roguelite_gameplay_lab.gd`，本机测试分别为15、52项通过；敌人可读性现为40项。范围与炮台夹具按各自敌人数量生成并保持同一中心距，单敌/分裂族根/首领保持固定一个。完整自动检查25套共1072项通过；新增本Review记录后最终FILE_MAP覆盖229文件并检查通过。
+- 最终代码与发布前只读审查均无剩余阻塞；完整结论与未测项见`reviews/2026-11-01-gameplay-lab.md`。本轮只请求进入最终Review，尚未授权或执行commit、push、PR、merge。
+- 真实图形进程分别启动`gameplay_lab.tscn`与正式`run.tscn`各240帧，OpenGL Compatibility/NVIDIA RTX4050，退出0；无脚本错误。未进行真人试玩、完整通关、A视觉样板评价或音质验收。
+- 未完成：A新视觉样板、玩家/伙伴/首领等其余表现拆分、批量参数扫描、输入录制回放、统计曲线和下一机制选择。实验室当前不进入正式胜负流程，生命归零后需重置；这不是正式`run.tscn`的胜负规则。真人视觉、手感、音质与完整通关仍未验收。
 
 ## 本批Git收尾：策划Windows包与双线分工
 
@@ -9,7 +20,7 @@
 - 本机Godot4.7.1及匹配Windows64导出模板已存在。tools/export_windows.ps1在独立暂存副本导出run入口，原F5旧侧视和配置保留；builds/playaball-planner-20261031-final/PlayABall.exe为109386304字节内嵌资源单文件，zip38170671字节（约38.2MB），含试玩说明与build_info。成品仅本地，不提交/上传；用户自行发送。
 - 运行资源指纹D6273627205F3157DA428451F800A0079A96D2A506C5039BA622E45D6EC7EB2E；导出包含当前尚未提交的游戏改动，不能用导出时基线SHA冒充完整源码版本。实际执行release EXE从构建目录启动进入肉鸽，拖动发射计数1/冷却、失败R重开恢复5/5与0发射；独立EXE headless --quit-after 60退出0，日志.local/export-exe-smoke.out/.err，无错误。不冒充完整通关、跨电脑、音质已验收。
 - 导出脚本另经Windows PowerShell5.1实际导出复测，使用显式UTF8/BOM、兼容哈希API和Ordinal排序。首次包与复测暂存运行资源逐字节相同，指纹排序已统一；最终EXE独立headless启动退出0。用户按Esc停止桌面操控后已停止所有UI输入，最终包不冒称新增人工通关或完整窗口试玩。
-- 规则AGENTS/CONTRIBUTING已引用计划008和教程020，详细A线样板/表现与B线实验室/一个机制对照及整文件边界。接口拆分、实验室、新机制仍未实施，旧暖色样板不采纳。导出教程019及策划说明已补。
+- 规则AGENTS/CONTRIBUTING已引用计划008和教程020，详细A线样板/表现与B线实验室/一个机制对照及整文件边界。截至上一批，接口拆分、实验室、新机制尚未实施；2026-11-01的最新状态以顶部交接为准，其中S1与首版实验室已落地、下一机制仍未选定。旧暖色样板不采纳，导出教程019及策划说明已补。
 - 本批代码独立最终审查final_code_review未参与实现，游戏/场景/资源/测试/CI及导出脚本静态审查无阻塞，独立36/21/26/12共95项复跑退出0。文档/目录/最终记录冻结后独立复核已通过，无剩余阻塞或建议项；本轮重新完整verify导入/210文件目录/23套共1004项通过，退出0，无脚本错误或警告，日志.local/handoff-full-verify.log。记录见reviews/2026-10-31-feedback-export.md。实际PR编号/合并SHA以本分支Git和GitHub为准。
 
 ## 前序反馈：橙色方块漏伤、范围取消与可选分裂

@@ -64,6 +64,12 @@ func sustain_enemy_impact(target_id: int, toward_target: Vector2) -> bool:
 	_drive_budget -= impulse
 	return true
 
+func impact_drive_remaining() -> float:
+	return _drive_budget
+
+func impact_drive_time_remaining() -> float:
+	return _drive_left
+
 func reset_body(point: Vector2) -> void:
 	_drive_left = 0.0
 	_drive_budget = 0.0

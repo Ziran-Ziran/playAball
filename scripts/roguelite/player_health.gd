@@ -3,6 +3,7 @@ extends Node
 ## 同一玩家共用受伤无敌时间，多个危险来源不会在一帧扣空生命。
 signal changed(hp: int)
 signal died
+signal damage_rejected(reason: StringName, amount: int)
 @export var max_hp: int = 5
 @export var invulnerability: float = 0.8
 var hp: int = 5
@@ -15,7 +16,14 @@ func _physics_process(delta: float) -> void:
 	invulnerability_left = maxf(0.0, invulnerability_left - delta)
 
 func hurt(amount: int = 1) -> bool:
-	if hp <= 0 or amount <= 0 or invulnerability_left > 0.0:
+	if hp <= 0:
+		damage_rejected.emit(&"already_dead", amount)
+		return false
+	if amount <= 0:
+		damage_rejected.emit(&"invalid_damage", amount)
+		return false
+	if invulnerability_left > 0.0:
+		damage_rejected.emit(&"invulnerable", amount)
 		return false
 	hp = maxi(0, hp - amount)
 	invulnerability_left = invulnerability

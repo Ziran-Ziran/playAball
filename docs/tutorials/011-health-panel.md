@@ -11,8 +11,9 @@
 | 文件/节点 | 用途 |
 | --- | --- |
 | `scripts/roguelite/run_arena.gd` | 整局初始化后，调用 `$RunHUD.bind_health(director.health)` 接线；将原有进度与控制移到生命面板右侧 |
-| `scripts/roguelite/run_hud.gd` | 订阅生命信号，刷新条/数字/状态，保留三选四选、结算和重开按钮 |
-| `scenes/roguelite/run_hud.tscn` | 保存可在编辑器调整的面板与样式 |
+| `scripts/roguelite/run_hud.gd` | 保留奖励、结算和重开；`bind_health()`只委托可替换生命面板 |
+| `scripts/roguelite/presentation/health_view.gd` | 订阅生命信号，刷新条/数字/状态，不保存第二份可修改生命 |
+| `scenes/roguelite/presentation/health_view.tscn` | 可独立替换的正式生命面板场景 |
 | `Overlay/PlayerPanel/Content/Heading` | 肥鱼名称与 `HealthValue` 数字 |
 | `Overlay/PlayerPanel/Content/HealthBar` | 实际生命比例，独立同步最大值和当前值 |
 | `Overlay/PlayerPanel/Content/HealthState` | 受伤、恢复、无敌、低生命、倒下等文字提示 |
@@ -22,7 +23,7 @@
 ## 二、从伤害到画面的过程
 
 1. 危险攻击调用 `DemoHealth.hurt()`。它先判断死亡、非法伤害和无敌时间，只有真正扣血才发出 `changed(hp)`。
-2. `bind_health()` 将此信号接到 `_on_health_changed()`。HUD 比较上次显示值，生成短暂的“受伤 -2”或“恢复 +2”文字。
+2. `RunHUD.bind_health()` 将信号转交 `DemoHealthView.bind_source()`。生命面板比较上次显示值，生成短暂的“受伤 -2”或“恢复 +2”文字。
 3. `_refresh_health()` 每次从组件读取 `max_hp` 与 `hp`，分别赋给进度条上限、当前值和数字。因此强身增加上限时，不会只改数字而漏改比例。
 4. 无敌倒计时结束没有另一个 `changed` 信号，因此 HUD 在 `_process()` 中只读刷新状态。它不减少 `invulnerability_left`，也不推进战斗计时。暂停时生命组件停止物理更新，HUD 继续显示当前状态；短暂的文字反馈也暂停计时。
 5. `hp == 0` 优先显示“已倒下 · R 重新开局”，不被受伤动画遮住。生命低于或等于最大值三分之一时，除了条色，还出现“生命偏低”文字。
@@ -31,9 +32,9 @@
 
 ## 三、在检查器中怎么调
 
-打开 `run_hud.tscn`，选择 `Overlay/PlayerPanel` 可调整位置和大小。当前位于逻辑画布左上 `(40,12)` 到 `(300,106)`，上方安全区之外的战斗边界仍由原场景负责。`run_arena.gd` 中原有进度和控制从横坐标320开始，改宽面板时要一起复查它们。
+打开 `scenes/roguelite/presentation/health_view.tscn` 可独立调整生命面板；在 `run_hud.tscn` 中它实例为 `Overlay/PlayerPanel`。当前位于逻辑画布左上 `(40,12)` 到 `(300,106)`，上方安全区之外的战斗边界仍由原场景负责。`run_arena.gd` 中原有进度和控制从横坐标320开始，改宽面板时要一起复查它们。
 
-选择场景根节点 `RunHUD`，调整导出的 `Health Feedback Seconds` 可改变受伤/治疗文字保持时长，默认0.7秒。这只影响展示，不改变受伤无敌时间。
+选择生命面板根节点`DemoHealthView`，调整导出的 `Health Feedback Seconds` 可改变受伤/治疗文字保持时长，默认0.7秒。这只影响展示，不改变受伤无敌时间。
 
 选择 `HealthBar`，展开 Theme Overrides 的 Styles：`HealthTrack` 是背景，`HealthFill` 是填充；`HealthPanelStyle` 控制面板底色、圆角与边距。字号在各 Label 的 Theme Overrides 中修改。共享同一个样式资源会影响所有引用它的控件，想单独改某份先在编辑器中使资源唯一。
 

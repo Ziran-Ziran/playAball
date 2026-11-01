@@ -36,6 +36,8 @@ foreach ($step in @(
     @{ Name = 'damage_contacts'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_damage_contacts.gd' },
     @{ Name = 'enemy_readability'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_enemy_readability.gd' },
     @{ Name = 'splitting'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_splitting.gd' },
+    @{ Name = 'presentation_interface'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_presentation_interface.gd' },
+    @{ Name = 'gameplay_lab'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_gameplay_lab.gd' },
     @{ Name = 'smoke'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/smoke.gd' }
 )) {
     $outFile = Join-Path $logDirectory ($step.Name + '.out')
@@ -73,6 +75,8 @@ foreach ($step in @(
     $completionMarkers.damage_contacts = 'DAMAGE CONTACT CHECKS PASSED'
     $completionMarkers.enemy_readability = 'ENEMY READABILITY CHECKS PASSED'
     $completionMarkers.splitting = 'SPLITTING CHECKS PASSED'
+    $completionMarkers.presentation_interface = 'PRESENTATION INTERFACE CHECKS PASSED'
+    $completionMarkers.gameplay_lab = 'GAMEPLAY LAB CHECKS PASSED'
     if ($completionMarkers.ContainsKey($step.Name) -and $logText -notmatch $completionMarkers[$step.Name]) {
         throw ($step.Name + ' 未获得测试完成标志。')
     }
@@ -80,4 +84,4 @@ foreach ($step in @(
         throw '未获得目录检查完成标志。'
     }
 }
-Write-Output 'VERIFIED: import + map + all 23 behavior suites including contact damage range and splitting'
+Write-Output 'VERIFIED: import + map + all 25 behavior suites including presentation interface and gameplay lab'
