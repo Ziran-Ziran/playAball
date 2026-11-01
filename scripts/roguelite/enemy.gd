@@ -173,7 +173,6 @@ func _release_attack(offset: Vector2) -> void:
 		_cancel_attack(&"out_of_range_release")
 		return
 	attack_left = attack_cooldown
-	_notify_presentation(&"attack_released")
 	match kind:
 		Kind.FRAGILE:
 			attack_active = true
@@ -194,3 +193,5 @@ func _release_attack(offset: Vector2) -> void:
 			shot.position = hazards.to_local(global_position + aim_direction * 43.0)
 			shot.linear_velocity = aim_direction * hazard_speed
 			hazards.add_child(shot)
+	# 仅在状态与实际弹体提交后发布成功事件，预算拒绝不冒充已释放。
+	_notify_presentation(&"attack_released")

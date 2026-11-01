@@ -78,6 +78,22 @@ func run() -> void:
 	check(outcomes[2].result == "accepted" and enemy.hp < hp_before, "Combat accepted outcome matches the actual damage branch")
 	combat.resolve(player, enemy, 400.0, enemy.global_position)
 	check(outcomes[3].reason == "pair_cooldown", "Combat reports the actual pair cooldown rejection")
+	enemy.player = player
+	enemy.health = health
+	var release_states: Array[bool] = []
+	enemy.presentation_event.connect(func(event: StringName, _payload: Dictionary):
+		if event == &"attack_released":
+			release_states.append(enemy.presentation_snapshot().attack_active)
+	)
+	enemy._release_attack(Vector2(50, 0))
+	check(release_states == [true], "Attack release event observes the committed attack state")
+	enemy.kind = DemoEnemy.Kind.TURRET
+	enemy.hazards = Node2D.new()
+	world.add_child(enemy.hazards)
+	enemy.hazard_limit = 0
+	enemy._release_attack(Vector2(50, 0))
+	check(release_states.size() == 1, "A turret blocked by its projectile budget emits no successful release event")
+	health.reset_health()
 
 	var hud = load("res://scenes/roguelite/run_hud.tscn").instantiate()
 	root.add_child(hud)

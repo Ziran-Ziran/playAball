@@ -216,6 +216,15 @@ func _build_shell() -> void:
 	_log_panel.add_child(_log)
 
 func _mark_pending() -> void:
+	# 未勾选覆盖时锁住这三项，避免显示数值被误当作实际构筑效果。
+	var override_field: CheckButton = _fields.get("override_build_parameters")
+	if override_field != null:
+		for id: String in ["cooldown_seconds", "companion_count", "follow_enabled"]:
+			var field: Control = _fields.get(id)
+			if field is SpinBox:
+				field.editable = override_field.button_pressed
+			elif field is CheckButton:
+				field.disabled = not override_field.button_pressed
 	if _pending_label != null:
 		_pending_label.text = "有未应用修改 · R 重置后生效"
 		_pending_label.modulate = Color("ffcf8f")

@@ -10,6 +10,7 @@ const DEFAULTS: Dictionary = {
 	"fixture": 0,
 	"enemy_kind": 0,
 	"build_preset": 0,
+	"override_build_parameters": false,
 	"enemy_count": 3,
 	"enemy_hp": 0,
 	"distance": 390,
@@ -29,6 +30,7 @@ const DEFAULTS: Dictionary = {
 const PARAMETER_SPECS: Array = [
 	{"id": "enemy_kind", "label": "敌人类型", "type": "option", "options": ["脆皮方块", "重型圆罐", "三角炮台"], "default": 0},
 	{"id": "build_preset", "label": "初始构筑", "type": "option", "options": ["基础", "机动", "火力", "伙伴", "生存", "节奏"], "default": 0},
+	{"id": "override_build_parameters", "label": "覆盖构筑冷却/伙伴", "type": "bool", "default": false},
 	{"id": "enemy_count", "label": "敌数（怪群/范围/炮台/伙伴）", "type": "int", "min": 1, "max": 8, "step": 1, "default": 3},
 	{"id": "enemy_hp", "label": "覆盖生命（0=默认）", "type": "int", "min": 0, "max": 30, "step": 1, "default": 0},
 	{"id": "distance", "label": "目标距离（px）", "type": "int", "min": 80, "max": 700, "step": 10, "default": 390},
@@ -36,12 +38,12 @@ const PARAMETER_SPECS: Array = [
 	{"id": "power_pct", "label": "固定力度（%）", "type": "int", "min": 1, "max": 100, "step": 1, "default": 100},
 	{"id": "minimum_speed", "label": "伤害速度门槛（px/s）", "type": "float", "min": 0, "max": 1200, "step": 10, "default": 180},
 	{"id": "pair_cooldown", "label": "配对冷却（秒）", "type": "float", "min": 0, "max": 2, "step": 0.01, "default": 0.18},
-	{"id": "cooldown_seconds", "label": "发射冷却（秒）", "type": "float", "min": 0.2, "max": 5, "step": 0.1, "default": 2.2},
-	{"id": "companion_count", "label": "伙伴数量（个）", "type": "int", "min": 1, "max": 4, "step": 1, "default": 1},
+	{"id": "cooldown_seconds", "label": "覆盖冷却（秒）", "type": "float", "min": 0.2, "max": 5, "step": 0.1, "default": 2.2},
+	{"id": "companion_count", "label": "覆盖伙伴数（个）", "type": "int", "min": 1, "max": 4, "step": 1, "default": 1},
 	{"id": "impact_retention_pct", "label": "撞击续力保留（%）", "type": "int", "min": 0, "max": 100, "step": 1, "default": 65},
 	{"id": "range_radius", "label": "攻击/索敌范围（px）", "type": "float", "min": 30, "max": 700, "step": 10, "default": 180},
 	{"id": "seed", "label": "固定种子", "type": "int", "min": 1, "max": 2147483647, "step": 1, "default": 31030},
-	{"id": "follow_enabled", "label": "伙伴跟随", "type": "bool", "default": false},
+	{"id": "follow_enabled", "label": "覆盖伙伴跟随", "type": "bool", "default": false},
 	{"id": "split_enabled", "label": "击破分裂（仅夹具7）", "type": "bool", "default": false},
 	{"id": "ai_enabled", "label": "敌人 AI", "type": "bool", "default": false},
 ]
@@ -95,6 +97,7 @@ var _report_lines: Array[String] = []
 var _boss: DemoBoss
 var _visuals_visible: bool = true
 var _lab_build: DemoBuild
+var _assists: DemoAssistEffects
 var _ever_spawned: bool = false
 var _clear_time: float = -1.0
 
@@ -110,6 +113,11 @@ func _ready() -> void:
 	if DisplayServer.get_name() != "headless":
 		get_window().title = "玩个球 · 玩法实验室"
 	_lab_build = load("res://scripts/roguelite/run_build.gd").new()
+	_assists = DemoAssistEffects.new()
+	_assists.player = player
+	_assists.enemies = enemies
+	_assists.build = _lab_build
+	add_child(_assists)
 	player_health.max_hp = 5
 	player_health.reset_health()
 	health_panel.bind_source(player_health)
@@ -204,12 +212,18 @@ func _switch_fixture(index: int) -> void:
 
 func _request_reset(requested: Dictionary) -> bool:
 	var config: Dictionary = _sanitize_config(requested)
+	var layout_error: String = _validate_layout(config)
+	if not layout_error.is_empty():
+		lab_panel.set_status("未应用：%s；请减小距离/数量，原实验保留" % layout_error, false)
+		_append_log("RESET rejected: %s" % layout_error)
+		return false
 	_applied = config
 	lab_panel.set_values(config)
 	_fixture_revision += 1
 	lab_panel.set_revision(_fixture_revision)
 	_reset_ready = false
 	_clear_fixture()
+	_assists.reset_effects()
 	_stat_reset()
 	player.reset_body(PLAYER_START)
 	_apply_build_preset(int(config.build_preset))
@@ -217,14 +231,14 @@ func _request_reset(requested: Dictionary) -> bool:
 	player_health.reset_health()
 	launcher.reset_launch()
 	launcher.set_capacity(_lab_build.launch_capacity())
-	launcher.cooldown = float(config.cooldown_seconds)
+	launcher.cooldown = float(config.cooldown_seconds) if config.override_build_parameters else _lab_build.launch_cooldown()
 	player.apply_launch_stats(_lab_build.launch_multiplier(), _lab_build.damping_multiplier(), _lab_build.friction_multiplier())
 	player.impact_drive_retention = clampf(float(config.impact_retention_pct) / 100.0, 0.0, 1.0)
 	combat.minimum_speed = float(config.minimum_speed)
 	combat.pair_cooldown = float(config.pair_cooldown)
 	combat.reset_combat()
-	companions.set_follow_enabled(bool(config.follow_enabled))
-	companions.set_count(int(config.companion_count))
+	companions.set_follow_enabled(bool(config.follow_enabled) if config.override_build_parameters else _lab_build.has_upgrade("follow"))
+	companions.set_count(int(config.companion_count) if config.override_build_parameters else _lab_build.companion_count())
 	split_director.split_enabled = bool(config.split_enabled)
 	split_director.rng.seed = int(config.seed)
 	split_director.pending.clear()
@@ -266,17 +280,17 @@ func _build_fixture(config: Dictionary) -> void:
 	var distance: float = float(config.distance)
 	match fixture:
 		Fixture.SINGLE:
-			_spawn_enemy(kind, PLAYER_START + Vector2(distance, 0), hp, false)
+			_spawn_enemy(kind, PLAYER_START + Vector2(distance, 0), hp, bool(config.ai_enabled))
 		Fixture.CROWD:
 			for index in int(config.enemy_count):
-				_spawn_enemy(kind, PLAYER_START + Vector2(distance + index * 62.0, (index % 2) * 44.0 - 22.0), hp, false)
+				_spawn_enemy(kind, PLAYER_START + Vector2(distance + index * 62.0, (index % 2) * 44.0 - 22.0), hp, bool(config.ai_enabled))
 		Fixture.CORNER:
 			_add_wall(Vector2(880, 390), Vector2(24, 220), 0.0)
 			_add_wall(Vector2(790, 500), Vector2(210, 24), 0.0)
-			_spawn_enemy(kind, PLAYER_START + Vector2(distance, 0), hp, false, float(config.range_radius))
+			_spawn_enemy(kind, PLAYER_START + Vector2(distance, 0), hp, bool(config.ai_enabled), float(config.range_radius))
 		Fixture.COMPANIONS:
 			for index in int(config.enemy_count):
-				_spawn_enemy(kind, PLAYER_START + Vector2(distance + index * 64.0, (index % 2) * 40.0), hp, false)
+				_spawn_enemy(kind, PLAYER_START + Vector2(distance + index * 64.0, (index % 2) * 40.0), hp, bool(config.ai_enabled))
 		Fixture.RANGE:
 			var range_count: int = int(config.enemy_count)
 			for index in range_count:
@@ -300,6 +314,7 @@ func _build_fixture(config: Dictionary) -> void:
 			enemies.add_child(_boss)
 			_boss.contact_report.connect(combat.resolve)
 			_boss.contact_diagnostics_enabled = true
+			_boss.apply_attack_scale(_lab_build.attack_radius_scale())
 			_boss.set_physics_process(bool(config.ai_enabled))
 
 func _spawn_enemy(kind: int, point: Vector2, hp_override: int, ai_enabled: bool, range_override: float = 0.0) -> DemoEnemy:
@@ -348,6 +363,62 @@ func _connect_enemy_diagnostics(enemy: DemoEnemy) -> void:
 func _on_enemy_entered(node: Node) -> void:
 	if node is DemoEnemy:
 		_connect_enemy_diagnostics(node)
+		# 所有代数都经过此入口；ready后应用，避免被actor初始化覆盖。
+		if node.is_node_ready():
+			_apply_enemy_policy(node)
+		else:
+			node.ready.connect(_apply_enemy_policy.bind(node), CONNECT_ONE_SHOT)
+
+func _apply_enemy_policy(enemy: DemoEnemy) -> void:
+	enemy.apply_attack_scale(_lab_build.attack_radius_scale())
+	if int(_applied.fixture) in [Fixture.CORNER, Fixture.RANGE, Fixture.TURRET]:
+		match enemy.kind:
+			DemoEnemy.Kind.FRAGILE:
+				enemy.pulse_radius = float(_applied.range_radius) * _lab_build.attack_radius_scale()
+			DemoEnemy.Kind.HEAVY:
+				enemy.charge_range = float(_applied.range_radius)
+			DemoEnemy.Kind.TURRET:
+				enemy.attack_range = float(_applied.range_radius)
+	enemy.set_physics_process(bool(_applied.ai_enabled))
+
+func _validate_layout(config: Dictionary) -> String:
+	var points: Array[Vector2] = []
+	var distance: float = float(config.distance)
+	var fixture: int = int(config.fixture)
+	var radius: float = 30.0 if int(config.enemy_kind) == DemoEnemy.Kind.HEAVY or fixture == Fixture.SPLIT else 22.0
+	match fixture:
+		Fixture.CROWD, Fixture.COMPANIONS:
+			for index in int(config.enemy_count):
+				var spacing: float = 62.0 if fixture == Fixture.CROWD else 64.0
+				var y: float = (index % 2) * 44.0 - 22.0 if fixture == Fixture.CROWD else (index % 2) * 40.0
+				points.append(PLAYER_START + Vector2(distance + index * spacing, y))
+		Fixture.RANGE, Fixture.TURRET:
+			for index in int(config.enemy_count):
+				points.append(PLAYER_START + _equidistant_offset(distance, int(config.enemy_count), index))
+		Fixture.BOSS:
+			radius = 96.0
+			points.append(PLAYER_START + Vector2(maxf(320.0, distance), 0))
+		_:
+			points.append(PLAYER_START + Vector2(distance, 0))
+	var shape := CircleShape2D.new()
+	shape.radius = radius
+	var query := PhysicsShapeQueryParameters2D.new()
+	query.shape = shape
+	query.collision_mask = 17
+	for index in points.size():
+		var point: Vector2 = points[index]
+		if point.x - radius < 40.0 or point.x + radius > 1240.0 or point.y - radius < 125.0 or point.y + radius > 678.0:
+			return "目标%d超出围场边界" % (index + 1)
+		for previous in index:
+			if point.distance_to(points[previous]) < radius * 2.0:
+				return "目标%d与目标%d初始重叠" % [previous + 1, index + 1]
+		query.transform = Transform2D(0.0, point)
+		for hit in get_world_2d().direct_space_state.intersect_shape(query):
+			if not lab_walls.is_ancestor_of(hit.collider):
+				return "目标%d与固定墙/挡板重叠" % (index + 1)
+		if fixture == Fixture.CORNER and (Rect2(868, 280, 24, 220).grow(radius).has_point(point) or Rect2(685, 488, 210, 24).grow(radius).has_point(point)):
+			return "目标与墙角夹具重叠"
+	return ""
 
 func _on_companion_entered(node: Node) -> void:
 	if not node is DemoCompanion or node.has_meta("lab_diagnostics"):
@@ -469,7 +540,7 @@ func _update_readout() -> void:
 		+ "玩家速度 %.1f px/s · 最近接触 %.1f px/s（%s）· 续力剩余 %.1f / %.2fs\n"
 		% [player.linear_velocity.length(), _last_contact_speed, "有资格" if _last_contact_attacking else "无资格", player.impact_drive_remaining(), player.impact_drive_time_remaining()]
 		+ "有效 %d · 拒伤 %d · 伤害 %d · 危险弹 %d · 分裂预警 %d\n" % [_valid_hits, _rejected_hits, _total_damage, hazards.get_child_count(), warnings_pending]
-		+ "目标生命：%s\n" % (", ".join(hp_texts) if not hp_texts.is_empty() else "无")
+		+ "目标生命：%s · 实际冷却 %.2fs · 伙伴 %d/跟随%s\n" % [", ".join(hp_texts) if not hp_texts.is_empty() else "无", launcher.cooldown, companions.members.size(), str(companions.follow_enabled)]
 		+ "拒伤原因：%s" % ("；".join(reasons) if not reasons.is_empty() else "尚无")
 	)
 
@@ -520,7 +591,7 @@ func _save_preset() -> bool:
 	var directory: String = ProjectSettings.globalize_path("res://.local")
 	DirAccess.make_dir_recursive_absolute(directory)
 	var record: Dictionary = {
-		"schema_version": 1,
+		"schema_version": 2,
 		"baseline_sha": BASELINE_SHA,
 		"fixture": String(FIXTURE_NAMES[int(_applied.fixture)]),
 		"parameters": lab_panel.values(),
@@ -548,13 +619,20 @@ func _load_preset() -> bool:
 		_append_log("PRESET load failed: %s" % error_string(FileAccess.get_open_error()))
 		return false
 	var parsed: Variant = JSON.parse_string(file.get_as_text())
-	if not parsed is Dictionary or int(parsed.get("schema_version", 0)) != 1:
+	if not parsed is Dictionary or int(parsed.get("schema_version", 0)) not in [1, 2]:
 		_append_log("PRESET load rejected: schema mismatch")
 		return false
 	if String(parsed.get("baseline_sha", "")) != BASELINE_SHA:
 		_append_log("PRESET baseline differs: %s" % String(parsed.get("baseline_sha", "")))
+	if not parsed.get("parameters", {}) is Dictionary:
+		_append_log("PRESET load rejected: parameters must be an object")
+		return false
 	var values: Dictionary = parsed.get("parameters", {})
-	_request_reset(values)
+	if int(parsed.schema_version) == 1:
+		# 旧预设的旋钮始终覆盖构筑；迁移时保留其明确记录的物理条件。
+		values.override_build_parameters = true
+	if not _request_reset(values):
+		return false
 	_append_log("PRESET loaded: %s" % PRESET_PATH)
 	return true
 

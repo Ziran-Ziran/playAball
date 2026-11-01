@@ -34,6 +34,7 @@ playAball/
 │   │   ├── 007-ui-art-direction.md  # UI美术方向与样板反馈；用户否定样板后暂停全面替换。
 │   │   └── 008-parallel-development.md  # A表现/B玩法实验室、用户owner合并权、整文件边界、S0～S4计划与当前最小接口/实验室实施进度。
 │   ├── playtest/  # 面向策划/试玩者的启动操作、反馈与已知限制说明
+│   │   ├── PLANNER_FEEDBACK.txt  # 策划试玩的当前数值基线、逐局手感/难度/经济反馈填写单，随Windows包交付。
 │   │   └── PLANNER_README.txt  # 随Windows试玩包交给策划的操作、流程、版本反馈与限制说明。
 │   ├── reviews/  # 重要改动的审查证据与交接
 │   │   ├── 2026-10-28-workflow.md  # 本轮独立最终审查、测试证据、问题处理、用户授权与交接记录。
@@ -153,7 +154,7 @@ playAball/
 │   │   ├── destructible.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
 │   │   ├── enemy.gd  # 三类物理敌人的生命、范围攻击、硬直、死亡与只读表现快照/事件；不负责绘制。
 │   │   ├── enemy.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
-│   │   ├── gameplay_lab.gd  # 八类夹具重建、正式固定发射、范围/分裂/首领接线、拒伤日志、本地预设与复现记录。
+│   │   ├── gameplay_lab.gd  # 独立八夹具、完整构筑/显式覆盖、生成校验、分裂AI策略、拒伤读数与预设迁移。
 │   │   ├── gameplay_lab.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
 │   │   ├── hazard_ball.gd  # 慢危险弹、玩家检测、寿命和旧事件保护。
 │   │   ├── hazard_ball.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
@@ -216,7 +217,7 @@ playAball/
 │   ├── roguelite_enemy_readability.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
 │   ├── roguelite_feedback_integration.gd  # 整局真实事件到音效、静音/结算尾音与生命面板重开集成回归。
 │   ├── roguelite_feedback_integration.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
-│   ├── roguelite_gameplay_lab.gd  # 八类夹具、固定发射、重置、范围/炮台、分裂经济、预设、日志边界和入口隔离回归。
+│   ├── roguelite_gameplay_lab.gd  # 八夹具真实发射/构筑与覆盖、阵型拒绝、分裂两代AI/经济、预设迁移/失败与输入隔离回归。
 │   ├── roguelite_gameplay_lab.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
 │   ├── roguelite_hud.gd  # 真实生命受伤/恢复/上限/无敌/死亡/复位与鼠标穿透回归。
 │   ├── roguelite_hud.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
@@ -249,7 +250,7 @@ playAball/
 │   ├── smoke.gd  # 旧原型停稳、发射、真实接触点、机关、复位、鼠标与进球回归。
 │   └── smoke.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
 ├── tools/  # 开发辅助工具，不属于游戏玩法
-│   ├── export_windows.ps1  # 固定引擎/原配置保护、隔离运行资源导入、Windows单EXE与说明/指纹/zip导出。
+│   ├── export_windows.ps1  # 固定引擎/原配置保护、隔离运行资源导入、Windows单EXE与说明/反馈单/指纹/zip导出。
 │   ├── project_map.gd  # 读取 Git 文件列表和用途清单，生成/检查项目文件目录。
 │   ├── project_map.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
 │   └── verify.ps1  # Windows固定引擎导入、目录与25套新旧行为检查入口。

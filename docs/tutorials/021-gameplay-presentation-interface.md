@@ -28,7 +28,7 @@ A替换视觉时：
 
 `DemoHealthView`已经拆到`scripts/roguelite/presentation/health_view.gd`和同名场景。它只读取`DemoHealth.hp/max_hp/invulnerability_left`，通过`bind_source()`连接`changed`信号。`RunHUD.bind_health()`现在只把生命源转交给该组件。
 
-A可以重做`health_view.tscn`的布局和样式，只要保留`bind_source()`及`snapshot()`，或者由B做一次整文件接线。奖励卡、结算和重开仍由`run_hud.gd`管理。
+A可以重做`health_view.tscn`的布局和样式。当前兼容契约除`bind_source()`及`snapshot()`外，还要求保留`DemoHealthView`类型，以及`Content/HealthBar`、`Content/Heading/HealthValue`、`Content/HealthState`三个内部节点路径；HUD和已有回归仍依赖它们。若要换掉这些节点或类型，由B做一次整文件接线并迁移回归，不能仅凭两个方法就直接替换任意面板。奖励卡、结算和重开仍由`run_hud.gd`管理。
 
 ## 2. UI请求不直接改规则
 
@@ -51,6 +51,8 @@ A可以重做`health_view.tscn`的布局和样式，只要保留`bind_source()`�
 - `accepted / valid_damage`
 
 `DemoHealth.damage_rejected`补充玩家已倒下、非法伤害和无敌保护。表现和实验室只显示这些结果，不重新执行一次伤害判断。完整正式运行时默认不打开无攻击资格接触诊断；实验室会显式打开。
+
+`attack_released`只在攻击状态或炮弹真正提交后发出，事件回调内读取的是释放后的状态。炮台因弹体预算耗尽而没有发射时，不发布成功释放事件，避免表现误报。
 
 ## 4. 最小替换示例
 

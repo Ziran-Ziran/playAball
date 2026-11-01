@@ -1,5 +1,14 @@
 # 当前状态
 
+## 2026-11-01 owner复核整改与策划包（最终Review通过，待CI/合并导出）
+
+- 用户明确授权修复PR #5后merge并导出策划EXE，覆盖本批必要commit/push及PR更新；本次授权不延续到后续任务。主机LAPTOP-8GS4N5SG，Windows10.0.26200，Ziran；独立目录`C:/Users/Ziran/playAball-review-pr5`，分支`codex/pr5-review-fixes`，基于B提交`e3252e1`。A原checkout未提交内容和project.godot保持，未集成未验收美术样板。
+- owner独立复核发现实验室构筑效果缺失、怪群越界、分裂后代忽略AI开关，已按正式规则补齐构筑/护身震退和缩圈，加入显式冷却/伙伴覆盖与整阵型校验，所有代数统一AI策略。预设升级schema2并迁移schema1；非法阵型加载须返回失败。另修复敌人attack_released的成功时机，并明确生命面板类型/节点兼容要求。
+- 测试先复现原问题，再验证真实伙伴/冷却/震退、拒绝非法阵型且保留旧实验、两代分裂AI和预设迁移/失败；完整`tools/verify.ps1`退出0：Godot4.7.1、230文件目录、25套1092项通过，实验室70项/表现接口17项；独立core_review定向复跑70/17通过，无剩余代码阻塞。日志`.local/fixes-full-verify.log`与`.local/independent-*-final.*`。链接、JSON、导出脚本语法和差异检查通过；最终文档快照已获core_review独立复核通过，无剩余必须修复或建议项，远端CI/merge/EXE结果随后核验。
+- 策划使用说明更新为11月1日；新增`playtest/PLANNER_FEEDBACK.txt`包含实际数值、试玩顺序和逐局反馈，导出脚本随包附带。正式战斗数值本批保持基线，具体平衡/手感由策划体验决定；不将自动检查写成人工验收。
+
+以下为B交付时的历史记录，Git/CI状态属于当时；本轮结果以上方更新及GitHub为准。
+
 更新：2026-11-01。当前B线在`feat/gameplay-lab`本地开发，从`origin/main=935b9b8`建立独立checkout；原checkout的`project.godot`编辑器规范化差异未带入或提交。
 
 ## 2026-11-01 B线接管：最小表现接口与玩法实验室（本地开发）

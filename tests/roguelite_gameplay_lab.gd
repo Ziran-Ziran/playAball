@@ -63,6 +63,32 @@ func run() -> void:
 	await frames(4)
 	check(lab._lab_build.has_upgrade("heavy") and lab._lab_build.has_upgrade("echo"), "Build preset applies existing gameplay upgrades through DemoBuild")
 	check(is_equal_approx(lab.player.max_impulse, 1050.0) and lab.combat.build == lab._lab_build, "Build preset feeds authoritative lab-only player and combat rules")
+	var partners: Dictionary = single.duplicate(true)
+	partners.build_preset = 3
+	lab._request_reset(partners)
+	await frames(4)
+	check(lab.companions.members.size() == 2 and lab.companions.follow_enabled, "Companion build applies both extra member and follow without manual overrides")
+	var rhythm: Dictionary = single.duplicate(true)
+	rhythm.build_preset = 5
+	lab._request_reset(rhythm)
+	await frames(4)
+	check(is_equal_approx(lab.launcher.cooldown, 1.95) and lab.launcher.capacity == 2, "Rhythm build applies reduced cooldown and double launch together")
+	rhythm.override_build_parameters = true
+	rhythm.cooldown_seconds = 3.0
+	rhythm.companion_count = 3
+	rhythm.follow_enabled = true
+	lab._request_reset(rhythm)
+	await frames(4)
+	check(is_equal_approx(lab.launcher.cooldown, 3.0) and lab.companions.members.size() == 3 and lab.companions.follow_enabled, "Explicit override wins over build cooldown and companion defaults")
+	var survival: Dictionary = single.duplicate(true)
+	survival.build_preset = 4
+	survival.distance = 120
+	lab._request_reset(survival)
+	await frames(4)
+	var survivor_target: DemoEnemy = lab.enemies.get_child(0)
+	check(is_equal_approx(survivor_target.pulse_radius, 76.5) and lab.player_health.max_hp == 6, "Survival build applies smaller enemy attack range and extra life")
+	await frames(250)
+	check(survivor_target.linear_velocity.length() > 1.0, "Survival pulse produces a real bounded impulse in the lab")
 
 	var crowd: Dictionary = single.duplicate(true)
 	crowd.fixture = lab.Fixture.CROWD
@@ -71,6 +97,26 @@ func run() -> void:
 	lab._request_reset(crowd)
 	await frames(4)
 	check(lab.enemies.get_child_count() == 3, "Crowd fixture rebuilds the requested enemy count")
+	var impossible: Dictionary = crowd.duplicate(true)
+	impossible.enemy_count = 8
+	impossible.distance = 700
+	var valid_revision: int = lab._fixture_revision
+	check(not lab._request_reset(impossible), "Crowd layout outside arena is rejected instead of spawning unreachable targets")
+	check(lab._fixture_revision == valid_revision and lab.enemies.get_child_count() == 3, "Rejected layout preserves the previous applied experiment")
+	impossible.fixture = lab.Fixture.COMPANIONS
+	check(not lab._request_reset(impossible), "Companion fixture rejects the same out-of-bounds formation")
+	impossible.fixture = lab.Fixture.RANGE
+	impossible.distance = 80
+	check(not lab._request_reset(impossible), "Eight overlapping near-range targets are rejected")
+	impossible.fixture = lab.Fixture.CORNER
+	impossible.distance = 450
+	check(not lab._request_reset(impossible), "Corner fixture rejects an enemy embedded in its new wall")
+	var wide_crowd: Dictionary = crowd.duplicate(true)
+	wide_crowd.enemy_count = 8
+	wide_crowd.distance = 100
+	check(lab._request_reset(wide_crowd), "An eight-enemy crowd that fits still applies")
+	await frames(4)
+	check(lab.enemies.get_child_count() == 8, "Valid large crowd is not silently reduced")
 	var old_warning: Dictionary = {"point": Vector2(700, 300), "kind": 0, "left": 0.8}
 	lab.split_director.pending.append(old_warning)
 	var hazard = load("res://scenes/roguelite/hazard_ball.tscn").instantiate()
@@ -89,6 +135,7 @@ func run() -> void:
 		config.enemy_hp = 6 if int(fixture) == lab.Fixture.SPLIT else 0
 		config.split_enabled = int(fixture) == lab.Fixture.SPLIT
 		config.companion_count = 2 if int(fixture) == lab.Fixture.COMPANIONS else 1
+		config.override_build_parameters = true
 		config.range_radius = 200
 		lab._request_reset(config)
 		await frames(4)
@@ -108,7 +155,7 @@ func run() -> void:
 	range_config.fixture = lab.Fixture.RANGE
 	range_config.enemy_kind = DemoEnemy.Kind.FRAGILE
 	range_config.enemy_count = 8
-	range_config.distance = 120
+	range_config.distance = 360
 	range_config.range_radius = 90
 	range_config.ai_enabled = false
 	lab._request_reset(range_config)
@@ -117,6 +164,7 @@ func run() -> void:
 
 	var range_boundary: Dictionary = range_config.duplicate(true)
 	range_boundary.enemy_count = 1
+	range_boundary.distance = 120
 	range_boundary.ai_enabled = true
 	lab._request_reset(range_boundary)
 	await frames(4)
@@ -160,11 +208,18 @@ func run() -> void:
 	check(lab.split_director.pending.size() == 2 and lab.split_director.kills == kills_before + 1, "Split fixture queues two children and settles the original family once")
 	await frames(105)
 	check(lab.enemies.get_child_count() == 2, "Split warnings materialize two real second-generation actors")
+	check(not lab.enemies.get_child(0).is_physics_processing() and not lab.enemies.get_child(1).is_physics_processing(), "Split children inherit disabled AI from the applied experiment")
 	if lab.enemies.get_child_count() > 0:
 		var child: DemoEnemy = lab.enemies.get_child(0)
 		child.hurt(10)
 		await frames(2)
 		check(lab.split_director.kills == kills_before + 1, "Child deaths do not grant duplicate family rewards")
+		# 静止后代可能堵住原分裂点；给正式安全重试/换点规则完整时间。
+		await frames(240)
+		var all_stationary: bool = true
+		for descendant in lab.enemies.get_children():
+			all_stationary = all_stationary and not descendant.is_physics_processing()
+		check(lab.enemies.get_child_count() == 3 and all_stationary, "Second split generation also inherits disabled AI")
 
 	var saved: Dictionary = lab._sanitize_config(lab._applied)
 	saved.minimum_speed = 780
@@ -179,6 +234,29 @@ func run() -> void:
 	check(lab._load_preset(), "Lab can load and validate its preset schema")
 	await frames(4)
 	check(is_equal_approx(lab.combat.minimum_speed, 780.0), "Loaded preset rebuilds gameplay with saved whitelist values (actual %.1f)" % lab.combat.minimum_speed)
+	var legacy: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(lab.PRESET_PATH))
+	legacy.schema_version = 1
+	legacy.parameters.erase("override_build_parameters")
+	legacy.parameters.cooldown_seconds = 3.0
+	var preset_file := FileAccess.open(lab.PRESET_PATH, FileAccess.WRITE)
+	preset_file.store_string(JSON.stringify(legacy))
+	preset_file.close()
+	check(lab._load_preset(), "Version-one preset migrates instead of losing explicit overrides")
+	await frames(4)
+	check(lab._applied.override_build_parameters and is_equal_approx(lab.launcher.cooldown, 3.0), "Migrated preset preserves its original cooldown condition")
+	legacy.schema_version = 2
+	legacy.parameters.fixture = lab.Fixture.CROWD
+	legacy.parameters.distance = 700
+	legacy.parameters.enemy_count = 8
+	preset_file = FileAccess.open(lab.PRESET_PATH, FileAccess.WRITE)
+	preset_file.store_string(JSON.stringify(legacy))
+	preset_file.close()
+	check(not lab._load_preset(), "A preset with an impossible formation reports load failure")
+	legacy.parameters = []
+	preset_file = FileAccess.open(lab.PRESET_PATH, FileAccess.WRITE)
+	preset_file.store_string(JSON.stringify(legacy))
+	preset_file.close()
+	check(not lab._load_preset(), "Malformed preset parameters are rejected without crashing")
 	check(lab._save_report(), "Lab can save a reproduction report")
 	check(FileAccess.file_exists(lab.REPORT_PATH), "Reproduction report exists in the ignored local directory")
 	for index in 200:

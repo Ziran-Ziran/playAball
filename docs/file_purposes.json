@@ -175,7 +175,7 @@
     "tests/roguelite_enemy_readability.gd": "三敌人范围即时取消/重新蓄力、生命覆盖和受伤跨颜色等级回归。",
     "tests/roguelite_splitting.gd": "分裂勾选接线、两代生命/预算/整族经济、安全预警与旧局防重回归。",
     "export_presets.cfg": "Windows64内嵌资源试玩导出预设，由隔离脚本设置肉鸽入口，原F5保持。",
-    "tools/export_windows.ps1": "固定引擎/原配置保护、隔离运行资源导入、Windows单EXE与说明/指纹/zip导出。",
+    "tools/export_windows.ps1": "固定引擎/原配置保护、隔离运行资源导入、Windows单EXE与说明/反馈单/指纹/zip导出。",
     "docs/playtest/PLANNER_README.txt": "随Windows试玩包交给策划的操作、流程、版本反馈与限制说明。",
     "docs/plans/008-parallel-development.md": "A表现/B玩法实验室、用户owner合并权、整文件边界、S0～S4计划与当前最小接口/实验室实施进度。",
     "docs/tutorials/019-windows-export.md": "隔离导出Windows策划包、版本指纹、验证与跨电脑限制教程。",
@@ -187,12 +187,13 @@
     "scenes/roguelite/lab_panel.tscn": "实验室可编辑开发控制根场景，运行时分栏显示白名单参数、读数和有界日志。",
     "scenes/roguelite/presentation/enemy_view.tscn": "默认敌人表现场景，只读取DemoEnemy快照并消费事件。",
     "scenes/roguelite/presentation/health_view.tscn": "正式可替换生命面板场景，只读取DemoHealth数据。",
-    "scripts/roguelite/gameplay_lab.gd": "八类夹具重建、正式固定发射、范围/分裂/首领接线、拒伤日志、本地预设与复现记录。",
+    "scripts/roguelite/gameplay_lab.gd": "独立八夹具、完整构筑/显式覆盖、生成校验、分裂AI策略、拒伤读数与预设迁移。",
     "scripts/roguelite/lab/lab_panel.gd": "实验室白名单参数表单、即时显示偏好和带revision的玩法请求；不直接修改战斗状态。",
     "scripts/roguelite/presentation/enemy_view.gd": "默认敌人绘制与生命数字，仅消费只读快照和表现事件。",
     "scripts/roguelite/presentation/health_view.gd": "只读生命条/数字/状态表现组件及热绑定入口。",
-    "tests/roguelite_gameplay_lab.gd": "八类夹具、固定发射、重置、范围/炮台、分裂经济、预设、日志边界和入口隔离回归。",
+    "tests/roguelite_gameplay_lab.gd": "八夹具真实发射/构筑与覆盖、阵型拒绝、分裂两代AI/经济、预设迁移/失败与输入隔离回归。",
     "tests/roguelite_presentation_interface.gd": "敌人视图替换、生命面板、真实拒伤结果和物理签名不变回归。",
-    "docs/reviews/2026-11-01-gameplay-lab.md": "本批S1表现接口和B线玩法实验室的最终Review范围、独立审查、问题处理、验证证据、未测项与授权边界。"
+    "docs/reviews/2026-11-01-gameplay-lab.md": "本批S1表现接口和B线玩法实验室的最终Review范围、独立审查、问题处理、验证证据、未测项与授权边界。",
+    "docs/playtest/PLANNER_FEEDBACK.txt": "策划试玩的当前数值基线、逐局手感/难度/经济反馈填写单，随Windows包交付。"
   }
 }
