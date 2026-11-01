@@ -7,6 +7,7 @@
 - `tools/export_windows.ps1`：检查本机引擎版本，复制运行资源到忽略的独立暂存目录，导入并导出。
 - `export_presets.cfg`：Windows Desktop、x86_64、内嵌PCK、不签名、不附控制台窗口的项目内预设。
 - `docs/playtest/PLANNER_README.txt`：随包交给策划的启动、操作、流程、限制和反馈提示。
+- `docs/playtest/PLANNER_FEEDBACK.txt`：当前数值基线、三局建议顺序与冷却/穿群/压力/成长/经济反馈单；导出时附为“数值与手感反馈.txt”。
 - `builds/<BuildName>/PlayABall.exe`：单文件试玩程序，游戏资源内嵌；旁边附说明及build_info.json。
 - `builds/<BuildName>.zip`：建议发送的压缩包。builds、zip和.local均被Git忽略，不提交成品。
 

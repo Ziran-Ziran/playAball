@@ -68,6 +68,7 @@ $metadata = [ordered]@{
 }
 $metadata | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $output 'build_info.json') -Encoding utf8
 Copy-Item -LiteralPath (Join-Path $projectRoot 'docs/playtest/PLANNER_README.txt') -Destination (Join-Path $output '试玩说明.txt')
+Copy-Item -LiteralPath (Join-Path $projectRoot 'docs/playtest/PLANNER_FEEDBACK.txt') -Destination (Join-Path $output '数值与手感反馈.txt')
 $archive = $output + '.zip'
 Compress-Archive -LiteralPath (Get-ChildItem -LiteralPath $output -File).FullName -DestinationPath $archive
 Write-Output ('EXPORT READY: ' + $exePath)

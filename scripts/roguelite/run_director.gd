@@ -96,7 +96,7 @@ func setup(owner_arena: Node2D) -> void:
 		_pulse_left = 0.3
 	)
 	hud.upgrade_selected.connect(choose_upgrade)
-	hud.restart_requested.connect(restart)
+	hud.restart_requested.connect(request_restart)
 	rest_panel = load("res://scenes/roguelite/rest_panel.tscn").instantiate()
 	arena.add_child(rest_panel)
 	rest_panel.action_selected.connect(_rest_action)
@@ -149,6 +149,13 @@ func restart() -> void:
 	chosen_rewards = 0
 	debug_build(debug_upgrades)
 	start_wave(debug_start_wave)
+
+func request_restart() -> bool:
+	# 面板只提出请求；玩法确认当前确实处于结算态后才执行重开。
+	if state not in [State.VICTORY, State.DEFEAT]:
+		return false
+	restart()
+	return true
 
 func start_wave(number: int) -> void:
 	wave = number

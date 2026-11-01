@@ -8,7 +8,7 @@
 playAball/
 ├── .github/  # GitHub 协作模板与自动检查
 │   ├── workflows/  # 提交/PR 触发的持续集成
-│   │   └── godot.yml  # Linux固定引擎导入、目录与23套检查配置；本轮未上传运行。
+│   │   └── godot.yml  # Linux固定引擎导入、目录与25套检查配置。
 │   └── pull_request_template.md  # PR 的改动、测试、Review、教程和目录核对模板。
 ├── docs/  # 项目现状、设计、教程与协作说明
 │   ├── art/  # 视觉方向样板与用户反馈记录，未获认可的样板不用于全面替换
@@ -32,13 +32,15 @@ playAball/
 │   │   ├── 005-kill-rewards.md  # 用户批准的击杀领奖/十五项发育池计划、并行分工与验收清单。
 │   │   ├── 006-feedback-and-run-rhythm.md  # 音效/生命面板/阶段节奏计划与本地实施更新，音质与两局节奏待验收。
 │   │   ├── 007-ui-art-direction.md  # UI美术方向与样板反馈；用户否定样板后暂停全面替换。
-│   │   └── 008-parallel-development.md  # A表现/B玩法实验室、用户owner合并权、整文件边界与S0～S4具体任务计划。
+│   │   └── 008-parallel-development.md  # A表现/B玩法实验室、用户owner合并权、整文件边界、S0～S4计划与当前最小接口/实验室实施进度。
 │   ├── playtest/  # 面向策划/试玩者的启动操作、反馈与已知限制说明
+│   │   ├── PLANNER_FEEDBACK.txt  # 策划试玩的当前数值基线、逐局手感/难度/经济反馈填写单，随Windows包交付。
 │   │   └── PLANNER_README.txt  # 随Windows试玩包交给策划的操作、流程、版本反馈与限制说明。
 │   ├── reviews/  # 重要改动的审查证据与交接
 │   │   ├── 2026-10-28-workflow.md  # 本轮独立最终审查、测试证据、问题处理、用户授权与交接记录。
 │   │   ├── 2026-10-31-feedback-export.md  # 当前反馈整改/导出/分工完整最终Review、独立审查与测试/未测证据。
 │   │   ├── 2026-10-31-kill-rewards.md  # 击杀奖励原型最终独立Review、验证限制、最新体验缺陷与本轮上传范围。
+│   │   ├── 2026-11-01-gameplay-lab.md  # 本批S1表现接口和B线玩法实验室的最终Review范围、独立审查、问题处理、验证证据、未测项与授权边界。
 │   │   └── collision-demo-final.md  # 当前Demo最终独立Review、首领真实接触修复、验证与人工未测证据。
 │   ├── tutorials/  # 每个功能的实现原理和手动修改教程
 │   │   ├── 001-prototype.md  # 球发射、碰撞表现、机关、目标和手动调参的初始教程。
@@ -60,7 +62,9 @@ playAball/
 │   │   ├── 017-enemy-splitting.md  # 玩家勾选分裂、两代次球、安全预警/预算和整族经济教程。
 │   │   ├── 018-contact-damage.md  # 橙色方块漏伤根因、物理帧双快照与不同节点顺序真实接触回归教程。
 │   │   ├── 019-windows-export.md  # 隔离导出Windows策划包、版本指纹、验证与跨电脑限制教程。
-│   │   └── 020-parallel-workflow.md  # 两电脑同基线、唯一文件owner、接口交接、文档集成与用户审阅merge操作教程。
+│   │   ├── 020-parallel-workflow.md  # 两电脑同基线、唯一文件owner、接口交接、文档集成与用户审阅merge操作教程。
+│   │   ├── 021-gameplay-presentation-interface.md  # 敌人只读快照/事件、可替换表现、生命面板和UI请求校验的最小接口教程。
+│   │   └── 022-gameplay-lab.md  # 八类玩法夹具、白名单参数、正式固定发射、拒伤日志、预设与复现教程。
 │   ├── .gdignore  # 让 Godot 跳过文档目录的资源导入，避免把交接图当作游戏素材。
 │   ├── FILE_MAP.md  # 自动生成的项目文件树、每个文件的用途及主要调用关系。
 │   ├── PROJECT.md  # 已采纳的游戏目标、技术选择、原型范围与模块边界。
@@ -95,24 +99,37 @@ playAball/
 │           ├── shrink.tres  # 敌人脉冲/首领震波缩范围的说明与两级上限。
 │           └── vigor.tres  # 普通池耗尽时本局生命上限+1的独立可重复兜底。
 ├── scenes/  # Godot 可编辑场景与节点结构
-│   ├── roguelite/  # 俯视零重力三靶场与可复用刚体场景
+│   ├── roguelite/  # 俯视零重力三靶场、正式整局与B线独立玩法夹具场景
+│   │   ├── presentation/  # A可独立替换的敌人与生命面板表现场景
+│   │   │   ├── enemy_view.tscn  # 默认敌人表现场景，只读取DemoEnemy快照并消费事件。
+│   │   │   └── health_view.tscn  # 正式可替换生命面板场景，只读取DemoHealth数据。
 │   │   ├── arena.tscn  # 可编辑俯视三靶场、四边围墙、斜切角、平面挡板与 HUD。
 │   │   ├── audio_preview.tscn  # F6独立音效试听场景，不改变游戏进度。
 │   │   ├── boss.tscn  # 同一刚体上的核心和四个可拆模块碰撞形状。
 │   │   ├── companion_ball.tscn  # 零重力小兵、接力传感器及围墙/挡板/箱体实体碰撞配置。
 │   │   ├── destructible.tscn  # 可复用的固定碰撞靶形状与受击脚本入口。
-│   │   ├── enemy.tscn  # 三敌人共用刚体/碰撞形状和低弹性材质，减少扎堆反弹。
+│   │   ├── enemy.tscn  # 三敌人共用刚体/碰撞形状和低弹性材质，并实例可替换表现组件。
+│   │   ├── gameplay_lab.tscn  # B线独立八类玩法夹具入口，F6运行且不替换正式run。
 │   │   ├── hazard_ball.tscn  # 危险弹刚体与玩家传感器，环境碰撞后消失。
+│   │   ├── lab_panel.tscn  # 实验室可编辑开发控制根场景，运行时分栏显示白名单参数、读数和有界日志。
 │   │   ├── player_ball.tscn  # 零重力主球刚体、圆形形状与弹性材质。
 │   │   ├── rest_panel.tscn  # 商店、补给事件和3秒准备共用的可编辑功能面板。
 │   │   ├── rice_lure.tscn  # 白饭Area2D与玩家拾取形状，不改变刚体碰撞。
 │   │   ├── run.tscn  # 独立三阶段战斗入口，接合音频、商店/事件与首领，保留F5旧入口。
-│   │   └── run_hud.tscn  # 可编辑生命面板、三/四选一卡片与胜负重开面板。
+│   │   └── run_hud.tscn  # 三/四选一、结算和重开面板，并实例独立可替换生命面板。
 │   ├── ball.tscn  # 可复用的球刚体、圆形碰撞形状与物理材质。
 │   ├── main.tscn  # 实验关卡的障碍、球、机关、目标、镜头和 HUD 节点布局。
 │   └── mechanism.tscn  # 可复用的区域机关入口，运行时按参数生成检测形状。
 ├── scripts/  # 游戏逻辑与表现脚本
-│   ├── roguelite/  # 新肉鸽物理、发射、碰撞与同伴逻辑
+│   ├── roguelite/  # 新肉鸽物理、发射、碰撞、同伴逻辑与独立玩法实验室
+│   │   ├── lab/  # B线玩法实验室的开发面板与请求界面
+│   │   │   ├── lab_panel.gd  # 实验室白名单参数表单、即时显示偏好和带revision的玩法请求；不直接修改战斗状态。
+│   │   │   └── lab_panel.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
+│   │   ├── presentation/  # 只读玩法状态并消费表现事件的可替换绘制组件
+│   │   │   ├── enemy_view.gd  # 默认敌人绘制与生命数字，仅消费只读快照和表现事件。
+│   │   │   ├── enemy_view.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
+│   │   │   ├── health_view.gd  # 只读生命条/数字/状态表现组件及热绑定入口。
+│   │   │   └── health_view.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
 │   │   ├── arena.gd  # 全屏拖动与按钮隔离、HUD 就绪状态、暂停/重置与单球越界回收。
 │   │   ├── arena.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
 │   │   ├── assist_effects.gd  # 可暂停的无伤护身震退、有限冲量与表现事件。
@@ -125,9 +142,9 @@ playAball/
 │   │   ├── audio_preview.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
 │   │   ├── boss.gd  # 首领预警冲刺、真实撞墙弱点、可碎模块、缺口震波与召唤。
 │   │   ├── boss.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
-│   │   ├── collision_combat.gd  # 碰撞伤害/接力去重与升级效果，主球有效撞普通敌人兑现有限续力。
+│   │   ├── collision_combat.gd  # 碰撞伤害/接力去重与升级效果，发布实际接受或拒伤原因，主球有效撞普通敌人兑现有限续力。
 │   │   ├── collision_combat.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
-│   │   ├── combat_body.gd  # 刚体接触的同帧双速度快照、统一零重力、限速及物理接口复位。
+│   │   ├── combat_body.gd  # 刚体接触的同帧双速度快照、可选诊断样本、统一零重力、限速及物理接口复位。
 │   │   ├── combat_body.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
 │   │   ├── companion_ball.gd  # 默认不跟随的小鱼、接力/障碍碰撞与升级后的限力引导。
 │   │   ├── companion_ball.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
@@ -135,17 +152,19 @@ playAball/
 │   │   ├── companion_manager.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
 │   │   ├── destructible.gd  # 固定碰撞靶的生命、一次死亡事件、复位与占位绘图。
 │   │   ├── destructible.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
-│   │   ├── enemy.gd  # 三类物理敌人、范围内蓄力/离开取消、硬直、生命分色数字与死亡。
+│   │   ├── enemy.gd  # 三类物理敌人的生命、范围攻击、硬直、死亡与只读表现快照/事件；不负责绘制。
 │   │   ├── enemy.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
+│   │   ├── gameplay_lab.gd  # 独立八夹具、完整构筑/显式覆盖、生成校验、分裂AI策略、拒伤读数与预设迁移。
+│   │   ├── gameplay_lab.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
 │   │   ├── hazard_ball.gd  # 慢危险弹、玩家检测、寿命和旧事件保护。
 │   │   ├── hazard_ball.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
 │   │   ├── kill_rewards.gd  # 死亡去重、递增门槛、击杀溢出和排队奖励的独立资源。
 │   │   ├── kill_rewards.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
-│   │   ├── launch_controller.gd  # 单发/双发容量、串行冷却、白饭返还与跨恢复输入手势。
+│   │   ├── launch_controller.gd  # 单发/双发容量、串行冷却、白饭返还、跨恢复输入手势及实验室正式固定发射入口。
 │   │   ├── launch_controller.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
-│   │   ├── player_ball.gd  # 主球冲量/短时有限撞敌续力、升级物理参数、能量环与肥鱼绘图。
+│   │   ├── player_ball.gd  # 主球冲量/短时有限撞敌续力、升级物理参数、续力只读读数、能量环与肥鱼绘图。
 │   │   ├── player_ball.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
-│   │   ├── player_health.gd  # 五格生命、统一受伤无敌、一次死亡与整局重置。
+│   │   ├── player_health.gd  # 五格生命、统一受伤无敌、一次死亡、拒伤原因事件与整局重置。
 │   │   ├── player_health.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
 │   │   ├── rest_panel.gd  # 可编辑休息面板的报价按钮、版本和倒计时显示。
 │   │   ├── rest_panel.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
@@ -159,7 +178,7 @@ playAball/
 │   │   ├── run_build.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
 │   │   ├── run_director.gd  # 逐波预算/强敌配额、可选两代分裂/整族经济、阶段奖励与整局清理。
 │   │   ├── run_director.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
-│   │   ├── run_hud.gd  # 只读生命条与受伤/恢复状态、三四卡版本和结算展示。
+│   │   ├── run_hud.gd  # 委托独立生命视图，管理三四卡版本、结算和经玩法校验的重开请求。
 │   │   ├── run_hud.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
 │   │   ├── run_wallet.gd  # 唯一死亡入账、余额校验扣款与整局钱包复位。
 │   │   ├── run_wallet.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
@@ -198,6 +217,8 @@ playAball/
 │   ├── roguelite_enemy_readability.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
 │   ├── roguelite_feedback_integration.gd  # 整局真实事件到音效、静音/结算尾音与生命面板重开集成回归。
 │   ├── roguelite_feedback_integration.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
+│   ├── roguelite_gameplay_lab.gd  # 八夹具真实发射/构筑与覆盖、阵型拒绝、分裂两代AI/经济、预设迁移/失败与输入隔离回归。
+│   ├── roguelite_gameplay_lab.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
 │   ├── roguelite_hud.gd  # 真实生命受伤/恢复/上限/无敌/死亡/复位与鼠标穿透回归。
 │   ├── roguelite_hud.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
 │   ├── roguelite_input_feedback.gd  # 全屏真实鼠标事件、冷却临界帧、正常速度、接触反馈位置与复位清理回归。
@@ -208,6 +229,8 @@ playAball/
 │   ├── roguelite_kill_run.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
 │   ├── roguelite_launch_rewards.gd  # 双发容量/串行恢复/幂等应用与滑行独立材质回归。
 │   ├── roguelite_launch_rewards.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
+│   ├── roguelite_presentation_interface.gd  # 敌人视图替换、生命面板、真实拒伤结果和物理签名不变回归。
+│   ├── roguelite_presentation_interface.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
 │   ├── roguelite_reward_effects.gd  # 分级重击、有限二连撞、攻击缩圈、无伤震退与旧局事件回归。
 │   ├── roguelite_reward_effects.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
 │   ├── roguelite_rice.gd  # 平面吸力限幅、生成/过期/暂停、冷却返还与强化链路检查。
@@ -227,10 +250,10 @@ playAball/
 │   ├── smoke.gd  # 旧原型停稳、发射、真实接触点、机关、复位、鼠标与进球回归。
 │   └── smoke.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
 ├── tools/  # 开发辅助工具，不属于游戏玩法
-│   ├── export_windows.ps1  # 固定引擎/原配置保护、隔离运行资源导入、Windows单EXE与说明/指纹/zip导出。
+│   ├── export_windows.ps1  # 固定引擎/原配置保护、隔离运行资源导入、Windows单EXE与说明/反馈单/指纹/zip导出。
 │   ├── project_map.gd  # 读取 Git 文件列表和用途清单，生成/检查项目文件目录。
 │   ├── project_map.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
-│   └── verify.ps1  # Windows固定引擎导入、目录与23套新旧行为检查入口。
+│   └── verify.ps1  # Windows固定引擎导入、目录与25套新旧行为检查入口。
 ├── .editorconfig  # 统一编码、缩进、换行和文件末尾格式。
 ├── .gitattributes  # 统一 Git 文本换行，标记图片/音频为二进制。
 ├── .gitignore  # 排除引擎缓存、本机临时文件、凭据和导出成品。
@@ -275,6 +298,24 @@ tools/verify.ps1 / GitHub CI
   └─ tests/roguelite_{audio,hud,feedback_integration,stage_flow,shop_events}.gd（音效/生命/阶段经济）
   └─ tests/roguelite_{crowd,difficulty}.gd（怪群真物理/逐波压力预算）
   └─ tests/roguelite_{damage_contacts,enemy_readability,splitting}.gd（漏伤/范围与生命/可选分裂）
+```
+
+## 玩法实验室与表现接口
+
+```text
+scenes/roguelite/gameplay_lab.tscn → gameplay_lab（B线完整夹具）
+  ├─ DemoLaunch.launch_with_drag → player_ball → combat_body（正式固定发射/真实接触）
+  ├─ RunDirector.spawn_enemy/queue_split（正式敌人与分裂规则）
+  ├─ boss / player_health / hazard_ball（范围、炮台和首领夹具）
+  └─ DemoLabPanel → GameplayLab（白名单请求、读数、有界日志、本地预设）
+
+enemy.tscn → DemoEnemy（玩法状态/事件）
+  └─ DemoEnemyView（只读快照与绘制替换）
+run_hud.tscn → RunHUD（奖励/结算）
+  └─ DemoHealthView（只读生命面板替换）
+
+tests/roguelite_presentation_interface.gd（换图不改物理/面板请求）
+tests/roguelite_gameplay_lab.gd（固定发射/八类夹具/预设/日志边界）
 ```
 
 图中关系是人工维护的架构摘要，文件树由工具生成；改变模块关系时也要更新生成器中的摘要，并通过 Review。维护方法见 [教程 002](tutorials/002-project-map-and-review.md)。
