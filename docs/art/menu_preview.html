@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>玩个球 · 基础菜单美术小样</title>
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: #091112; font-family: 'Microsoft YaHei', sans-serif; color: #e5f1e9; }
+  main { width: 100%; aspect-ratio: 16/9; display: grid; place-items: center; }
+  .panel { width: 60%; aspect-ratio: 3/2; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2%; }
+  .panel-art { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+  h1 { z-index: 1; margin: 0 0 2%; font-size: clamp(22px, 3.8vw, 48px); font-weight: 500; letter-spacing: .18em; }
+  .action { width: 55%; height: 14%; position: relative; padding: 0; overflow: hidden; border: 0; background: transparent; color: #d7e8df; font: inherit; font-size: clamp(15px, 1.9vw, 24px); letter-spacing: .13em; }
+  .action img { position: absolute; width: 100%; height: auto; top: 50%; left: 0; transform: translateY(-50%); pointer-events: none; filter: brightness(.82); transition: filter .16s; }
+  .action span { position: relative; }
+  .primary img { filter: brightness(1.2); }
+  .primary { color: #f1fff7; font-weight: 600; }
+  .action:hover img, .action:focus-visible img, .hover img { filter: brightness(1.5); }
+  .action:active, .pressed { transform: scale(.985); }
+  .action:active img, .pressed img { filter: brightness(1.04); }
+  .action:disabled { opacity: .38; }
+  .action:disabled img { filter: grayscale(.7); }
+  .action:focus-visible { outline: 1px solid #d3efdf; outline-offset: 3px; border-radius: 30px; }
+  .feedback { height: 1.5em; z-index: 1; margin: 1% 0 0; color: #9db9ac; font-size: clamp(11px, 1.1vw, 14px); }
+  .states { width: 88%; display: grid; gap: 18px; grid-template-columns: repeat(4, 1fr); }
+  .states section { text-align: center; font-size: 16px; color: #9db9ac; }
+  .states .action { width: 100%; height: 64px; font-size: 19px; }
+  .states p { margin: 10px 0; }
+</style>
+<main id="preview">
+  <section class="panel" aria-label="主菜单美术小样">
+    <img class="panel-art" src="ui_panel_base.png" alt="简约科幻通用面板底板">
+    <h1>玩个球</h1>
+    <button type="button" class="action primary"><img src="ui_button_base.png" alt=""><span>开始游戏</span></button>
+    <button type="button" class="action"><img src="ui_button_base.png" alt=""><span>设置</span></button>
+    <button type="button" class="action"><img src="ui_button_base.png" alt=""><span>退出</span></button>
+    <p class="feedback" aria-live="polite"></p>
+  </section>
+</main>
+<script>
+  // 仅展示美术状态，不启动/退出游戏，不改变任何设置。
+  const query = new URLSearchParams(location.search);
+  if (query.has('states')) {
+    const main = document.getElementById('preview');
+    main.textContent = '';
+    const group = document.createElement('div');
+    group.className = 'states';
+    [['normal','平常'], ['hover','悬停'], ['pressed','按下'], ['disabled','禁用']].forEach(([state, text]) => {
+      const section = document.createElement('section');
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'action ' + state;
+      button.disabled = state === 'disabled';
+      const image = document.createElement('img');
+      image.src = 'ui_button_base.png';
+      image.alt = '';
+      const span = document.createElement('span');
+      span.textContent = '确认';
+      button.append(image, span);
+      const label = document.createElement('p');
+      label.textContent = text;
+      section.append(button, label);
+      group.append(section);
+    });
+    main.append(group);
+  }
+  document.querySelectorAll('.action').forEach(button => button.addEventListener('click', () => {
+    const feedback = document.querySelector('.feedback');
+    if (feedback) feedback.textContent = `${button.textContent.trim()} · 美术小样，功能尚未接入`;
+  }));
+</script>
+</html>

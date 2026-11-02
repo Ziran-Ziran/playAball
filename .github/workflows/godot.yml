@@ -42,6 +42,12 @@ jobs:
           "$GODOT" --headless --path . --script tests/roguelite_gameplay_lab.gd 2>&1 | tee /tmp/gameplay-lab.log
           ! grep -E '^(SCRIPT ERROR|ERROR):' /tmp/gameplay-lab.log
           grep -q 'GAMEPLAY LAB CHECKS PASSED' /tmp/gameplay-lab.log
+          "$GODOT" --headless --path . --script tests/roguelite_live_tuning.gd 2>&1 | tee /tmp/live-tuning.log
+          ! grep -E '^(SCRIPT ERROR|ERROR):' /tmp/live-tuning.log
+          grep -q 'LIVE TUNING CHECKS PASSED' /tmp/live-tuning.log
+          "$GODOT" --headless --path . --script tests/roguelite_full_tuning.gd 2>&1 | tee /tmp/full-tuning.log
+          ! grep -E '^(SCRIPT ERROR|ERROR):' /tmp/full-tuning.log
+          grep -q 'FULL TUNING CHECKS PASSED' /tmp/full-tuning.log
           for spec in enemies build boss run rice theme kill_rewards kill_run launch_rewards reward_effects audio hud feedback_integration stage_flow shop_events crowd difficulty damage_contacts enemy_readability splitting; do
             "$GODOT" --headless --path . --script "tests/roguelite_${spec}.gd" 2>&1 | tee "/tmp/${spec}.log"
             ! grep -E '^(SCRIPT ERROR|ERROR):' "/tmp/${spec}.log"
@@ -66,3 +72,9 @@ jobs:
           grep -q 'DAMAGE CONTACT CHECKS PASSED' /tmp/damage_contacts.log
           grep -q 'ENEMY READABILITY CHECKS PASSED' /tmp/enemy_readability.log
           grep -q 'SPLITTING CHECKS PASSED' /tmp/splitting.log
+      - name: UI integration
+        run: |
+          set -euo pipefail
+          /tmp/godot/Godot_v4.7.1-stable_linux.x86_64 --headless --path . --script tests/ui_integration.gd 2>&1 | tee /tmp/ui-integration.log
+          ! grep -E "^(SCRIPT ERROR|ERROR):" /tmp/ui-integration.log
+          grep -q "UI INTEGRATION CHECKS PASSED" /tmp/ui-integration.log

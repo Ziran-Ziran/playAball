@@ -1,5 +1,11 @@
 # 玩个球
 
+## 当前集成入口（2026-11-02）
+
+F5进入肥鱼主菜单，开始后运行完整五波/成长/商店事件/首领/结算游戏。独立开发入口：F6运行`gameplay_lab.tscn`或`tuning_run.tscn`；正式游戏不含调参面板。旧实验仍可打开`scenes/main.tscn`后F6。下文旧F5描述属于历史入口；以本节为准。
+
+详见[集成教程026](docs/tutorials/026-ui-game-integration.md)。
+
 一款 PC 端 2D 物理碰撞游戏。当前 Demo 是俯视平面、零环境重力的碰撞拆迁肉鸽：主动发射主球，撞出小兵接力清场，击杀领奖成长。旧横版解谜实验原型继续保留；完整规则见 [设计方案](docs/ideas/COLLISION_ROGUELITE_DEMO.md)。
 
 ## 开始玩旧实验原型
@@ -55,3 +61,7 @@ B线开发夹具入口为 `scenes/roguelite/gameplay_lab.tscn`，在编辑器打
 Windows导出方法见[教程019](docs/tutorials/019-windows-export.md)，包内[试玩说明](docs/playtest/PLANNER_README.txt)面向策划，不需安装Godot。导出只在暂存副本切换到run入口，源码F5旧侧视保留，成品位于忽略的builds目录。
 
 用户拟负责A线（美术/UI/粒子/声音表现）及最终审阅merge，B线负责玩法创新、实验室与集成协调。整文件所有权、接口契约、阶段计划与验收见[计划008](docs/plans/008-parallel-development.md)和[教程020](docs/tutorials/020-parallel-workflow.md)。S1最小表现接口和首版八类玩法实验室已实现；玩家/伙伴/首领等其余表现拆分及下一机制尚未实施，B不自动获得合并权限。
+
+策划实时手感入口：`scenes/roguelite/tuning_run.tscn`，F1展开9项物理滑杆，同局即时应用、对照/恢复/保存参数。导出加`-LiveTuning`即可交给无需Godot的策划，见[教程024](docs/tutorials/024-live-feel-tuning.md)。策略/成长使用逐局反馈，手感直接现场调。
+
+完整调参台已扩展到引擎/求解器/全部工程设置、刚体/材质/形状、各玩法actor和资源，支持分类、中文/原名搜索与分页，默认从F1进入。完整覆盖与重启配置见[教程025](docs/tutorials/025-full-engine-tuning.md)。

@@ -1,0 +1,96 @@
+extends SceneTree
+
+func _initialize() -> void:
+	call_deferred("check_game")
+	create_timer(15).timeout.connect(func(): quit(1))
+
+func check_game() -> void:
+	root.size = Vector2i(1280, 720)
+	if not ResourceLoader.exists("res://scenes/ui/main_menu.tscn"):
+		push_error("UI integration: main menu missing")
+		quit(1)
+		return
+	var menu = load("res://scenes/ui/main_menu.tscn").instantiate()
+	root.add_child(menu)
+	current_scene = menu
+	await process_frame
+	assert(menu.get_node("Start") is TextureButton)
+	menu.show_settings()
+	assert(menu.get_node("Start").disabled)
+	assert(menu.get_node("Exit").disabled)
+	menu.close_settings()
+	assert(not menu.get_node("Start").disabled)
+	mouse(Vector2(330, 425), true)
+	await process_frame
+	mouse(Vector2(330, 425), false)
+	await process_frame
+	await process_frame
+	assert(current_scene.name == "Game")
+	var game = current_scene
+	if not game.has_node("ArenaSkin") or not game.get_node("RunHUD/Overlay").has_node("HealthSkin"):
+		push_error("Approved arena and segmented health art are not installed")
+		quit(1)
+		return
+	assert(not game.get_node("HUD/Controls").visible)
+	assert(not game.has_node("LiveTuning"))
+	assert(not game.over_controls(Vector2(350, 100)))
+	assert(game.over_controls(Vector2(1210, 35)))
+	assert(game.get_node("HUD/Menu/Buttons/Split") is CheckButton)
+	game.get_node("HUD/Menu/Buttons/Split").button_pressed = true
+	assert(game.director.split_enabled)
+	game.get_node("HUD/Menu/Buttons/Split").button_pressed = false
+	assert(game.director.health.hp == 5)
+	# 从原隐藏控件所在区域发射，再验证在正式暂停按钮上释放会取消。
+	mouse(Vector2(350, 100), true)
+	await process_frame
+	assert(game.launcher.input_held)
+	mouse(Vector2(450, 100), false)
+	await process_frame
+	assert(game.launcher.shots == 1)
+	game.launcher.reset_launch()
+	mouse(Vector2(350, 100), true)
+	await process_frame
+	mouse(Vector2(1210, 35), false)
+	await process_frame
+	assert(game.launcher.shots == 0)
+	game.director.health.hurt(1)
+	await process_frame
+	assert(game.get_node("RunHUD").health_snapshot().hp == 4)
+	await process_frame
+	var health_skin = game.get_node("RunHUD/Overlay/HealthSkin")
+	assert(health_skin._count == 5)
+	assert(health_skin._clips[4].size.x == 0)
+	assert(health_skin._hp.text == "4 / 5")
+	game.director.health.max_hp = 8
+	game.director.health.hp = 8
+	game.director.health.changed.emit(8)
+	await process_frame
+	await process_frame
+	assert(health_skin._count == 8 and health_skin._hp.text == "8 / 8")
+	var hud = game.get_node("RunHUD")
+	var choices: Array = []
+	for id in ["heal", "companion", "cooldown", "heavy"]:
+		choices.append(load("res://resources/roguelite/upgrades/" + id + ".tres"))
+	hud.show_choices(choices)
+	assert(hud.cards.get_child_count() == 4)
+	assert(hud.cards.get_child(0).get_theme_stylebox("normal") is StyleBoxTexture)
+	assert(hud.cards.get_child(0).disabled)
+	await create_timer(0.85).timeout
+	assert(not hud.cards.get_child(3).disabled)
+	hud.clear_cards()
+	game.set_paused(true)
+	game.reset_range()
+	assert(not paused)
+	assert(game.director.health.hp == 5)
+	game.queue_free()
+	# 等待音频混音线程释放最后一段WAV播放引用，避免进程退出时误报泄漏。
+	await create_timer(0.1).timeout
+	print("UI INTEGRATION CHECKS PASSED")
+	quit(0)
+
+func mouse(point: Vector2, pressed: bool) -> void:
+	var event := InputEventMouseButton.new()
+	event.button_index = MOUSE_BUTTON_LEFT
+	event.position = point
+	event.pressed = pressed
+	Input.parse_input_event(event)

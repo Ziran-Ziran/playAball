@@ -7,22 +7,22 @@
 - `tools/export_windows.ps1`：检查本机引擎版本，复制运行资源到忽略的独立暂存目录，导入并导出。
 - `export_presets.cfg`：Windows Desktop、x86_64、内嵌PCK、不签名、不附控制台窗口的项目内预设。
 - `docs/playtest/PLANNER_README.txt`：随包交给策划的启动、操作、流程、限制和反馈提示。
-- `docs/playtest/PLANNER_FEEDBACK.txt`：当前数值基线、三局建议顺序与冷却/穿群/压力/成长/经济反馈单；导出时附为“数值与手感反馈.txt”。
+- `docs/playtest/PLANNER_FEEDBACK.txt`：策略、成长与节奏反馈单；物理手感用实时面板，导出时附为“策略与成长反馈.txt”。
 - `builds/<BuildName>/PlayABall.exe`：单文件试玩程序，游戏资源内嵌；旁边附说明及build_info.json。
 - `builds/<BuildName>.zip`：建议发送的压缩包。builds、zip和.local均被Git忽略，不提交成品。
 
 ## 为什么在暂存目录导出
 
-源码的project.godot仍保留F5旧侧视入口以及既有编辑器规范化差异。脚本只复制scripts/scenes/resources和可选assets，以及工程配置和导出预设。它只把暂存副本的主场景替换成`res://scenes/roguelite/run.tscn`，原工程文件不写回，结束时核对原project.godot哈希。
+源码的project.godot仍保留F5旧侧视入口以及既有编辑器规范化差异。脚本只复制scripts/scenes/resources和可选assets，以及工程配置和导出预设。它只把暂存副本的主场景替换成`res://scenes/roguelite/run.tscn`，启用`-LiveTuning`时用继承正式run的`res://scenes/roguelite/tuning_run.tscn`，原工程文件不写回，结束时核对原project.godot哈希。
 
 不复制文档、测试、个人设置、Git数据或原引擎缓存。暂存项目自行导入并生成所需缓存，再由Godot正式导出。正式导出不使用临时测试脚本代替玩法入口。
 
 ## 本机操作
 
-脚本使用Windows PowerShell 5.1及PowerShell 7共有的文件/哈希API；先用`$PSVersionTable.PSVersion`确认实际Shell，再遵守AGENTS调查当前设备和Godot实际路径，确认4.7.1 stable标准版及匹配Windows导出模板已安装。模板由Godot管理；另一电脑不要照抄本机绝对路径。运行：
+脚本使用Windows PowerShell 5.1及PowerShell 7共有的文件/哈希API；先用`$PSVersionTable.PSVersion`确认实际Shell，再遵守AGENTS调查当前设备和Godot实际路径，确认4.7.1 stable标准版及匹配Windows导出模板已安装。模板由Godot管理；另一电脑不要照抄本机绝对路径。运行（加`-LiveTuning`导出含F1现场调参面板的策划版；不加则保留普通正式run入口）：
 
 ```powershell
-./tools/export_windows.ps1 -GodotExe '<本机实际Godot路径>' -BuildName planner-preview-v1
+./tools/export_windows.ps1 -GodotExe '<本机实际Godot路径>' -BuildName planner-live-tuning -LiveTuning
 ```
 
 BuildName只允许字母、数字、下划线和连字符；已有同名目录时拒绝覆盖，请换新版本名。脚本通过Start-Process -Wait等待图形版Godot真正结束，并检查版本、退出码和错误日志。日志在.local/export-<唯一ID>中，便于故障追踪。
@@ -50,3 +50,5 @@ build_info.json记录构建名、引擎版本、平台、入口、基线提交�
 - 无法覆盖exe：旧版可能仍运行；本脚本不覆盖既有构建，换BuildName并关闭无需使用的旧窗口。
 - 因BuildName失败：不要传路径或斜杠，脚本只接受构建目录名。
 - 单机运行正常但另一机失败：记录Windows/显卡、错误与build_info，不把本机结果推广成所有机器通过。
+
+实时面板的参数语义、存取和对照操作见[教程024](024-live-feel-tuning.md)。本轮导出从本地未提交开发源码构建，用runtime_source_sha256识别，不把base_commit冒充全部实现。

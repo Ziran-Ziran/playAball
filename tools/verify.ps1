@@ -1,4 +1,4 @@
-param([string]$GodotExe = $env:GODOT_EXE)
+﻿param([string]$GodotExe = $env:GODOT_EXE)
 $ErrorActionPreference = 'Stop'
 if (-not $GodotExe) {
     $godotCommand = Get-Command godot, godot4 -ErrorAction SilentlyContinue | Select-Object -First 1
@@ -38,6 +38,9 @@ foreach ($step in @(
     @{ Name = 'splitting'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_splitting.gd' },
     @{ Name = 'presentation_interface'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_presentation_interface.gd' },
     @{ Name = 'gameplay_lab'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_gameplay_lab.gd' },
+    @{ Name = 'live_tuning'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_live_tuning.gd' },
+    @{ Name = 'full_tuning'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_full_tuning.gd' },
+    @{ Name = 'ui_integration'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/ui_integration.gd' },
     @{ Name = 'smoke'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/smoke.gd' }
 )) {
     $outFile = Join-Path $logDirectory ($step.Name + '.out')
@@ -77,6 +80,9 @@ foreach ($step in @(
     $completionMarkers.splitting = 'SPLITTING CHECKS PASSED'
     $completionMarkers.presentation_interface = 'PRESENTATION INTERFACE CHECKS PASSED'
     $completionMarkers.gameplay_lab = 'GAMEPLAY LAB CHECKS PASSED'
+    $completionMarkers.live_tuning = 'LIVE TUNING CHECKS PASSED'
+    $completionMarkers.ui_integration = 'UI INTEGRATION CHECKS PASSED'
+    $completionMarkers.full_tuning = 'FULL TUNING CHECKS PASSED'
     if ($completionMarkers.ContainsKey($step.Name) -and $logText -notmatch $completionMarkers[$step.Name]) {
         throw ($step.Name + ' 未获得测试完成标志。')
     }
@@ -84,4 +90,4 @@ foreach ($step in @(
         throw '未获得目录检查完成标志。'
     }
 }
-Write-Output 'VERIFIED: import + map + all 25 behavior suites including presentation interface and gameplay lab'
+Write-Output 'VERIFIED: import + map + all 28 behavior suites including full engine tuning and release UI'
