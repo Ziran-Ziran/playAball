@@ -1,6 +1,7 @@
 ﻿param(
     [Parameter(Mandatory = $true)][string]$GodotExe,
-    [string]$BuildName = 'planner-preview'
+    [string]$BuildName = 'planner-preview',
+    [switch]$LiveTuning
 )
 $ErrorActionPreference = 'Stop'
 $projectRoot = Split-Path -Parent $PSScriptRoot
@@ -34,7 +35,8 @@ $settingsPath = Join-Path $projectRoot 'project.godot'
 $originalSettingsHash = (Get-FileHash -LiteralPath $settingsPath -Algorithm SHA256).Hash
 $settings = Get-Content -LiteralPath $settingsPath -Raw -Encoding UTF8
 if ([regex]::Matches($settings, '(?m)^run/main_scene=.*$').Count -ne 1) { throw '无法唯一识别主场景配置。' }
-$settings = [regex]::Replace($settings, '(?m)^run/main_scene=.*$', 'run/main_scene="res://scenes/roguelite/run.tscn"')
+$entryScene = if ($LiveTuning) { 'res://scenes/roguelite/tuning_run.tscn' } else { 'res://scenes/ui/main_menu.tscn' }
+$settings = [regex]::Replace($settings, '(?m)^run/main_scene=.*$', ('run/main_scene="' + $entryScene + '"'))
 [IO.File]::WriteAllText((Join-Path $staging 'project.godot'), $settings, [Text.UTF8Encoding]::new($false))
 Copy-Item -LiteralPath (Join-Path $projectRoot 'export_presets.cfg') -Destination $staging
 
@@ -60,7 +62,8 @@ $metadata = [ordered]@{
     build = $BuildName
     engine = '4.7.1.stable'
     platform = 'Windows x86_64 Compatibility'
-    scene = 'res://scenes/roguelite/run.tscn'
+    scene = $entryScene
+    live_tuning = [bool]$LiveTuning
     base_commit = $commit
     runtime_source_sha256 = $sourceHash
     exe_sha256 = (Get-FileHash -LiteralPath $exePath -Algorithm SHA256).Hash
@@ -68,7 +71,7 @@ $metadata = [ordered]@{
 }
 $metadata | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $output 'build_info.json') -Encoding utf8
 Copy-Item -LiteralPath (Join-Path $projectRoot 'docs/playtest/PLANNER_README.txt') -Destination (Join-Path $output '试玩说明.txt')
-Copy-Item -LiteralPath (Join-Path $projectRoot 'docs/playtest/PLANNER_FEEDBACK.txt') -Destination (Join-Path $output '数值与手感反馈.txt')
+Copy-Item -LiteralPath (Join-Path $projectRoot 'docs/playtest/PLANNER_FEEDBACK.txt') -Destination (Join-Path $output '策略与成长反馈.txt')
 $archive = $output + '.zip'
 Compress-Archive -LiteralPath (Get-ChildItem -LiteralPath $output -File).FullName -DestinationPath $archive
 Write-Output ('EXPORT READY: ' + $exePath)

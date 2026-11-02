@@ -19,7 +19,7 @@ func frames(count: int) -> void:
 		await physics_frame
 
 func run() -> void:
-	check(ProjectSettings.get_setting("application/run/main_scene") == "res://scenes/main.tscn", "Formal project entry remains unchanged")
+	check(ProjectSettings.get_setting("application/run/main_scene") == "res://scenes/ui/main_menu.tscn", "Formal entry is the release menu, not a lab")
 	check(ResourceLoader.exists("res://scenes/roguelite/run.tscn"), "Formal run scene remains available")
 	check(ResourceLoader.exists("res://scenes/roguelite/gameplay_lab.tscn"), "Independent gameplay lab scene exists")
 	check(not FileAccess.get_file_as_string("res://scenes/roguelite/run.tscn").contains("gameplay_lab.gd"), "Formal run scene does not reference the lab script")

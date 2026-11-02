@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>成长选择 · 通用卡框入场小样</title>
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: #0b1315; font-family: "Microsoft YaHei", sans-serif; }
+  main { aspect-ratio: 16 / 9; width: 100%; padding: 5% 6% 4%; overflow: hidden; }
+  h1 { margin: 0; text-align: center; color: #edf1e9; font-size: clamp(18px, 2.8vw, 28px); letter-spacing: .12em; }
+  .row { display: flex; justify-content: center; gap: 2%; margin: 3% auto 0; width: 78%; }
+  .row.four { width: 100%; }
+  .card { width: 31%; flex-shrink: 0; transform-origin: 50% 65%; opacity: 0; position: relative; }
+  .four .card { width: 23%; }
+  img { display: block; width: 100%; height: auto; pointer-events: none; }
+  .rim { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+  @media (prefers-reduced-motion: reduce) { .card { will-change: auto; } }
+</style>
+<main aria-label="通用成长卡框的依次入场演示，没有具体卡面与升级内容">
+  <h1>选择一项成长</h1>
+  <div class="row" id="cards"></div>
+</main>
+<script>
+  const query = new URLSearchParams(location.search);
+  const count = query.get('count') === '4' ? 4 : 3;
+  const row = document.getElementById('cards');
+  if (count === 4) row.classList.add('four');
+  for (let index = 0; index < count; index++) {
+    const card = document.createElement('div');
+    card.className = 'card';
+    const image = document.createElement('img');
+    image.src = 'upgrade_card_frame_v2.png';
+    image.alt = `第${index + 1}张通用空白卡框`;
+    card.append(image);
+    // 细线只给生图边缘添加流动表现，底图仍由生图工具制作。
+    const ns = 'http://www.w3.org/2000/svg';
+    const rim = document.createElementNS(ns, 'svg');
+    rim.setAttribute('viewBox', '0 0 1024 1536');
+    rim.setAttribute('class', 'rim');
+    rim.setAttribute('aria-hidden', 'true');
+    const trail = document.createElementNS(ns, 'rect');
+    for (const [key, value] of Object.entries({x:64, y:55, width:896, height:1413, rx:90, fill:'none', stroke:'#b2f8d4', 'stroke-width':3, 'stroke-linecap':'round', pathLength:1000, 'stroke-dasharray':'45 955', opacity:'.55'})) trail.setAttribute(key, value);
+    rim.append(trail);
+    card.append(rim);
+    row.append(card);
+  }
+  const cards = [...row.children];
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // 小样只控制生成贴图的显示变换，逐卡内容和真实奖励状态留给B接线。
+  window.setPreviewTime = function (milliseconds) {
+    const phase = ((milliseconds % 2400) + 2400) % 2400;
+    cards.forEach((card, index) => {
+      const progress = Math.min(1, Math.max(0, (phase - index * 100) / 420));
+      const ease = 1 - Math.pow(1 - progress, 3);
+      card.style.opacity = String(ease);
+      const scale = .985 + .015 * ease;
+      card.style.transform = reduced ? 'none' : `translateY(${24 * (1 - ease)}px) scale(${scale})`;
+      const trail = card.querySelector('rect');
+      trail.setAttribute('stroke-dashoffset', String(-1000 * phase / 2400));
+      trail.style.display = reduced ? 'none' : '';
+    });
+  };
+  if (!query.has('capture')) {
+    const start = performance.now();
+    function animate(now) {
+      window.setPreviewTime(now - start);
+      requestAnimationFrame(animate);
+    }
+    requestAnimationFrame(animate);
+  } else window.setPreviewTime(0);
+</script>
+</html>

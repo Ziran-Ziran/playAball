@@ -17,6 +17,15 @@ var _feedback_left: float = 0.0
 var _reset_revision: int = 0
 ## 默认关闭完整拒伤诊断；实验室打开后，无攻击资格接触也交给规则层记录原因。
 var contact_diagnostics_enabled: bool = false
+var _debug_state_request: Dictionary = {}
+
+func request_debug_state(property: String, value: Variant) -> void:
+	# 完整调参的一次性状态编辑仍交给物理接口；不在绘制/每帧强写刚体位置。
+	_debug_state_request[property] = value
+	if property in ["position","global_position","transform","global_transform","rotation","global_rotation"]:
+		_reset_revision += 1
+		chain_id = 0
+	sleeping = false
 
 func _ready() -> void:
 	# 新玩法派生刚体统一禁用环境重力，旧原型不继承此类。
@@ -30,6 +39,7 @@ func attacking() -> bool:
 	return chain_id > 0
 
 func reset_body(point: Vector2) -> void:
+	_debug_state_request.clear()
 	_reset_revision += 1
 	_feedback_left = 0.0
 	reset_point = point
@@ -47,6 +57,25 @@ func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
 		_previous_velocity = Vector2.ZERO
 		_velocity_frame = Engine.get_physics_frames()
 		reset_pending = false
+		return
+	if not _debug_state_request.is_empty():
+		var parent_transform: Transform2D = get_parent().global_transform if get_parent() is Node2D else Transform2D.IDENTITY
+		for property: String in _debug_state_request:
+			var value: Variant = _debug_state_request[property]
+			match property:
+				"position": state.transform.origin = parent_transform * value
+				"global_position": state.transform.origin = value
+				"transform": state.transform = parent_transform * value
+				"global_transform": state.transform = value
+				"rotation": state.transform = Transform2D(float(value)+parent_transform.get_rotation(),state.transform.origin)
+				"global_rotation": state.transform = Transform2D(float(value),state.transform.origin)
+				"linear_velocity": state.linear_velocity = value
+				"angular_velocity": state.angular_velocity = float(value)
+				"sleeping": state.sleeping = bool(value)
+		_debug_state_request.clear()
+		incoming_velocity = state.linear_velocity
+		_previous_velocity = incoming_velocity
+		_velocity_frame = Engine.get_physics_frames()
 		return
 	state.linear_velocity = state.linear_velocity.limit_length(speed_limit)
 	_feedback_left = maxf(0.0, _feedback_left - state.step)

@@ -1,0 +1,11 @@
+[gd_scene load_steps=5 format=3]
+[ext_resource type="PackedScene" path="res://scenes/roguelite/run.tscn" id="1"]
+[ext_resource type="Script" path="res://scripts/roguelite/tuning_run.gd" id="2"]
+[ext_resource type="Script" path="res://scripts/roguelite/live_tuning.gd" id="3"]
+[ext_resource type="PackedScene" path="res://scenes/roguelite/tuning_panel.tscn" id="4"]
+[node name="TuningRun" instance=ExtResource("1")]
+script = ExtResource("2")
+[node name="LiveTuning" type="Node" parent="."]
+process_mode = 3
+script = ExtResource("3")
+[node name="TuningPanel" parent="." instance=ExtResource("4")]
