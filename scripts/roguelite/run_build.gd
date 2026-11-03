@@ -13,7 +13,7 @@ func reset_build() -> void:
 	levels.clear()
 
 func companion_count() -> int:
-	return 1 + mini(3, int(levels.get("companion", 0)))
+	return clampi(int(levels.get("companion", 0)), 0, 3)
 
 func launch_cooldown() -> float:
 	return maxf(1.2, 2.2 - 0.25 * int(levels.get("cooldown", 0)))
@@ -60,6 +60,8 @@ func candidates(rng: RandomNumberGenerator, first_wave: bool, hp: int, max_hp: i
 	var pool: Array[DemoUpgrade] = []
 	var result: Array[DemoUpgrade] = []
 	for upgrade: DemoUpgrade in definitions:
+		if upgrade.id in ["follow", "explosion"] and companion_count() == 0:
+			continue
 		if upgrade.id == "heal":
 			if hp >= max_hp:
 				continue

@@ -53,7 +53,7 @@ func run() -> void:
 	check(shot.position.distance_to(saved_position) < 0.1 and shot.linear_velocity.is_equal_approx(saved_velocity), "Reward pause preserves projectile motion state")
 	director.choose_upgrade("companion")
 	check(director.wave == 1 and director.state == director.State.BATTLE and not paused, "Reward resumes same wave")
-	check(director.chosen_rewards == 1 and director.companions.members.size() == 2, "Exactly one chosen reward applies")
+	check(director.chosen_rewards == 1 and director.companions.members.size() == 1, "Exactly one chosen reward applies")
 	for id in range(10000, 10010):
 		director.register_kill(id)
 	director.advance(0.01)

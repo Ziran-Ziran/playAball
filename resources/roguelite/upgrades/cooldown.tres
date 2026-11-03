@@ -6,7 +6,7 @@
 script = ExtResource("1")
 id = "cooldown"
 title = "快速上弦"
-description = "每级发射冷却减少 0.25 秒，最低 1.2 秒。"
+description = "每级发射冷却 -0.25 秒，最多 4 级；基础 2.2 秒，满级 1.2 秒。"
 max_level = 4
 category = "节奏"
 weight = 1.1

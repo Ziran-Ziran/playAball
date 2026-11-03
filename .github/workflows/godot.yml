@@ -48,12 +48,20 @@ jobs:
           "$GODOT" --headless --path . --script tests/roguelite_full_tuning.gd 2>&1 | tee /tmp/full-tuning.log
           ! grep -E '^(SCRIPT ERROR|ERROR):' /tmp/full-tuning.log
           grep -q 'FULL TUNING CHECKS PASSED' /tmp/full-tuning.log
-          for spec in enemies build boss run rice theme kill_rewards kill_run launch_rewards reward_effects audio hud feedback_integration stage_flow shop_events crowd difficulty damage_contacts enemy_readability splitting; do
+          for spec in enemies build boss run rice theme kill_rewards kill_run launch_rewards reward_effects audio hud feedback_integration stage_flow shop_events crowd difficulty damage_contacts enemy_readability splitting map_mechanisms portals maps map_flow map_navigation balance_metrics fish_view actor_views; do
             "$GODOT" --headless --path . --script "tests/roguelite_${spec}.gd" 2>&1 | tee "/tmp/${spec}.log"
             ! grep -E '^(SCRIPT ERROR|ERROR):' "/tmp/${spec}.log"
           done
           grep -q 'ENEMY CHECKS PASSED' /tmp/enemies.log
           grep -q 'BUILD CHECKS PASSED' /tmp/build.log
+          grep -q 'MAP MECHANISM CHECKS PASSED' /tmp/map_mechanisms.log
+          grep -q 'PORTAL CHECKS PASSED' /tmp/portals.log
+          grep -q 'MAP CHECKS PASSED' /tmp/maps.log
+          grep -q 'MAP FLOW CHECKS PASSED' /tmp/map_flow.log
+          grep -q 'MAP NAVIGATION CHECKS PASSED' /tmp/map_navigation.log
+          grep -q 'BALANCE METRIC CHECKS PASSED' /tmp/balance_metrics.log
+          grep -q 'FISH VIEW CHECKS PASSED' /tmp/fish_view.log
+          grep -q 'ACTOR VIEW CHECKS PASSED' /tmp/actor_views.log
           grep -qE 'ROGUELITE BOSS: [0-9]+ checks, 0 failures' /tmp/boss.log
           grep -q 'RUN CHECKS PASSED' /tmp/run.log
           grep -q 'RICE CHECKS PASSED' /tmp/rice.log
@@ -72,6 +80,12 @@ jobs:
           grep -q 'DAMAGE CONTACT CHECKS PASSED' /tmp/damage_contacts.log
           grep -q 'ENEMY READABILITY CHECKS PASSED' /tmp/enemy_readability.log
           grep -q 'SPLITTING CHECKS PASSED' /tmp/splitting.log
+          for spec in paddle_response feature_acceptance; do
+            "$GODOT" --headless --fixed-fps 120 --path . --script "tests/roguelite_${spec}.gd" 2>&1 | tee "/tmp/${spec}.log"
+            ! grep -E '^(SCRIPT ERROR|ERROR):' "/tmp/${spec}.log"
+          done
+          grep -qE 'PADDLE RESPONSE CHECKS PASSED: [0-9]+ failures: 0' /tmp/paddle_response.log
+          grep -qE 'FEATURE ACCEPTANCE CHECKS PASSED: [0-9]+ failures: 0' /tmp/feature_acceptance.log
       - name: UI integration
         run: |
           set -euo pipefail

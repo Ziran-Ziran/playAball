@@ -1,0 +1,42 @@
+[gd_scene load_steps=8 format=3]
+[ext_resource type="Script" path="res://scripts/roguelite/maps/map_layout.gd" id="layout"]
+[ext_resource type="Resource" path="res://resources/roguelite/maps/map_02.tres" id="data"]
+[ext_resource type="PackedScene" path="res://scenes/roguelite/mechanisms/pivot_paddle.tscn" id="pivot"]
+[ext_resource type="PackedScene" path="res://scenes/roguelite/mechanisms/moving_barrier.tscn" id="moving"]
+[ext_resource type="PackedScene" path="res://scenes/roguelite/mechanisms/spike_strip.tscn" id="spikes"]
+[ext_resource type="PackedScene" path="res://scenes/roguelite/mechanisms/portal_pair.tscn" id="portals"]
+[sub_resource type="RectangleShape2D" id="Vertical"]
+size = Vector2(18,180)
+[node name="Map02" type="Node2D"]
+process_mode = 1
+script = ExtResource("layout")
+definition = ExtResource("data")
+[node name="CrossPivot" parent="." instance=ExtResource("pivot")]
+position = Vector2(640, 400)
+angle_limit = 1.3
+[node name="VerticalShape" type="CollisionShape2D" parent="CrossPivot/Paddle"]
+shape = SubResource("Vertical")
+[node name="VisualVertical" type="Polygon2D" parent="CrossPivot/Paddle"]
+polygon = PackedVector2Array(-9,-90,9,-90,9,90,-9,90)
+[node name="MovingLeft" parent="." instance=ExtResource("moving")]
+position = Vector2(350, 300)
+rotation = 0.6
+travel = Vector2(0,60)
+[node name="MovingRight" parent="." instance=ExtResource("moving")]
+position = Vector2(930, 500)
+rotation = 0.6
+travel = Vector2(0,-60)
+[node name="TopSpikes" parent="." instance=ExtResource("spikes")]
+position = Vector2(640, 135)
+rotation = 3.141592653589793
+[node name="BottomSpikes" parent="." instance=ExtResource("spikes")]
+position = Vector2(640, 668)
+rotation = 0
+[node name="LeftSpikes" parent="." instance=ExtResource("spikes")]
+position = Vector2(55, 400)
+rotation = 1.5707963267948966
+[node name="RightSpikes" parent="." instance=ExtResource("spikes")]
+position = Vector2(1225, 400)
+rotation = -1.5707963267948966
+
+[editable path="CrossPivot"]

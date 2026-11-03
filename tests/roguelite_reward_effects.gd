@@ -127,6 +127,8 @@ func run() -> void:
 	quit(0 if failures == 0 else 1)
 
 func echo_isolation(arena: Node2D, player: DemoPlayer, combat: DemoCombat) -> void:
+	var bursts: Array[float] = []
+	combat.explosion_triggered.connect(func(_point: Vector2, radius: float): bursts.append(radius))
 	combat.reset_combat()
 	combat.build.levels = {"echo": 1, "bowling": 1, "explosion": 1, "heavy": 3}
 	var member: DemoCompanion = load("res://scenes/roguelite/companion_ball.tscn").instantiate()
@@ -152,6 +154,7 @@ func echo_isolation(arena: Node2D, player: DemoPlayer, combat: DemoCombat) -> vo
 	enemy.projectile_left = 0.05
 	combat._physics_process(0.13)
 	check(enemy.hp == 27, "Companion echo adds exactly one after direct hit and first explosion")
+	check(bursts.size() == 1 and bursts[0] == 80.0, "Exactly one presentation burst follows real first-hit explosion, never echo recursion")
 	check(neighbor.hp == nearby_hp and counter.calls == 1 and is_equal_approx(enemy.projectile_left, 0.05), "Echo cannot explode, consume rice, refresh bowling or add ranked heavy")
 	combat._physics_process(1.0)
 	check(enemy.hp == 27 and combat.pending_echoes.is_empty(), "Echo never recursively schedules another echo")

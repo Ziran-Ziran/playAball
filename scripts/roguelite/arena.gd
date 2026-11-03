@@ -8,16 +8,20 @@ extends Node2D
 @onready var feedback: Node2D = $ImpactFeedback
 var companion_count: int = 1
 var paused: bool = false
+var map_provider: Node
 
 func _ready() -> void:
 	launcher.player = player
+	# 回能只发布表现事件，不能复用撞击粒子或改变真实弹槽/冷却。
+	launcher.recharged.connect(func(): player.visual_event.emit(&"charge_restored",{"charges":launcher.charges,"capacity":launcher.capacity}))
 	companions.player = player
 	companions.combat = combat
 	companions.set_count(companion_count)
 	player.contact_report.connect(combat.resolve)
-	player.impacted.connect(feedback.play_impact)
+	player.impacted.connect(feedback.play_contact)
 	combat.hit.connect(feedback.play_impact)
-	combat.relay.connect(func(point: Vector2, depth: int): feedback.play_impact(point, 200.0 + depth * 120.0))
+	combat.relay.connect(feedback.play_relay)
+	combat.explosion_triggered.connect(feedback.play_explosion)
 	# 发射/回能不冒充实体碰撞；能量环与 HUD 表达可发射状态。
 	$HUD/Controls/Count.item_selected.connect(change_count)
 	$HUD/Controls/Momentum.toggled.connect(func(value: bool): player.cancel_opposing_momentum = 0.6 if value else 0.0)
@@ -68,9 +72,19 @@ func _process(_delta: float) -> void:
 	if launcher.input_held and not launcher.aiming:
 		availability += " · 按住等待"
 	status.text = "碰撞试验场 P0–P2   发射 %d   %s   击破 %d/3   接力 %d/3" % [launcher.shots, availability, destroyed, combat.longest_chain]
-	if player.position.y > 820 or player.position.y < -100 or player.position.x < -100 or player.position.x > 1380:
+	var outside: bool = player.position.y > 820 or player.position.y < -100 or player.position.x < -100 or player.position.x > 1380
+	if is_instance_valid(map_provider):
+		outside = not map_provider.definition.bounds.grow(100.0).has_point(player.position)
+	if outside:
 		launcher.cancel()
-		player.reset_body(Vector2(640, 540))
+		var reset_point: Vector2 = Vector2(640, 540)
+		if is_instance_valid(map_provider):
+			var exclusions: Array[RID] = [player.get_rid()]
+			reset_point = map_provider.find_safe_point(map_provider.definition.player_spawn, 23.0, exclusions)
+		if reset_point.is_finite():
+			if is_instance_valid(map_provider):
+				map_provider.recovery_requested.emit(player, player.position, reset_point)
+			player.reset_body(reset_point)
 	queue_redraw()
 
 func set_paused(value: bool) -> void:

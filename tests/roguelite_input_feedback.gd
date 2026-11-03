@@ -43,6 +43,11 @@ func run() -> void:
 	await frames(3)
 	var launch: DemoLaunch = arena.launcher
 	var player: DemoPlayer = arena.player
+	var restored: Array[Dictionary]=[]
+	player.visual_event.connect(func(event: StringName,payload: Dictionary):
+		if event==&"charge_restored":restored.append(payload))
+	var fish_view: Node2D=player.get_node("Presentation")
+	check(restored.is_empty(),"Fresh spawn never reports a restored charge")
 	launch.set_process(false)
 	# 不把冷却完成、发射当成撞击；就绪只更新 UI。
 	arena.feedback.set_process(false)
@@ -50,6 +55,29 @@ func run() -> void:
 	launch.remaining = 0.01
 	launch.advance(0.02)
 	check(arena.feedback._rings.is_empty(), "Recharge never creates phantom collision particles")
+	check(restored.size()==1 and restored[0].charges==1 and restored[0].capacity==1,"Actual single-charge completion publishes its real capacity for presentation")
+	check("recharge_pulse_left" in fish_view and fish_view.get("recharge_pulse_left")>0.0,"Actual restoration starts the separate fish readiness cue")
+	var pulse_before_pause: float=fish_view.get("recharge_pulse_left") if "recharge_pulse_left" in fish_view else -1.0
+	arena.set_paused(true)
+	await create_timer(0.04).timeout
+	check(pulse_before_pause>0.0 and fish_view.get("recharge_pulse_left")==pulse_before_pause,"Paused battle freezes the visual readiness pulse")
+	arena.set_paused(false)
+	launch.set_blocked(true)
+	launch.remaining=0.1
+	launch.advance(0.2)
+	check(restored.size()==1,"Blocked battle cannot emit a false recharge cue")
+	launch.reset_launch()
+	launch.set_capacity(2)
+	check(restored.size()==1,"Reset and a newly granted slot do not pretend to be a recharge")
+	launch.launch_with_drag(Vector2(80,0))
+	launch.launch_with_drag(Vector2(-80,0))
+	launch.advance(launch.cooldown+0.01)
+	check(restored.size()==2 and restored[-1].charges==1 and restored[-1].capacity==2,"Double charge reports the first actual restored slot")
+	launch.advance(launch.cooldown+0.01)
+	check(restored.size()==3 and restored[-1].charges==2,"Double charge reports its final restored slot")
+	player.reset_body(Vector2(640,540))
+	check("recharge_pulse_left" in fish_view and fish_view.get("recharge_pulse_left")==0.0,"Physical reset clears old visual readiness without creating a charge")
+	launch.reset_launch()
 	launch.remaining = 0.04
 	arena._process(0.0)
 	check(not arena.status.text.contains("冷却 0.0"), "Cooldown display never rounds unavailable energy to zero")
@@ -143,8 +171,10 @@ func run() -> void:
 		launch.remaining = 0.4
 		launch.request_aim(Vector2(900, 400))
 		launch.pointer = Vector2(820, 400)
+		var restores_before_refund: int=restored.size()
 		launch.refund_cooldown(0.6)
 		check(launch.remaining == 0.0 and launch.aiming and launch.pointer == Vector2(820, 400), "Refund reaching ready continues held drag without losing pointer")
+		check(restored.size()==restores_before_refund+1 and fish_view.get("recharge_pulse_left")>0.0,"Actual rice refund completion uses the same readiness event exactly once")
 		launch.cancel()
 	arena.feedback.sound_enabled = true
 	for index in 20:

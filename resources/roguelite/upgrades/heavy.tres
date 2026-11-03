@@ -5,8 +5,8 @@
 [resource]
 script = ExtResource("1")
 id = "heavy"
-title = "重击"
-description = "每级主球有效撞击伤害 +1，低速不造成伤害。"
+title = "！？肥肥？！"
+description = "主球有效撞击伤害每级 +1，最多 3 级；低速不造成伤害。"
 max_level = 3
 category = "火力"
 weight = 1

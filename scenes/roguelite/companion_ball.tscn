@@ -1,5 +1,6 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=6 format=3]
 [ext_resource type="Script" path="res://scripts/roguelite/companion_ball.gd" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/roguelite/presentation/companion_view.tscn" id="2"]
 [sub_resource type="CircleShape2D" id="Shape"]
 radius = 14.0
 [sub_resource type="CircleShape2D" id="SensorShape"]
@@ -22,3 +23,4 @@ collision_layer = 0
 collision_mask = 6
 [node name="Shape" type="CollisionShape2D" parent="Sensor"]
 shape = SubResource("SensorShape")
+[node name="Presentation" parent="." instance=ExtResource("2")]

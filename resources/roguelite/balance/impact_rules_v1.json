@@ -1,0 +1,73 @@
+{
+  "version": "impact_rules_v1",
+  "locked_before_candidates": true,
+  "physics_hz": 120,
+  "time_scale": 1,
+  "duration": 20,
+  "train_seeds": [
+    42,
+    20261103
+  ],
+  "holdout_seeds": [
+    123456
+  ],
+  "strategies": [
+    "nearest",
+    "safe",
+    "relay"
+  ],
+  "scenarios": [
+    "single",
+    "crowd",
+    "corner",
+    "reverse",
+    "relay",
+    "mechanisms"
+  ],
+  "weights": {
+    "control": 25,
+    "impact": 25,
+    "growth": 20,
+    "fairness": 20,
+    "rhythm": 10
+  },
+  "score_policy": "Do not publish a combined score when growth/full-run evidence is absent. Choose by paired measured outcomes and hard gates, not a score target.",
+  "definitions": {
+    "effective_damage": "Sum actual HP lost from real enemy presentation hurt events; excludes overkill; includes legitimate echoes/explosions.",
+    "nominal_damage": "Accepted collision requested damage; may include overkill.",
+    "cooldown_wait": "Seconds with living threats and formal launch unavailable, while player is alive.",
+    "corner_time": "Low velocity (<80) in70px boundary band while targets remain; a stall proxy, not proof of a softlock.",
+    "mechanism_hp": "All HP lost across20s, including moving hazards after target clear; inspect full runs before difficulty claims.",
+    "reversal_time": "Delay after fixed2.35s reverse-intent time until velocity.x<-50; includes input/cooldown response.",
+    "censored": "Fixture or run timed out; never counted as a victory.",
+    "first_effective_damage": "First actual enemy HP loss, excluding overkill; absent event is duration20 censored, never instant success."
+  },
+  "hard_gates": {
+    "physics_failures": 0,
+    "max_total_hp_loss_increase": 0,
+    "no_infinite_chain": true,
+    "all_four_cooldown_ranks_positive": true
+  },
+  "selection": {
+    "required_mean_paired_clear_time_improvement": 0.05,
+    "reverse_clear_or_response_improvement": 0.1,
+    "max_worst_paired_clear_time_regression": 0.2,
+    "must_validate_holdout_and_natural_ai_three_routes": true,
+    "candidate_is_not_user_approval": true,
+    "target_metric": "first_effective_damage",
+    "target_improvement": 0.05,
+    "note": "Separate direct-launch factor: require both 5% paired mean clear and 5% first actual HP damage improvement. Preserve HP, worst-case, physics and holdout/normal-route gates. No retroactive relaxation of control/cooldown/transfer groups."
+  },
+  "group": "launch_impulse",
+  "candidates": [
+    945,
+    1155
+  ],
+  "baseline": 1050,
+  "unchanged": {
+    "opposing_cancel": 0,
+    "cooldown": 2.2,
+    "transfer_retention": 0.85,
+    "enemy_hazard_rules": "unchanged"
+  }
+}

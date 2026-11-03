@@ -8,6 +8,7 @@ signal eaten(point: Vector2)
 var player: DemoPlayer
 var launcher: DemoLaunch
 var enemies: Node2D
+var map_provider: Node
 var rice: DemoRice
 var elapsed: float = 0.0
 var stored_bonus: bool = false
@@ -49,6 +50,8 @@ func spawn_rice() -> bool:
 
 func can_spawn_at(point: Vector2) -> bool:
 	if not is_inside_tree() or not is_instance_valid(player) or not safe_bounds.has_point(point) or point.distance_to(player.global_position) < player_clearance:
+		return false
+	if is_instance_valid(map_provider) and not map_provider.point_safe(point, 36.0):
 		return false
 	if is_instance_valid(enemies):
 		for enemy in enemies.get_children():

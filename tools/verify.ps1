@@ -41,6 +41,16 @@ foreach ($step in @(
     @{ Name = 'live_tuning'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_live_tuning.gd' },
     @{ Name = 'full_tuning'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_full_tuning.gd' },
     @{ Name = 'ui_integration'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/ui_integration.gd' },
+    @{ Name = 'map_mechanisms'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_map_mechanisms.gd' },
+    @{ Name = 'portals'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_portals.gd' },
+    @{ Name = 'maps'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_maps.gd' },
+    @{ Name = 'map_flow'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_map_flow.gd' },
+    @{ Name = 'map_navigation'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_map_navigation.gd' },
+    @{ Name = 'balance_metrics'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_balance_metrics.gd' },
+    @{ Name = 'fish_view'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_fish_view.gd' },
+    @{ Name = 'actor_views'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_actor_views.gd' },
+    @{ Name = 'paddle_response'; Arguments = '--headless --fixed-fps 120 --path "' + $projectRoot + '" --script tests/roguelite_paddle_response.gd' },
+    @{ Name = 'feature_acceptance'; Arguments = '--headless --fixed-fps 120 --path "' + $projectRoot + '" --script tests/roguelite_feature_acceptance.gd' },
     @{ Name = 'smoke'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/smoke.gd' }
 )) {
     $outFile = Join-Path $logDirectory ($step.Name + '.out')
@@ -83,6 +93,16 @@ foreach ($step in @(
     $completionMarkers.live_tuning = 'LIVE TUNING CHECKS PASSED'
     $completionMarkers.ui_integration = 'UI INTEGRATION CHECKS PASSED'
     $completionMarkers.full_tuning = 'FULL TUNING CHECKS PASSED'
+    $completionMarkers.map_mechanisms = 'MAP MECHANISM CHECKS PASSED'
+    $completionMarkers.portals = 'PORTAL CHECKS PASSED'
+    $completionMarkers.maps = 'MAP CHECKS PASSED'
+    $completionMarkers.map_flow = 'MAP FLOW CHECKS PASSED'
+    $completionMarkers.map_navigation = 'MAP NAVIGATION CHECKS PASSED'
+    $completionMarkers.balance_metrics = 'BALANCE METRIC CHECKS PASSED'
+    $completionMarkers.fish_view = 'FISH VIEW CHECKS PASSED'
+    $completionMarkers.actor_views = 'ACTOR VIEW CHECKS PASSED'
+    $completionMarkers.paddle_response = 'PADDLE RESPONSE CHECKS PASSED: \d+ failures: 0'
+    $completionMarkers.feature_acceptance = 'FEATURE ACCEPTANCE CHECKS PASSED: \d+ failures: 0'
     if ($completionMarkers.ContainsKey($step.Name) -and $logText -notmatch $completionMarkers[$step.Name]) {
         throw ($step.Name + ' 未获得测试完成标志。')
     }
@@ -90,4 +110,4 @@ foreach ($step in @(
         throw '未获得目录检查完成标志。'
     }
 }
-Write-Output 'VERIFIED: import + map + all 28 behavior suites including full engine tuning and release UI'
+Write-Output 'VERIFIED: import + map + all 38 behavior suites including physical paddle response and all growth card wiring'

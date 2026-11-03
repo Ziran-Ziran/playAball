@@ -1,0 +1,36 @@
+[gd_scene load_steps=8 format=3]
+[ext_resource type="Script" path="res://scripts/roguelite/maps/map_layout.gd" id="layout"]
+[ext_resource type="Resource" path="res://resources/roguelite/maps/map_03.tres" id="data"]
+[ext_resource type="PackedScene" path="res://scenes/roguelite/mechanisms/pivot_paddle.tscn" id="pivot"]
+[ext_resource type="PackedScene" path="res://scenes/roguelite/mechanisms/moving_barrier.tscn" id="moving"]
+[ext_resource type="PackedScene" path="res://scenes/roguelite/mechanisms/spike_strip.tscn" id="spikes"]
+[ext_resource type="PackedScene" path="res://scenes/roguelite/mechanisms/portal_pair.tscn" id="portals"]
+[ext_resource type="PackedScene" path="res://scenes/roguelite/mechanisms/twin_arcs.tscn" id="ring"]
+[node name="Map03" type="Node2D"]
+process_mode = 1
+script = ExtResource("layout")
+definition = ExtResource("data")
+[node name="TwinArcs" parent="." instance=ExtResource("ring")]
+position = Vector2(640, 400)
+[node name="MovingLeft" parent="." instance=ExtResource("moving")]
+position = Vector2(300, 260)
+rotation = 0.65
+travel = Vector2(45,0)
+[node name="MovingLeftSpikes" parent="MovingLeft/Body" instance=ExtResource("spikes")]
+position = Vector2(0,-15)
+[node name="MovingRight" parent="." instance=ExtResource("moving")]
+position = Vector2(980, 540)
+rotation = 0.65
+travel = Vector2(-45,0)
+[node name="MovingRightSpikes" parent="MovingRight/Body" instance=ExtResource("spikes")]
+position = Vector2(0,-15)
+[node name="Portals" parent="." instance=ExtResource("portals")]
+position = Vector2(640, 400)
+[node name="A" parent="Portals" index="0"]
+position = Vector2(-500,0)
+[node name="B" parent="Portals" index="1"]
+position = Vector2(500,0)
+
+[editable path="MovingLeft"]
+[editable path="MovingRight"]
+[editable path="Portals"]

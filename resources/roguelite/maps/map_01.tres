@@ -1,0 +1,9 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+[ext_resource type="Script" path="res://scripts/roguelite/maps/map_definition.gd" id="1"]
+[resource]
+script = ExtResource("1")
+map_id = "map_01"
+display_name = "翻转挡板"
+player_spawn = Vector2(640, 620)
+boss_spawn = Vector2(640, 240)
+safe_regions = Array[Rect2]([Rect2(625,605,30,40)])

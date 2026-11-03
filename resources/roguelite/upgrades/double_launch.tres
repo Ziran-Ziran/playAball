@@ -6,7 +6,7 @@
 script = ExtResource("1")
 id = "double_launch"
 title = "双发"
-description = "最多储存两次主动发射，分别消耗并逐次恢复。"
+description = "储存两次主动发射，逐次消耗并逐次恢复；不是永久零冷却。"
 max_level = 1
 category = "节奏"
 weight = 0.9

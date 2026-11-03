@@ -5,6 +5,8 @@ var _reward_progress: TextureProgressBar
 
 func _ready() -> void:
 	super._ready()
+	if DisplayServer.get_name()!="headless":get_window().title="玩个球 / playAball"
+	$RunHUD.menu_requested.connect(return_to_menu)
 	var arena_skin := Node2D.new()
 	arena_skin.name = "ArenaSkin"
 	arena_skin.set_script(load("res://scripts/ui/arena_skin.gd"))
@@ -12,7 +14,14 @@ func _ready() -> void:
 	for path in ["BottomBoundary/Visual", "LeftRamp/Visual", "RightRamp/Visual"]:
 		get_node(path).hide()
 	$HUD/Controls.hide()
-	$HUD/Hint.hide()
+	# 顶栏空位提供首次手势说明，不覆盖战斗区域，也不创建鼠标热区。
+	$HUD/Hint.position = Vector2(475,14)
+	$HUD/Hint.size = Vector2(320,80)
+	$HUD/Hint.text = "空白处按住左键，向后拖动\n松开即可发射 · 右键取消\nEsc 暂停"
+	$HUD/Hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	$HUD/Hint.add_theme_font_size_override("font_size",18)
+	$HUD/Hint.modulate = Color("a4c5bd")
+	$HUD/Hint.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	status.position = Vector2(850, 16)
 	status.add_theme_font_size_override("font_size", 20)
 	var pause_button := TextureButton.new()
@@ -100,6 +109,7 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	super._process(delta)
 	if is_instance_valid(director):
+		$HUD/Hint.visible = director.wave==1 and launcher.shots==0 and director.state==director.State.BATTLE and not launcher.aiming
 		status.text = "阶段 %d / 3  ·  第 %s 波\n金币 %d  ·  成长 %d / %d" % [director.flow.stage_number(director.wave), str(director.wave) if director.wave < 6 else "首领", director.wallet.balance, director.rewards.progress, director.rewards.next_target()]
 		if is_instance_valid(_reward_progress):
 			_reward_progress.max_value = director.rewards.next_target()

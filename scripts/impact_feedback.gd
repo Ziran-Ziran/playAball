@@ -28,25 +28,45 @@ func _ready() -> void:
 	_sound.data = samples
 
 func play_impact(point: Vector2, strength: float) -> void:
+	_burst(point, strength, true)
+
+func play_contact(point: Vector2, strength: float) -> void:
+	# 普通实体接触不冒充有效伤害：小火星、短环与有限震动。
+	_burst(point, strength, false)
+
+func play_relay(point: Vector2, generation: int) -> void:
+	_append_ring({"point":point,"life":1.0,"intensity":0.4,"kind":&"relay","radius":18.0+mini(generation,3)*4.0})
+
+func play_explosion(point: Vector2, radius: float) -> void:
+	# 边界提示真实80半径；不使用实心闪光遮住攻击预警。
+	_append_ring({"point":point,"life":1.0,"intensity":0.6,"kind":&"explosion","radius":radius})
+
+func _append_ring(ring: Dictionary) -> void:
+	_rings.append(ring)
+	if _rings.size() > 64: _rings.pop_front()
+
+func _burst(point: Vector2, strength: float, damaging: bool) -> void:
 	var intensity: float = clampf(strength / 800.0, 0.12, 1.0)
-	_rings.append({"point": point, "life": 1.0, "intensity": intensity})
-	if _rings.size() > 64:
-		_rings.pop_front()
-	_shake = maxf(_shake, intensity * shake_amount)
+	_append_ring({"point": point, "life": 1.0, "intensity": intensity if damaging else intensity*0.35, "kind":&"damage" if damaging else &"contact"})
+	_shake = maxf(_shake, intensity * shake_amount * (1.0 if damaging else 0.16))
+	var particle_count: int = 0
+	for child in get_children():
+		if child is CPUParticles2D: particle_count += 1
+	if particle_count >= 18: return
 	var sparks := CPUParticles2D.new()
 	sparks.position = point
 	sparks.one_shot = true
-	sparks.amount = int(6 + intensity * 18)
-	sparks.lifetime = 0.32
+	sparks.amount = int(4 + intensity * 8) if damaging else int(2 + intensity * 4)
+	sparks.lifetime = 0.22 if damaging else 0.14
 	sparks.explosiveness = 1.0
 	sparks.direction = Vector2.UP
 	sparks.spread = 150.0
 	sparks.initial_velocity_min = 50.0
-	sparks.initial_velocity_max = 100.0 + intensity * 230.0
+	sparks.initial_velocity_max = 75.0 + intensity * (130.0 if damaging else 45.0)
 	sparks.gravity = particle_gravity
-	sparks.color = Color("a4efff")
-	sparks.scale_amount_min = 2.0
-	sparks.scale_amount_max = 3.5
+	sparks.color = Color("b9ffe1") if damaging else Color("749b99")
+	sparks.scale_amount_min = 1.0
+	sparks.scale_amount_max = 2.2 if damaging else 1.4
 	add_child(sparks)
 	sparks.finished.connect(sparks.queue_free)
 	sparks.emitting = true
@@ -83,6 +103,11 @@ func play_sound(point: Vector2, intensity: float, pitch: float) -> void:
 	player.play()
 
 func reset_feedback() -> void:
+	# 浮字挂在本局根节点以跨越敌人删除；重开时也必须清除旧局残影。
+	for visual in get_tree().get_nodes_in_group("demo_combat_floats"):
+		if get_parent().is_ancestor_of(visual):
+			visual.get_parent().remove_child(visual)
+			visual.queue_free()
 	if is_instance_valid(audio_director):
 		audio_director.reset_audio()
 	_rings.clear()
@@ -105,6 +130,15 @@ func _process(delta: float) -> void:
 
 func _draw() -> void:
 	for ring in _rings:
+		var kind: StringName = ring.get("kind", &"damage")
+		if kind == &"relay":
+			var relay_radius: float = 9.0 + (1.0-ring.life)*float(ring.radius)
+			for angle in [0.0,PI]:
+				draw_arc(ring.point,relay_radius,angle,angle+PI*0.65,12,Color(0.45,1.0,0.85,ring.life),1.5,true)
+			continue
+		if kind == &"explosion":
+			draw_arc(ring.point,float(ring.radius)*(0.5+0.5*(1.0-ring.life)),0,TAU,48,Color(1.0,0.75,0.38,ring.life*0.65),1.5,true)
+			continue
 		var radius: float = (1.0 - ring.life) * 55.0 * ring.intensity + 8.0
-		draw_circle(ring.point, radius, Color(0.4, 0.85, 1.0, ring.life * 0.12))
-		draw_arc(ring.point, radius, 0, TAU, 40, Color(0.7, 0.95, 1.0, ring.life), 2.0, true)
+		if kind == &"damage": draw_circle(ring.point, radius, Color(0.4, 0.85, 1.0, ring.life * 0.07))
+		draw_arc(ring.point, radius, 0, TAU, 32, Color(0.7, 0.95, 1.0, ring.life*(0.45 if kind==&"contact" else 0.8)), 1.0 if kind==&"contact" else 1.5, true)

@@ -56,3 +56,8 @@ theme_override_constants/separation = 14
 layout_mode = 2
 text = "重新开局"
 custom_minimum_size = Vector2(0, 54)
+[node name="Home" type="Button" parent="Overlay/Panel/Content"]
+visible = false
+layout_mode = 2
+text = "返回主菜单"
+custom_minimum_size = Vector2(0, 54)

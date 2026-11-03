@@ -39,6 +39,14 @@ $entryScene = if ($LiveTuning) { 'res://scenes/roguelite/tuning_run.tscn' } else
 $settings = [regex]::Replace($settings, '(?m)^run/main_scene=.*$', ('run/main_scene="' + $entryScene + '"'))
 [IO.File]::WriteAllText((Join-Path $staging 'project.godot'), $settings, [Text.UTF8Encoding]::new($false))
 Copy-Item -LiteralPath (Join-Path $projectRoot 'export_presets.cfg') -Destination $staging
+if (-not $LiveTuning) {
+    # 正式包保留动态加载的玩法资源，但不携带调参/评估入口或生成提示词个人路径。
+    $presetPath = Join-Path $staging 'export_presets.cfg'
+    $presets = Get-Content -LiteralPath $presetPath -Raw -Encoding UTF8
+    $exclusions = 'scenes/roguelite/*tuning*,scenes/roguelite/*lab*,scenes/roguelite/audio_preview*,scenes/main.tscn,scenes/ball.tscn,scenes/mechanism.tscn,scripts/roguelite/*tuning*,scripts/roguelite/gameplay_lab*,scripts/roguelite/audio_preview*,scripts/roguelite/lab/*,scripts/roguelite/evaluation/*,resources/roguelite/balance/*,assets/roguelite/presentation/*.json'
+    $presets = [regex]::Replace($presets, '(?m)^exclude_filter="(.*)"$', { param($match) 'exclude_filter="' + (($match.Groups[1].Value,$exclusions | Where-Object { $_ }) -join ',') + '"' })
+    [IO.File]::WriteAllText($presetPath, $presets, [Text.UTF8Encoding]::new($false))
+}
 
 # Ordinal排序避免不同PowerShell/系统区域设置把同一资源集算成不同指纹。
 $sourceFiles = [string[]](Get-ChildItem -LiteralPath $staging -File -Recurse | Where-Object { $_.Extension -in @('.gd','.tscn','.tres','.godot','.png','.svg','.wav','.ogg','.ttf','.otf','.import','.uid','.cfg') } | ForEach-Object { $_.FullName })
@@ -56,6 +64,20 @@ Invoke-GodotStep 'import' ('--headless --path "' + $staging + '" --editor --impo
 $exePath = Join-Path $output 'PlayABall.exe'
 Invoke-GodotStep 'export' ('--headless --path "' + $staging + '" --export-release "Windows Planner" "' + $exePath + '"')
 if (-not (Test-Path -LiteralPath $exePath) -or (Get-Item -LiteralPath $exePath).Length -lt 1000000) { throw '未生成有效的Windows可执行文件。' }
+if (-not $LiveTuning) {
+    $probeOut = Join-Path $staging 'package_probe.out'
+    $probeErr = Join-Path $staging 'package_probe.err'
+    $probePath = Join-Path $projectRoot 'tools/package_probe.gd'
+    $manifestPath = Join-Path $output 'package_manifest.json'
+    # 标准发布模板禁用外部脚本覆盖；用同版编辑器引擎读取EXE内嵌包。
+    # 此检查验证实际包资源；发布模板窗口输入另做原生UI验证。
+    $probe = Start-Process -FilePath $GodotExe -ArgumentList ('--headless --path "' + $output + '" --main-pack "' + $exePath + '" --script "' + $probePath + '" -- "' + $manifestPath + '"') -WorkingDirectory $output -WindowStyle Hidden -PassThru -RedirectStandardOutput $probeOut -RedirectStandardError $probeErr
+    if (-not $probe.WaitForExit(40000)) { $probe.Kill(); throw '内嵌包探针超时，保留日志。' }
+    $probe.Refresh()
+    $probeLog = (Get-Content -LiteralPath $probeOut,$probeErr -Raw) -join "`n"
+    Write-Output $probeLog
+    if ($probe.ExitCode -ne 0 -or $probeLog -match '(?m)^(SCRIPT ERROR|ERROR|WARNING):' -or $probeLog -notmatch 'PACKAGE PROBE PASSED') { throw '导出资源包检查失败，暂不生成交付zip。' }
+}
 if ((Get-FileHash -LiteralPath $settingsPath -Algorithm SHA256).Hash -ne $originalSettingsHash) { throw '原工程配置发生变化，请检查，脚本未主动写回。' }
 $commit = (& git -C $projectRoot rev-parse HEAD).Trim()
 $metadata = [ordered]@{
@@ -67,11 +89,13 @@ $metadata = [ordered]@{
     base_commit = $commit
     runtime_source_sha256 = $sourceHash
     exe_sha256 = (Get-FileHash -LiteralPath $exePath -Algorithm SHA256).Hash
-    note = '策划功能预览，可能包含尚未提交的运行资源；以runtime_source_sha256区分。'
+    note = '本地游戏预览，包含本轮未提交资源；源指纹是含导出过滤规则的暂存输入，实际包内容见package_manifest.json。'
 }
 $metadata | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $output 'build_info.json') -Encoding utf8
-Copy-Item -LiteralPath (Join-Path $projectRoot 'docs/playtest/PLANNER_README.txt') -Destination (Join-Path $output '试玩说明.txt')
-Copy-Item -LiteralPath (Join-Path $projectRoot 'docs/playtest/PLANNER_FEEDBACK.txt') -Destination (Join-Path $output '策略与成长反馈.txt')
+$readmeFile = if ($LiveTuning) { 'docs/playtest/PLANNER_README.txt' } else { 'docs/playtest/OVERNIGHT_README.txt' }
+Copy-Item -LiteralPath (Join-Path $projectRoot $readmeFile) -Destination (Join-Path $output '试玩说明.txt')
+$feedbackFile = if ($LiveTuning) { 'docs/playtest/PLANNER_FEEDBACK.txt' } else { 'docs/playtest/OVERNIGHT_FEEDBACK.txt' }
+Copy-Item -LiteralPath (Join-Path $projectRoot $feedbackFile) -Destination (Join-Path $output '策略与成长反馈.txt')
 $archive = $output + '.zip'
 Compress-Archive -LiteralPath (Get-ChildItem -LiteralPath $output -File).FullName -DestinationPath $archive
 Write-Output ('EXPORT READY: ' + $exePath)

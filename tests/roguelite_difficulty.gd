@@ -58,7 +58,7 @@ func run() -> void:
 	d.player.position = Vector2(640, 540)
 	d.pending.clear()
 	for trial in 8:
-		d.spawn_enemy(0, Vector2(140, 220))
+		d.spawn_enemy(0, d.maps.definition.enemy_entrances[trial % 4])
 	check(d.alive_count() == 3, "Direct spawning also respects current population cap")
 	d.clear_container(d.enemies)
 	d.pending.clear()

@@ -43,6 +43,7 @@ var hud: CanvasLayer
 var health: Node
 var rice: Node2D
 var assists: Node
+var maps: Node
 var build
 var rewards = preload("res://scripts/roguelite/kill_rewards.gd").new()
 var chosen_rewards: int = 0
@@ -66,6 +67,9 @@ func setup(owner_arena: Node2D) -> void:
 	arena = owner_arena
 	player = arena.player
 	companions = arena.companions
+	maps = load("res://scripts/roguelite/maps/map_controller.gd").new()
+	add_child(maps)
+	maps.setup(arena)
 	launcher = arena.launcher
 	combat = arena.combat
 	enemies = arena.get_node("Enemies")
@@ -77,10 +81,12 @@ func setup(owner_arena: Node2D) -> void:
 	health.process_mode = Node.PROCESS_MODE_PAUSABLE
 	add_child(health)
 	health.died.connect(func(): finish(false))
+	maps.player_health = health
 	rice = load("res://scripts/roguelite/rice_manager.gd").new()
 	rice.player = player
 	rice.launcher = launcher
 	rice.enemies = enemies
+	rice.map_provider = maps
 	add_child(rice)
 	combat.rice_bonus = rice
 	launcher.fired.connect(rice.bind_launch)
@@ -139,7 +145,7 @@ func restart() -> void:
 	health.max_hp = build.max_health()
 	health.reset_health()
 	companions.set_follow_enabled(false)
-	companions.set_count(1)
+	companions.set_count(build.companion_count())
 	rng.seed = run_seed
 	kills = 0
 	rewards.first_target = reward_first
@@ -148,7 +154,7 @@ func restart() -> void:
 	rewards.reset_progress()
 	chosen_rewards = 0
 	debug_build(debug_upgrades)
-	start_wave(debug_start_wave)
+	start_wave(debug_start_wave, true)
 
 func request_restart() -> bool:
 	# 面板只提出请求；玩法确认当前确实处于结算态后才执行重开。
@@ -157,7 +163,23 @@ func request_restart() -> bool:
 	restart()
 	return true
 
-func start_wave(number: int) -> void:
+func start_wave(number: int, force_map: bool = false) -> void:
+	if is_instance_valid(maps):
+		if not maps.select_wave(number, force_map):
+			state = State.PAUSED
+			launcher.set_blocked(true)
+			arena.paused = true
+			arena.menu.show()
+			get_tree().paused = true
+			return
+		if maps.last_change:
+			clear_container(hazards)
+			pending.clear()
+			rice.reset_rice()
+			launcher.cancel()
+			combat.pending_echoes.clear()
+			combat.pairs.clear()
+		maps.set_active(true)
 	wave = number
 	_wave_queued = 0
 	_wave_heavies = 0
@@ -170,6 +192,7 @@ func start_wave(number: int) -> void:
 		queue_batch()
 	else:
 		spawn_boss()
+	queue_redraw()
 
 func _process(delta: float) -> void:
 	advance_transition(delta)
@@ -217,11 +240,12 @@ func alive_count() -> int:
 	return count
 
 func safe_entrance(offset: int) -> Vector2:
-	for attempt in ENTRANCES.size():
-		var point: Vector2 = ENTRANCES[(offset + attempt) % ENTRANCES.size()]
-		if point.distance_to(player.position) >= 200.0:
+	var entrances: PackedVector2Array = maps.definition.enemy_entrances if is_instance_valid(maps) else PackedVector2Array(ENTRANCES)
+	for attempt in entrances.size():
+		var point: Vector2 = entrances[posmod(offset + attempt, entrances.size())]
+		if point.distance_to(player.position) >= 200.0 and (not is_instance_valid(maps) or maps.point_safe(point, 30.0)):
 			return point
-	return ENTRANCES[offset % ENTRANCES.size()]
+	return Vector2.INF
 
 func wave_budget() -> int:
 	if wave >= 6:
@@ -262,6 +286,8 @@ func queue_batch() -> void:
 			break
 		var kind: int = next_enemy_kind()
 		var point: Vector2 = safe_entrance(rng.randi_range(0, 3)) + Vector2(index * 34, 0)
+		if not point.is_finite():
+			continue
 		var hp_override: int = 6 if split_enabled and wave in [4, 5] and kind == 1 and _wave_heavies % 2 == 0 else 0
 		pending.append({"point": point, "kind": kind, "left": spawn_warning, "hp_override": hp_override, "family_reward": true, "generation": 0})
 
@@ -269,8 +295,12 @@ func spawn_enemy(kind: int, point: Vector2, hp_override: int = 0, family_reward:
 	if alive_count() + pending.size() >= wave_budget():
 		return
 	# 预警后再次核对距离；玩家已到入口时，改到安全入口并重新预警。
-	if not from_split and point.distance_to(player.position) < 200.0:
-		pending.append({"point": safe_entrance(0), "kind": kind, "left": spawn_warning, "hp_override": hp_override, "family_reward": family_reward, "generation": split_generation})
+	if not point.is_finite():
+		return
+	if not from_split and (point.distance_to(player.position) < 200.0 or (is_instance_valid(maps) and not maps.point_safe(point, 30.0 if kind == 1 else 23.0))):
+		var replacement: Vector2 = safe_entrance(0)
+		if replacement.is_finite():
+			pending.append({"point": replacement, "kind": kind, "left": spawn_warning, "hp_override": hp_override, "family_reward": family_reward, "generation": split_generation})
 		return
 	var enemy = load("res://scenes/roguelite/enemy.tscn").instantiate()
 	enemy.kind = kind
@@ -327,6 +357,9 @@ func split_point_safe(point: Vector2) -> bool:
 	for enemy in enemies.get_children():
 		if enemy.dead:
 			exclusions.append(enemy.get_rid())
+	# 死亡已逻辑结算、碰撞禁用正在延后应用的父体不应挡住本族预警。
+	if is_instance_valid(maps) and not maps.point_safe(point, 23.0, exclusions):
+		return false
 	query.exclude = exclusions
 	return get_world_2d().direct_space_state.intersect_shape(query, 1).is_empty()
 
@@ -364,6 +397,8 @@ func open_upgrade() -> void:
 	if rewards.pending <= 0 or state not in [State.BATTLE, State.UPGRADE]:
 		return
 	state = State.UPGRADE
+	if is_instance_valid(maps):
+		maps.set_active(false)
 	launcher.set_blocked(true)
 	# 战斗中领奖只暂停，不删除飞行中的弹/球或改变它们的动量。
 	current_choices = build.candidates(rng, chosen_rewards == 0, health.hp, health.max_hp)
@@ -405,6 +440,8 @@ func choose_upgrade(id: String, offer_id: int = -1) -> void:
 		return
 	get_tree().paused = false
 	state = State.BATTLE
+	if is_instance_valid(maps):
+		maps.set_active(true)
 	launcher.set_blocked(false)
 
 func apply_build() -> void:
@@ -420,8 +457,7 @@ func apply_build() -> void:
 	health.changed.emit(health.hp)
 	companions.set_follow_enabled(int(build.levels.get("follow", 0)) > 0)
 	# 增员保留已有球的位置和动量，不能每次选升级都重摆全队。
-	while companions.members.size() < build.companion_count():
-		companions.add_member()
+	companions.ensure_count(build.companion_count())
 	for enemy in enemies.get_children():
 		apply_enemy_build(enemy)
 
@@ -440,7 +476,7 @@ func spawn_boss() -> void:
 	boss = load("res://scenes/roguelite/boss.tscn").instantiate()
 	boss.player = player
 	boss.health = health
-	boss.position = Vector2(640, 240)
+	boss.position = maps.definition.boss_spawn if is_instance_valid(maps) else Vector2(640, 240)
 	enemies.add_child(boss)
 	apply_enemy_build(boss)
 	boss.contact_report.connect(combat.resolve)
@@ -452,13 +488,16 @@ func spawn_boss() -> void:
 	)
 	boss.summon_requested.connect(func(point: Vector2):
 		if alive_count() - 1 + pending.size() < 6:
-			pending.append({"point": point.clamp(Vector2(140, 200), Vector2(1140, 580)), "kind": 0, "left": spawn_warning})
+			var safe_bounds: Rect2 = maps.definition.bounds.grow(-40.0) if is_instance_valid(maps) else Rect2(140, 200, 1000, 380)
+			pending.append({"point": point.clamp(safe_bounds.position, safe_bounds.end), "kind": 0, "left": spawn_warning})
 	)
 
 func finish(won: bool) -> void:
 	if state in [State.VICTORY, State.DEFEAT]:
 		return
 	state = State.VICTORY if won else State.DEFEAT
+	if is_instance_valid(maps):
+		maps.set_active(false)
 	rest_revision += 1
 	rest_panel.hide()
 	reward_source = "kill"
@@ -476,6 +515,8 @@ func set_paused(value: bool) -> void:
 	if state not in [State.BATTLE, State.PAUSED]:
 		return
 	state = State.PAUSED if value else State.BATTLE
+	if is_instance_valid(maps):
+		maps.set_active(not value)
 	if value:
 		run_event.emit("pause")
 	arena.paused = value
@@ -510,6 +551,8 @@ func enter_rest(kind: String) -> void:
 	if state != State.BATTLE or health.hp <= 0 or rewards.pending > 0 or alive_count() > 0 or not pending.is_empty():
 		return
 	state = State.SHOP if kind == "shop" else State.EVENT
+	if is_instance_valid(maps):
+		maps.set_active(false)
 	_rest_kind = kind
 	_next_wave = wave + 1
 	rest_revision += 1

@@ -5,8 +5,8 @@
 [resource]
 script = ExtResource("1")
 id = "shrink"
-title = "威慑"
-description = "每级敌人脉冲与首领震波半径缩小 15%，不改实体尺寸。"
+title = "小小的也很可爱"
+description = "敌人脉冲与首领震波范围每级缩小 15%，最多 2 级；不缩碰撞体。"
 max_level = 2
 category = "生存"
 weight = 1

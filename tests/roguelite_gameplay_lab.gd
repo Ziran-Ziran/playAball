@@ -67,7 +67,7 @@ func run() -> void:
 	partners.build_preset = 3
 	lab._request_reset(partners)
 	await frames(4)
-	check(lab.companions.members.size() == 2 and lab.companions.follow_enabled, "Companion build applies both extra member and follow without manual overrides")
+	check(lab.companions.members.size() == 1 and lab.companions.follow_enabled, "Companion build applies both extra member and follow without manual overrides")
 	var rhythm: Dictionary = single.duplicate(true)
 	rhythm.build_preset = 5
 	lab._request_reset(rhythm)

@@ -6,7 +6,7 @@
 script = ExtResource("1")
 id = "heal"
 title = "饱餐"
-description = "恢复 2 格生命，可重复选择；满血不进普通候选。"
+description = "立即恢复 2 格生命，不超过上限；可重复选择，满血不进普通候选。"
 max_level = 0
 category = "生存"
 weight = 0.8

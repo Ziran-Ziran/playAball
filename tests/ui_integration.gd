@@ -40,6 +40,22 @@ func check_game() -> void:
 	assert(game.director.split_enabled)
 	game.get_node("HUD/Menu/Buttons/Split").button_pressed = false
 	assert(game.director.health.hp == 5)
+	var launch_hint: Label = game.get_node("HUD/Hint")
+	assert(launch_hint.visible and launch_hint.mouse_filter==Control.MOUSE_FILTER_IGNORE)
+	assert(launch_hint.get_global_rect().end.y<125 and launch_hint.position.x>=475)
+	# 提示文字本身也是空白手势区域，不得成为隐形按钮。
+	mouse(Vector2(600,55),true)
+	await process_frame
+	await process_frame
+	assert(game.launcher.input_held and not launch_hint.visible)
+	mouse(Vector2(720,55),false)
+	await process_frame
+	await process_frame
+	assert(game.launcher.shots==1 and not launch_hint.visible)
+	game.reset_range()
+	await process_frame
+	await process_frame
+	assert(launch_hint.visible)
 	# 从原隐藏控件所在区域发射，再验证在正式暂停按钮上释放会取消。
 	mouse(Vector2(350, 100), true)
 	await process_frame
@@ -73,16 +89,55 @@ func check_game() -> void:
 		choices.append(load("res://resources/roguelite/upgrades/" + id + ".tres"))
 	hud.show_choices(choices)
 	assert(hud.cards.get_child_count() == 4)
+	assert(hud.cards.get_child(2).get_node("Content/Preview").text.contains("2.20 → 1.95"))
 	assert(hud.cards.get_child(0).get_theme_stylebox("normal") is StyleBoxTexture)
 	assert(hud.cards.get_child(0).disabled)
 	await create_timer(0.85).timeout
 	assert(not hud.cards.get_child(3).disabled)
+	# 检查真实字体排版后的最小尺寸，而非只验证文案字符串存在。
+	var all_ids: Array[String] = ["launch_power","glide","cooldown","double_launch","heavy","echo","bowling","explosion","companion","follow","relay","shrink","pulse","heal","choices","vigor"]
+	for batch in 4:
+		var group: Array = []
+		for slot in 4:
+			var id: String = all_ids[batch*4+slot]
+			if id == "vigor":
+				group.append(game.director.build.fallback)
+			else:
+				group.append(load("res://resources/roguelite/upgrades/%s.tres"%id))
+		hud.show_choices(group)
+		await process_frame
+		await process_frame
+		for card in hud.cards.get_children():
+			var heading: Label = card.get_node("Content/Heading")
+			var preview: Label = card.get_node("Content/Preview")
+			var detail: Label = card.get_node("Content/Detail")
+			assert(heading.position.y+heading.get_minimum_size().y < preview.position.y)
+			assert(preview.position.y+preview.get_minimum_size().y < 209.0)
+			assert(detail.position.y+detail.get_minimum_size().y < card.size.y-18.0)
 	hud.clear_cards()
 	game.set_paused(true)
 	game.reset_range()
 	assert(not paused)
 	assert(game.director.health.hp == 5)
-	game.queue_free()
+	game.director.debug_wave(6)
+	await process_frame
+	await process_frame
+	assert(not launch_hint.visible and game.director.boss.get_node("Presentation/Status").visible)
+	game.reset_range()
+	await process_frame
+	await process_frame
+	game.director.finish(true)
+	await process_frame
+	await process_frame
+	assert(not launch_hint.visible)
+	await process_frame
+	assert(hud.panel.size.y <= 340.0 and hud.panel.size.x <= 620.0)
+	assert(hud.home_button.visible)
+	hud.home_button.pressed.emit()
+	await process_frame
+	await process_frame
+	assert(current_scene.has_node("Start") and not paused)
+	current_scene.queue_free()
 	# 等待音频混音线程释放最后一段WAV播放引用，避免进程退出时误报泄漏。
 	await create_timer(0.1).timeout
 	print("UI INTEGRATION CHECKS PASSED")

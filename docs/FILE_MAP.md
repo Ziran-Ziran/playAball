@@ -8,9 +8,20 @@
 playAball/
 ├── .github/  # GitHub 协作模板与自动检查
 │   ├── workflows/  # 提交/PR 触发的持续集成
-│   │   └── godot.yml  # Linux固定引擎导入、目录与25套检查配置。
+│   │   └── godot.yml  # Linux固定引擎导入、目录与36套行为回归配置
 │   └── pull_request_template.md  # PR 的改动、测试、Review、教程和目录核对模板。
 ├── assets/  # 运行素材
+│   ├── roguelite/  # 正式游戏实体独立美术资源
+│   │   └── presentation/  # 生图透明实体素材与生成来源，不改变碰撞形状
+│   │       ├── fat_fish_ball_v1.png  # 内置生图制作的透明肥鱼主球，真实Sprite接入
+│   │       ├── fat_fish_ball_v1.png.import  # 同名素材的 Godot 导入配置，应随素材一起维护。
+│   │       ├── fragile_crate_v1.png  # 内置生图制作的透明箱子，敌人表现按真实HP染色
+│   │       ├── fragile_crate_v1.png.import  # 同名素材的 Godot 导入配置，应随素材一起维护。
+│   │       ├── generation_metadata.json  # 四张实际位图的完整最终提示词、原始来源和审批边界
+│   │       ├── heavy_shell_v1.png  # 内置生图的圆形重型/首领共用透明装甲，保留物理轮廓与真实状态染色
+│   │       ├── heavy_shell_v1.png.import  # 同名素材的 Godot 导入配置，应随素材一起维护。
+│   │       ├── turret_base_v1.png  # 内置生图的三角炮台透明底座，炮管仍按真实方向独立绘制
+│   │       └── turret_base_v1.png.import  # 同名素材的 Godot 导入配置，应随素材一起维护。
 │   └── ui/  # 用户认可的第一批UI素材；从文档样板复制用于运行
 │       ├── arena_skin.png  # 用户认可的暗绿薄墙全景生图；正式运行仅裁取无字地面和四边墙纹理。
 │       ├── arena_skin.png.import  # UI贴图导入配置，由Godot维护。
@@ -77,8 +88,12 @@ playAball/
 │   │   ├── 006-feedback-and-run-rhythm.md  # 音效/生命面板/阶段节奏计划与本地实施更新，音质与两局节奏待验收。
 │   │   ├── 007-ui-art-direction.md  # UI美术方向与样板反馈；用户否定样板后暂停全面替换。
 │   │   ├── 008-parallel-development.md  # A表现/B玩法实验室、用户owner合并权、整文件边界、S0～S4计划与当前最小接口/实验室实施进度。
-│   │   └── 009-ui-game-integration.md  # 本轮集成范围、所有权、验证与Git授权边界。
+│   │   ├── 009-ui-game-integration.md  # 本轮集成范围、所有权、验证与Git授权边界。
+│   │   └── 010-full-game-and-overnight-iteration.md  # 根据附件和代码整理的四地图/Buff/操作、有限自动调参与表现迭代计划；含范围、门槛、整夜预算和授权边界，尚未执行。
 │   ├── playtest/  # 面向策划/试玩者的启动操作、反馈与已知限制说明
+│   │   ├── OVERNIGHT_DELIVERY.md  # 整夜阶段交付：普通包、实际采用差异、前后证据和真人/原生窗口未验项
+│   │   ├── OVERNIGHT_FEEDBACK.txt  # 普通包真人手感、美术、音频与成长反馈模板，无调参快捷键误导
+│   │   ├── OVERNIGHT_README.txt  # 普通菜单包的零伙伴/四图操作说明与验证边界
 │   │   ├── PLANNER_FEEDBACK.txt  # 只供策略、成长与节奏逐局反馈；手感改用实时面板并回传物理参数JSON。
 │   │   └── PLANNER_README.txt  # 随Windows试玩包交给策划的操作、流程、版本反馈与限制说明。
 │   ├── reviews/  # 重要改动的审查证据与交接
@@ -87,6 +102,7 @@ playAball/
 │   │   ├── 2026-10-31-kill-rewards.md  # 击杀奖励原型最终独立Review、验证限制、最新体验缺陷与本轮上传范围。
 │   │   ├── 2026-11-01-gameplay-lab.md  # 本批S1表现接口和B线玩法实验室的最终Review范围、独立审查、问题处理、验证证据、未测项与授权边界。
 │   │   ├── 2026-11-02-ui-integration.md  # A/B快照集成与UI接线的验证/独立审查证据及未测项。
+│   │   ├── 2026-11-03-function-verification.md  # 本轮完整功能实测清单、翻板数值对照、独立审查与Git边界证据
 │   │   └── collision-demo-final.md  # 当前Demo最终独立Review、首领真实接触修复、验证与人工未测证据。
 │   ├── tutorials/  # 每个功能的实现原理和手动修改教程
 │   │   ├── 001-prototype.md  # 球发射、碰撞表现、机关、目标和手动调参的初始教程。
@@ -117,7 +133,14 @@ playAball/
 │   │   ├── 024-fat-fish-menu.md  # 肥鱼菜单独立生图来源、图层/参数、浏览器验证及B接线边界教程。
 │   │   ├── 024-live-feel-tuning.md  # 策划EXE现场调物理量的操作、生效语义、节点/源码、对照/存取与扩展验证教程。
 │   │   ├── 025-full-engine-tuning.md  # 完整引擎/玩法调参台的覆盖、生效/重启、复合编辑、源码与验证教程。
-│   │   └── 026-ui-game-integration.md  # A/B快照汇合、入口分离、UI运行接入、调参保留与验证教程。
+│   │   ├── 026-ui-game-integration.md  # A/B快照汇合、入口分离、UI运行接入、调参保留与验证教程。
+│   │   ├── 027-zero-companion-buffs.md  # 零伙伴开局、外包前提、安全增员与15项Buff文案的修改和验证教程
+│   │   ├── 028-map-mechanisms-portals.md  # 真实机关节点、传送保速与安全出口、旧地图接口的使用修改和验证教程
+│   │   ├── 029-four-map-run.md  # 四张实际地图的波次接线、暂停/休息/重开、安全生成与空间通道检查教程
+│   │   ├── 030-balance-evaluation.md  # 固定场景、策略、真实指标、提速验证、候选取舍与证据复现教程
+│   │   ├── 031-fish-art-feedback.md  # 位图接入、UV修复、事件反馈、四卡排版与实录边界教程
+│   │   ├── 032-ordinary-export-validation.md  # 普通包过滤、内嵌资源探针、标准发布模板限制与原生验证边界教程
+│   │   └── 033-paddle-response-and-feature-checks.md  # 翻板限速限位原理、检查器调参与逐项功能验证教程
 │   ├── .gdignore  # 让 Godot 跳过文档目录的资源导入，避免把交接图当作游戏素材。
 │   ├── FILE_MAP.md  # 自动生成的项目文件树、每个文件的用途及主要调用关系。
 │   ├── PROJECT.md  # 已采纳的游戏目标、技术选择、原型范围与模块边界。
@@ -128,6 +151,30 @@ playAball/
 │   └── roguelite/  # 肉鸽构筑与主题数据
 │       ├── audio/  # 原创事件音组与混音调参资源
 │       │   └── default_palette.tres  # 默认原创音色合成增益资源。
+│       ├── balance/  # 独立评估参数候选与搜索前锁定的分组门槛
+│       │   ├── baseline.tres  # 独立真实物理评估参数：baseline；未自动替换正式默认
+│       │   ├── control_015.tres  # 独立真实物理评估参数：control_015；未自动替换正式默认
+│       │   ├── control_030.tres  # 独立真实物理评估参数：control_030；未自动替换正式默认
+│       │   ├── control_045.tres  # 独立真实物理评估参数：control_045；未自动替换正式默认
+│       │   ├── control_060.tres  # 独立真实物理评估参数：control_060；未自动替换正式默认
+│       │   ├── cooldown_180.tres  # 独立真实物理评估参数：cooldown_180；未自动替换正式默认
+│       │   ├── cooldown_200.tres  # 独立真实物理评估参数：cooldown_200；未自动替换正式默认
+│       │   ├── cooldown_rules_v1.json  # 冷却组搜索前锁定的战斗等待改善门槛，保留共同安全约束
+│       │   ├── evaluation_rules_v1.json  # 控制组搜索前锁定的成对改善、坏例、伤害与物理硬门槛
+│       │   ├── impact_0945.tres  # 实际发射冲量945独立候选，正式默认1050未替换
+│       │   ├── impact_1155.tres  # 实际发射冲量1155独立候选，正式默认1050未替换
+│       │   ├── impact_rules_v1.json  # 搜索前锁定的主动撞击清敌/首次真实HP伤害及安全门槛
+│       │   ├── transfer_075.tres  # 独立真实传能评估候选0.75，默认0.85未自动替换
+│       │   ├── transfer_090.tres  # 独立真实传能第二轮候选0.90，保持冲量与链路上限
+│       │   ├── transfer_095.tres  # 独立真实传能评估候选0.95，默认0.85未自动替换
+│       │   ├── transfer_rules_v1.json  # 首轮搜索前锁定的伙伴实际HP速率、清敌与安全门槛
+│       │   └── transfer_rules_v2_fan.json  # 保留原门槛并加入可观测侧向伙伴场景的第二轮固定规则
+│       ├── maps/  # 地图边界、出生点及入口资源
+│       │   ├── boss_map.tres  # 首领内外旋转场、四入口与内圈尖刺的边界和安全出生数据
+│       │   ├── legacy.tres  # 旧原型围场的默认地图数据
+│       │   ├── map_01.tres  # 翻转挡板与偏心轴的边界和安全出生数据
+│       │   ├── map_02.tres  # 十字轴、移动斜板及四边局部尖刺的边界和安全出生数据
+│       │   └── map_03.tres  # 旋转双圆弧、对角移动尖刺板及成对门的边界和安全出生数据
 │       ├── stages/  # 波次范围与阶段休息配置
 │       │   ├── stage_1.tres  # 第一阶段波1～2及波末商店配置。
 │       │   ├── stage_2.tres  # 第二阶段波3～4及波末补给事件配置。
@@ -153,8 +200,25 @@ playAball/
 │           └── vigor.tres  # 普通池耗尽时本局生命上限+1的独立可重复兜底。
 ├── scenes/  # Godot 可编辑场景与节点结构
 │   ├── roguelite/  # 俯视零重力三靶场、正式整局与B线独立玩法夹具场景
+│   │   ├── maps/  # 三张普通地图与首领地图的可编辑布局
+│   │   │   ├── boss_map.tscn  # 首领内外旋转场、四入口与内圈尖刺的实际布局场景
+│   │   │   ├── map_01.tscn  # 翻转挡板与偏心轴的实际布局场景
+│   │   │   ├── map_02.tscn  # 十字轴、移动斜板及四边局部尖刺的实际布局场景
+│   │   │   └── map_03.tscn  # 旋转双圆弧、对角移动尖刺板及成对门的实际布局场景
+│   │   ├── mechanisms/  # 可编辑的刚体挡板、移动板、圆弧、尖刺与成对门场景
+│   │   │   ├── boss_inner_ring.tscn  # 首领内圈双弧的可编辑分段碰撞场景
+│   │   │   ├── boss_outer_ring.tscn  # 首领外圈四入口的可编辑分段碰撞场景
+│   │   │   ├── moving_barrier.tscn  # 物理帧驱动的往返AnimatableBody2D挡板的可编辑场景
+│   │   │   ├── pivot_paddle.tscn  # 真实关节翻转挡板的配置、暂停与复位的可编辑场景
+│   │   │   ├── portal_pair.tscn  # 传送入口检测、出口占用复核、同帧预约与离门冷却锁的可编辑场景
+│   │   │   ├── rotating_arc.tscn  # 带缺口分段圆弧的物理帧旋转的可编辑场景
+│   │   │   ├── spike_strip.tscn  # 主球尖刺接触与统一生命伤害请求的可编辑场景
+│   │   │   └── twin_arcs.tscn  # 地图三两段带缺口圆弧的可编辑分段碰撞场景
 │   │   ├── presentation/  # A可独立替换的敌人与生命面板表现场景
-│   │   │   ├── enemy_view.tscn  # 默认敌人表现场景，只读取DemoEnemy快照并消费事件。
+│   │   │   ├── boss_view.tscn  # 可编辑首领表现与不会遮住危险的顶栏状态
+│   │   │   ├── companion_view.tscn  # 可编辑伙伴Sprite视觉子场景
+│   │   │   ├── enemy_view.tscn  # 三种敌人共用独立视图，线性mipmap与生图材质接入
+│   │   │   ├── fish_ball_view.tscn  # 可编辑主球视觉子场景，Sprite及导入位图
 │   │   │   └── health_view.tscn  # 正式可替换生命面板场景，只读取DemoHealth数据。
 │   │   ├── arena.tscn  # 可编辑俯视三靶场、四边围墙、斜切角、平面挡板与 HUD。
 │   │   ├── audio_preview.tscn  # F6独立音效试听场景，不改变游戏进度。
@@ -180,6 +244,21 @@ playAball/
 │   └── mechanism.tscn  # 可复用的区域机关入口，运行时按参数生成检测形状。
 ├── scripts/  # 游戏逻辑与表现脚本
 │   ├── roguelite/  # 新肉鸽物理、发射、碰撞、同伴逻辑与独立玩法实验室
+│   │   ├── evaluation/  # 固定输入、真实物理夹具、原始指标及正常AI整局代理；不挂正式入口
+│   │   │   ├── balance_profile.gd  # 白名单冲量/反向抵消/冷却候选的应用与实际参数快照
+│   │   │   ├── balance_profile.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
+│   │   │   ├── evaluation_fixture.gd  # 六类固定种子独立物理夹具，使用正式球/发射/敌人/机关
+│   │   │   ├── evaluation_fixture.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
+│   │   │   ├── full_run_agent.gd  # 正常AI整局代理，遵守卡入场锁并从真实候选和商店选择
+│   │   │   ├── full_run_agent.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
+│   │   │   ├── full_run_runner.gd  # 独立正式整局的自然胜负/截尾、构筑与事件证据运行入口
+│   │   │   ├── full_run_runner.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
+│   │   │   ├── input_policy.gd  # 最近/墙与尖刺安全启发式/伙伴策略，只调用正式发射；普通预警按DemoEnemy类型守卫，不误读首领
+│   │   │   ├── input_policy.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
+│   │   │   ├── metrics_recorder.gd  # 真实HP/过量/伙伴直接归因、激活、输入、轨迹和伙伴越界计量
+│   │   │   ├── metrics_recorder.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
+│   │   │   ├── scenario_runner.gd  # 固定120Hz/20秒矩阵运行与逐条原始JSON保存
+│   │   │   └── scenario_runner.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
 │   │   ├── lab/  # B线玩法实验室的开发面板与请求界面
 │   │   │   ├── engine_tuning.gd  # ProjectSettings与Engine/PhysicsServer热调适配及override.cfg保存/清除。
 │   │   │   ├── engine_tuning.gd.uid  # 关联GDScript稳定资源标识。
@@ -193,12 +272,42 @@ playAball/
 │   │   │   ├── tuning_panel.gd.uid  # 关联GDScript稳定资源标识。
 │   │   │   ├── tuning_variant.gd  # 无对象Variant存取、可读JSON复合值转换、有限数和结构校验。
 │   │   │   └── tuning_variant.gd.uid  # 关联GDScript稳定资源标识。
+│   │   ├── maps/  # 地图数据、安全查询与切换接口
+│   │   │   ├── map_controller.gd  # 四图选择/释放、玩家伙伴安全落位、机关状态与地图碰撞安全查询
+│   │   │   ├── map_controller.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
+│   │   │   ├── map_definition.gd  # 地图边界、玩家/首领出生点、敌人入口与安全区域的数据契约
+│   │   │   ├── map_definition.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
+│   │   │   ├── map_layout.gd  # 地图根数据及从现有墙条位图映射到真实障碍的视觉接入
+│   │   │   └── map_layout.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
+│   │   ├── mechanisms/  # 地图真实物理机关、尖刺接触与受控传送组件
+│   │   │   ├── moving_barrier.gd  # 物理帧驱动的往返AnimatableBody2D挡板
+│   │   │   ├── moving_barrier.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
+│   │   │   ├── pivot_body.gd  # 翻板刚体物理状态复位、角速度上限及相对初始角度限位稳定
+│   │   │   ├── pivot_body.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
+│   │   │   ├── pivot_paddle.gd  # 真实关节翻转挡板的配置、暂停与复位
+│   │   │   ├── pivot_paddle.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
+│   │   │   ├── portal_pair.gd  # 传送入口检测、出口占用复核、同帧预约与离门冷却锁
+│   │   │   ├── portal_pair.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
+│   │   │   ├── rotating_arc.gd  # 带缺口分段圆弧的物理帧旋转
+│   │   │   ├── rotating_arc.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
+│   │   │   ├── spike_strip.gd  # 主球尖刺接触与统一生命伤害请求
+│   │   │   └── spike_strip.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
 │   │   ├── presentation/  # 只读玩法状态并消费表现事件的可替换绘制组件
-│   │   │   ├── enemy_view.gd  # 默认敌人绘制与生命数字，仅消费只读快照和表现事件。
+│   │   │   ├── boss_view.gd  # 首领生图装甲/实际裁切，阶段真实剩余时间/生命顶栏，核心与模块独立受击/破坏反馈
+│   │   │   ├── boss_view.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
+│   │   │   ├── combat_float.gd  # 有效HP损失浮字与死亡短碎光，受预算和生命周期约束
+│   │   │   ├── combat_float.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
+│   │   │   ├── companion_view.gd  # 复用肥鱼位图、只读伙伴模式/剩余时间的独立表现
+│   │   │   ├── companion_view.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
+│   │   │   ├── enemy_view.gd  # 三类敌人生图材质、实际导入裁切、HP色阶/浮字与读取真实warning_fraction的细倒计时环
 │   │   │   ├── enemy_view.gd.uid  # 关联GDScript稳定资源标识。
+│   │   │   ├── fish_ball_view.gd  # 读取主球快照/真实事件的形变、有效命中短亮、回能双短弧；物理复位清理旧表现
+│   │   │   ├── fish_ball_view.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
 │   │   │   ├── health_view.gd  # 只读生命条/数字/状态表现组件及热绑定入口。
-│   │   │   └── health_view.gd.uid  # 关联GDScript稳定资源标识。
-│   │   ├── arena.gd  # 全屏拖动与按钮隔离、HUD 就绪状态、暂停/重置与单球越界回收。
+│   │   │   ├── health_view.gd.uid  # 关联GDScript稳定资源标识。
+│   │   │   ├── portal_view.gd  # 细弧/出口箭头与物理成功后过门短环，不播放假成功
+│   │   │   └── portal_view.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
+│   │   ├── arena.gd  # 全屏拖动与按钮隔离、HUD就绪、真实回能表现事件转发、暂停/重置与越界回收。
 │   │   ├── arena.gd.uid  # 关联GDScript稳定资源标识。
 │   │   ├── assist_effects.gd  # 可暂停的无伤护身震退、有限冲量与表现事件。
 │   │   ├── assist_effects.gd.uid  # 关联GDScript稳定资源标识。
@@ -284,8 +393,12 @@ playAball/
 │   ├── mechanism.gd  # 管理区域内的加速、粘滞或反向重力及离开后的恢复。
 │   └── mechanism.gd.uid  # 关联GDScript稳定资源标识。
 ├── tests/  # 无需测试插件的游戏行为检查
+│   ├── roguelite_actor_views.gd  # 伙伴/首领物理不受表现影响、真实事件与快照隔离回归
+│   ├── roguelite_actor_views.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
 │   ├── roguelite_audio.gd  # 音组变体、PCM余量、优先级预算、混音与生命周期调度回归。
 │   ├── roguelite_audio.gd.uid  # 关联GDScript稳定资源标识。
+│   ├── roguelite_balance_metrics.gd  # 真实伤害/伙伴归因/冲量、夹具升级/冷却/种子复现及实际首领代理类型边界验证
+│   ├── roguelite_balance_metrics.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
 │   ├── roguelite_boss.gd  # 首领真实撞墙/模块接触、弱点时序、护甲、缺口与死亡回归。
 │   ├── roguelite_boss.gd.uid  # 关联GDScript稳定资源标识。
 │   ├── roguelite_build.gd  # 十五项池资格/权重/上限、派生参数与碰撞升级预算边界回归。
@@ -300,8 +413,12 @@ playAball/
 │   ├── roguelite_enemies.gd.uid  # 关联GDScript稳定资源标识。
 │   ├── roguelite_enemy_readability.gd  # 三敌人范围即时取消/重新蓄力、生命覆盖和受伤跨颜色等级回归。
 │   ├── roguelite_enemy_readability.gd.uid  # 关联GDScript稳定资源标识。
+│   ├── roguelite_feature_acceptance.gd  # 逐张合法卡池到真实按钮选择的正式构筑接线与物理效果验证
+│   ├── roguelite_feature_acceptance.gd.uid  # 逐项成长功能验收脚本UID
 │   ├── roguelite_feedback_integration.gd  # 整局真实事件到音效、静音/结算尾音与生命面板重开集成回归。
 │   ├── roguelite_feedback_integration.gd.uid  # 关联GDScript稳定资源标识。
+│   ├── roguelite_fish_view.gd  # 视觉形变不改变物理、有效HP浮字与释放回归
+│   ├── roguelite_fish_view.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
 │   ├── roguelite_full_tuning.gd  # 完整目录、真实引擎读回、资源隔离/新实体、别名恢复、类型与重启配置回归。
 │   ├── roguelite_full_tuning.gd.uid  # 关联GDScript稳定资源标识。
 │   ├── roguelite_gameplay_lab.gd  # 八夹具真实发射/构筑与覆盖、阵型拒绝、分裂两代AI/经济、预设迁移/失败与输入隔离回归。
@@ -318,6 +435,18 @@ playAball/
 │   ├── roguelite_launch_rewards.gd.uid  # 关联GDScript稳定资源标识。
 │   ├── roguelite_live_tuning.gd  # 实时滑杆/数字接线、真实冲量、成长/重开、已有/新敌人、暂停所有权与存取隔离回归。
 │   ├── roguelite_live_tuning.gd.uid  # 关联GDScript稳定资源标识。
+│   ├── roguelite_map_flow.gd  # 正式菜单到四图、成长商店事件、胜负重开及地图释放的流程夹具与首领撞刚体挡板回归
+│   ├── roguelite_map_flow.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
+│   ├── roguelite_map_mechanisms.gd  # 真实刚体翻转、物理运动机关、暂停复位及尖刺伤害回归
+│   ├── roguelite_map_mechanisms.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
+│   ├── roguelite_map_navigation.gd  # 真实碰撞空间8像素寻路网格下的旋转通道和完整首领出生净空采样回归
+│   ├── roguelite_map_navigation.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
+│   ├── roguelite_maps.gd  # 旧场地地图接口、真实障碍与安全出生查询回归
+│   ├── roguelite_maps.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
+│   ├── roguelite_paddle_response.gd  # 真实主球多方向/速度撞击、偏心轴、反复限位与停转复位回归
+│   ├── roguelite_paddle_response.gd.uid  # 翻转板转速及限位回归脚本UID
+│   ├── roguelite_portals.gd  # 传送保速、去重、堵塞/死亡/暂停取消、双体出口及高速往返回归
+│   ├── roguelite_portals.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
 │   ├── roguelite_presentation_interface.gd  # 敌人视图替换、生命面板、真实拒伤结果和物理签名不变回归。
 │   ├── roguelite_presentation_interface.gd.uid  # 关联GDScript稳定资源标识。
 │   ├── roguelite_reward_effects.gd  # 分级重击、有限二连撞、攻击缩圈、无伤震退与旧局事件回归。
@@ -341,10 +470,16 @@ playAball/
 │   ├── ui_integration.gd  # 主菜单、开发隔离、真实血量、四卡和暂停重开的接线回归。
 │   └── ui_integration.gd.uid  # 关联GDScript稳定资源标识。
 ├── tools/  # 开发辅助工具，不属于游戏玩法
-│   ├── export_windows.ps1  # 隔离导出普通或-LiveTuning实时调参Windows EXE，附策略反馈/说明及源码指纹，保护原配置。
+│   ├── analyze_balance.py  # 按固定分组规则比较相同种子/策略原始结果，不伪造用户认可
+│   ├── analyze_transfer.py  # 比较同源实际传能候选，使用真实伙伴直接HP归因和硬门槛
+│   ├── balance_search.ps1  # 固定源文件指纹并运行串行或逐条隔离进程的数值矩阵
+│   ├── export_windows.ps1  # 固定引擎暂存导出普通/显式调参包，隔离内嵌包探针、指纹与说明zip
+│   ├── package_probe.gd  # 编辑器引擎读取实际EXE内嵌包，验证资源排除与正式菜单/输入/重开流程
+│   ├── package_probe.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
 │   ├── project_map.gd  # 读取 Git 文件列表和用途清单，生成/检查项目文件目录。
 │   ├── project_map.gd.uid  # 关联GDScript稳定资源标识。
-│   └── verify.ps1  # 固定Godot导入、目录与27套新旧行为/完整引擎调参检查入口。
+│   ├── validate_natural_runs.ps1  # 逐个引擎进程跑真实卡池与正常AI完整局，记录自然死亡/胜利/截尾并拒绝错误日志
+│   └── verify.ps1  # 本机固定Godot导入、目录与36套回归，拒绝错误日志或缺少完成标记
 ├── .editorconfig  # 统一编码、缩进、换行和文件末尾格式。
 ├── .gitattributes  # 统一 Git 文本换行，标记图片/音频为二进制。
 ├── .gitignore  # 排除引擎缓存、本机临时文件、凭据和导出成品。

@@ -5,8 +5,8 @@
 [resource]
 script = ExtResource("1")
 id = "launch_power"
-title = "强力发射"
-description = "每级主动发射冲量 +15%。"
+title = "冲刺！冲刺！"
+description = "主动发射冲量每级 +15%，最多 3 级。"
 max_level = 3
 category = "机动"
 weight = 1.1

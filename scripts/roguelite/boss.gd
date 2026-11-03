@@ -3,6 +3,7 @@ extends DemoBody
 ## 核心和模块共享同一个刚体；模块只增减碰撞形状，不产生嵌套物理体。
 signal died(boss: DemoBoss)
 signal summon_requested(point: Vector2)
+signal presentation_event(event: StringName, payload: Dictionary)
 enum Phase { WARNING, CHARGE, EXPOSED, RECOVERY }
 @export var core_hit_points: int = 45
 @export var module_hit_points: int = 3
@@ -96,7 +97,7 @@ func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
 			_charge_hit = true
 			publish_charge_hit.call_deferred(player.get_instance_id(), health.get_instance_id(), _charge_revision, _reset_revision, player._reset_revision)
 		# 只有场景墙/挡板撞击才开弱点；箱体、球与小怪不触发。
-		if other is StaticBody2D and other.collision_layer & 17 != 0:
+		if other is PhysicsBody2D and other.collision_layer & 17 != 0:
 			hit_wall = true
 	if hit_wall:
 		phase = Phase.EXPOSED
@@ -159,7 +160,9 @@ func hurt_at(amount: int, point: Vector2) -> void:
 	for index in 4:
 		var shape: CollisionShape2D = get_node("Module%d" % index)
 		if module_hp[index] > 0 and local_point.distance_to(shape.position) <= 25.0:
+			var effective: int = mini(module_hp[index],amount)
 			module_hp[index] = maxi(0, module_hp[index] - amount)
+			presentation_event.emit(&"module_hurt",{"amount":effective,"point":shape.position,"index":index})
 			if module_hp[index] == 0:
 				shape.set_deferred("disabled", true)
 			queue_redraw()
@@ -170,7 +173,9 @@ func hurt(amount: int) -> void:
 	if dead or amount <= 0:
 		return
 	var damage: int = amount if phase == Phase.EXPOSED else ceili(amount * 0.5)
+	var effective: int = mini(hp,damage)
 	hp = maxi(0, hp - damage)
+	presentation_event.emit(&"core_hurt",{"amount":effective,"point":Vector2.ZERO})
 	if hp == 0:
 		dead = true
 		wave_active = false
@@ -179,25 +184,8 @@ func hurt(amount: int) -> void:
 		died.emit(self)
 	queue_redraw()
 
-func _draw() -> void:
-	if dead:
-		return
-	draw_circle(Vector2.ZERO, 43, Color("a35762") if phase != Phase.EXPOSED else Color("ffdc78"))
-	draw_arc(Vector2.ZERO, 34, 0, TAU, 40, Color("fff0c9"), 3, true)
+func presentation_snapshot() -> Dictionary:
+	var modules: Array[Dictionary] = []
 	for index in module_hp.size():
-		if module_hp[index] > 0:
-			var point: Vector2 = get_node("Module%d" % index).position
-			draw_circle(point, 17, Color("d49964"))
-			draw_arc(point, 17, 0, TAU * float(module_hp[index]) / module_hit_points, 20, Color("fff0c9"), 3, true)
-	draw_rect(Rect2(-55, -92, 110, 7), Color("302c46"))
-	draw_rect(Rect2(-55, -92, 110.0 * hp / core_hit_points, 7), Color("ffdc78"))
-	if phase == Phase.WARNING:
-		draw_line(charge_direction * 50, charge_direction * 280, Color("ffbc77"), 3, true)
-		draw_circle(charge_direction * 290, 12, Color("ffbc77"), false, 3)
-	if wave_active:
-		var center: Vector2 = to_local(wave_origin)
-		var start: float = _wave_safe_direction.angle() + wave_half_gap
-		var end: float = _wave_safe_direction.angle() + TAU - wave_half_gap
-		var warning: bool = wave_warning_left > 0.0
-		draw_arc(center, wave_radius, start, end, 64, Color("ffb978") if warning else Color("ff586a"), 2 if warning else 12, true)
-		draw_line(center, center + _wave_safe_direction * 120, Color("80e2c0"), 2, true)
+		modules.append({"point":get_node("Module%d"%index).position,"hp":module_hp[index],"max_hp":module_hit_points})
+	return {"hp":hp,"max_hp":core_hit_points,"dead":dead,"phase":int(phase),"phase_left":phase_left,"modules":modules,"charge_direction":charge_direction,"wave_active":wave_active,"wave_center":to_local(wave_origin),"wave_radius":wave_radius,"wave_warning_left":wave_warning_left,"safe_direction":_wave_safe_direction,"wave_half_gap":wave_half_gap}

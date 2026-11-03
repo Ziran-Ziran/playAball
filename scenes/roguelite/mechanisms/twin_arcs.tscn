@@ -1,0 +1,130 @@
+[gd_scene load_steps=2 format=3]
+[ext_resource type="Script" path="res://scripts/roguelite/mechanisms/rotating_arc.gd" id="1"]
+[node name="twin_arcs" type="Node2D"]
+process_mode = 1
+script = ExtResource("1")
+angular_speed = 0.1
+[node name="Body" type="AnimatableBody2D" parent="."]
+sync_to_physics = false
+collision_layer = 16
+collision_mask = 31
+[node name="Segment00" type="CollisionPolygon2D" parent="Body"]
+polygon = PackedVector2Array(130.76984, 75.50000, 146.35829, 84.50000, 129.46151, 108.63111, 115.67271, 97.06093)
+[node name="Visual00" type="Polygon2D" parent="Body"]
+polygon = PackedVector2Array(130.76984, 75.50000, 146.35829, 84.50000, 129.46151, 108.63111, 115.67271, 97.06093)
+color = Color(0.24,0.47,0.42,1)
+[node name="Segment01" type="CollisionPolygon2D" parent="Body"]
+polygon = PackedVector2Array(115.67271, 97.06093, 129.46151, 108.63111, 108.63111, 129.46151, 97.06093, 115.67271)
+[node name="Visual01" type="Polygon2D" parent="Body"]
+polygon = PackedVector2Array(115.67271, 97.06093, 129.46151, 108.63111, 108.63111, 129.46151, 97.06093, 115.67271)
+color = Color(0.24,0.47,0.42,1)
+[node name="Segment02" type="CollisionPolygon2D" parent="Body"]
+polygon = PackedVector2Array(97.06093, 115.67271, 108.63111, 129.46151, 84.50000, 146.35829, 75.50000, 130.76984)
+[node name="Visual02" type="Polygon2D" parent="Body"]
+polygon = PackedVector2Array(97.06093, 115.67271, 108.63111, 129.46151, 84.50000, 146.35829, 75.50000, 130.76984)
+color = Color(0.24,0.47,0.42,1)
+[node name="Segment03" type="CollisionPolygon2D" parent="Body"]
+polygon = PackedVector2Array(75.50000, 130.76984, 84.50000, 146.35829, 57.80140, 158.80805, 51.64504, 141.89359)
+[node name="Visual03" type="Polygon2D" parent="Body"]
+polygon = PackedVector2Array(75.50000, 130.76984, 84.50000, 146.35829, 57.80140, 158.80805, 51.64504, 141.89359)
+color = Color(0.24,0.47,0.42,1)
+[node name="Segment04" type="CollisionPolygon2D" parent="Body"]
+polygon = PackedVector2Array(51.64504, 141.89359, 57.80140, 158.80805, 29.34654, 166.43251, 26.22087, 148.70597)
+[node name="Visual04" type="Polygon2D" parent="Body"]
+polygon = PackedVector2Array(51.64504, 141.89359, 57.80140, 158.80805, 29.34654, 166.43251, 26.22087, 148.70597)
+color = Color(0.24,0.47,0.42,1)
+[node name="Segment05" type="CollisionPolygon2D" parent="Body"]
+polygon = PackedVector2Array(26.22087, 148.70597, 29.34654, 166.43251, 0.00000, 169.00000, 0.00000, 151.00000)
+[node name="Visual05" type="Polygon2D" parent="Body"]
+polygon = PackedVector2Array(26.22087, 148.70597, 29.34654, 166.43251, 0.00000, 169.00000, 0.00000, 151.00000)
+color = Color(0.24,0.47,0.42,1)
+[node name="Segment06" type="CollisionPolygon2D" parent="Body"]
+polygon = PackedVector2Array(0.00000, 151.00000, 0.00000, 169.00000, -29.34654, 166.43251, -26.22087, 148.70597)
+[node name="Visual06" type="Polygon2D" parent="Body"]
+polygon = PackedVector2Array(0.00000, 151.00000, 0.00000, 169.00000, -29.34654, 166.43251, -26.22087, 148.70597)
+color = Color(0.24,0.47,0.42,1)
+[node name="Segment07" type="CollisionPolygon2D" parent="Body"]
+polygon = PackedVector2Array(-26.22087, 148.70597, -29.34654, 166.43251, -57.80140, 158.80805, -51.64504, 141.89359)
+[node name="Visual07" type="Polygon2D" parent="Body"]
+polygon = PackedVector2Array(-26.22087, 148.70597, -29.34654, 166.43251, -57.80140, 158.80805, -51.64504, 141.89359)
+color = Color(0.24,0.47,0.42,1)
+[node name="Segment08" type="CollisionPolygon2D" parent="Body"]
+polygon = PackedVector2Array(-51.64504, 141.89359, -57.80140, 158.80805, -84.50000, 146.35829, -75.50000, 130.76984)
+[node name="Visual08" type="Polygon2D" parent="Body"]
+polygon = PackedVector2Array(-51.64504, 141.89359, -57.80140, 158.80805, -84.50000, 146.35829, -75.50000, 130.76984)
+color = Color(0.24,0.47,0.42,1)
+[node name="Segment09" type="CollisionPolygon2D" parent="Body"]
+polygon = PackedVector2Array(-75.50000, 130.76984, -84.50000, 146.35829, -108.63111, 129.46151, -97.06093, 115.67271)
+[node name="Visual09" type="Polygon2D" parent="Body"]
+polygon = PackedVector2Array(-75.50000, 130.76984, -84.50000, 146.35829, -108.63111, 129.46151, -97.06093, 115.67271)
+color = Color(0.24,0.47,0.42,1)
+[node name="Segment10" type="CollisionPolygon2D" parent="Body"]
+polygon = PackedVector2Array(-97.06093, 115.67271, -108.63111, 129.46151, -129.46151, 108.63111, -115.67271, 97.06093)
+[node name="Visual10" type="Polygon2D" parent="Body"]
+polygon = PackedVector2Array(-97.06093, 115.67271, -108.63111, 129.46151, -129.46151, 108.63111, -115.67271, 97.06093)
+color = Color(0.24,0.47,0.42,1)
+[node name="Segment11" type="CollisionPolygon2D" parent="Body"]
+polygon = PackedVector2Array(-115.67271, 97.06093, -129.46151, 108.63111, -146.35829, 84.50000, -130.76984, 75.50000)
+[node name="Visual11" type="Polygon2D" parent="Body"]
+polygon = PackedVector2Array(-115.67271, 97.06093, -129.46151, 108.63111, -146.35829, 84.50000, -130.76984, 75.50000)
+color = Color(0.24,0.47,0.42,1)
+[node name="Segment12" type="CollisionPolygon2D" parent="Body"]
+polygon = PackedVector2Array(-130.76984, -75.50000, -146.35829, -84.50000, -129.46151, -108.63111, -115.67271, -97.06093)
+[node name="Visual12" type="Polygon2D" parent="Body"]
+polygon = PackedVector2Array(-130.76984, -75.50000, -146.35829, -84.50000, -129.46151, -108.63111, -115.67271, -97.06093)
+color = Color(0.24,0.47,0.42,1)
+[node name="Segment13" type="CollisionPolygon2D" parent="Body"]
+polygon = PackedVector2Array(-115.67271, -97.06093, -129.46151, -108.63111, -108.63111, -129.46151, -97.06093, -115.67271)
+[node name="Visual13" type="Polygon2D" parent="Body"]
+polygon = PackedVector2Array(-115.67271, -97.06093, -129.46151, -108.63111, -108.63111, -129.46151, -97.06093, -115.67271)
+color = Color(0.24,0.47,0.42,1)
+[node name="Segment14" type="CollisionPolygon2D" parent="Body"]
+polygon = PackedVector2Array(-97.06093, -115.67271, -108.63111, -129.46151, -84.50000, -146.35829, -75.50000, -130.76984)
+[node name="Visual14" type="Polygon2D" parent="Body"]
+polygon = PackedVector2Array(-97.06093, -115.67271, -108.63111, -129.46151, -84.50000, -146.35829, -75.50000, -130.76984)
+color = Color(0.24,0.47,0.42,1)
+[node name="Segment15" type="CollisionPolygon2D" parent="Body"]
+polygon = PackedVector2Array(-75.50000, -130.76984, -84.50000, -146.35829, -57.80140, -158.80805, -51.64504, -141.89359)
+[node name="Visual15" type="Polygon2D" parent="Body"]
+polygon = PackedVector2Array(-75.50000, -130.76984, -84.50000, -146.35829, -57.80140, -158.80805, -51.64504, -141.89359)
+color = Color(0.24,0.47,0.42,1)
+[node name="Segment16" type="CollisionPolygon2D" parent="Body"]
+polygon = PackedVector2Array(-51.64504, -141.89359, -57.80140, -158.80805, -29.34654, -166.43251, -26.22087, -148.70597)
+[node name="Visual16" type="Polygon2D" parent="Body"]
+polygon = PackedVector2Array(-51.64504, -141.89359, -57.80140, -158.80805, -29.34654, -166.43251, -26.22087, -148.70597)
+color = Color(0.24,0.47,0.42,1)
+[node name="Segment17" type="CollisionPolygon2D" parent="Body"]
+polygon = PackedVector2Array(-26.22087, -148.70597, -29.34654, -166.43251, -0.00000, -169.00000, -0.00000, -151.00000)
+[node name="Visual17" type="Polygon2D" parent="Body"]
+polygon = PackedVector2Array(-26.22087, -148.70597, -29.34654, -166.43251, -0.00000, -169.00000, -0.00000, -151.00000)
+color = Color(0.24,0.47,0.42,1)
+[node name="Segment18" type="CollisionPolygon2D" parent="Body"]
+polygon = PackedVector2Array(-0.00000, -151.00000, -0.00000, -169.00000, 29.34654, -166.43251, 26.22087, -148.70597)
+[node name="Visual18" type="Polygon2D" parent="Body"]
+polygon = PackedVector2Array(-0.00000, -151.00000, -0.00000, -169.00000, 29.34654, -166.43251, 26.22087, -148.70597)
+color = Color(0.24,0.47,0.42,1)
+[node name="Segment19" type="CollisionPolygon2D" parent="Body"]
+polygon = PackedVector2Array(26.22087, -148.70597, 29.34654, -166.43251, 57.80140, -158.80805, 51.64504, -141.89359)
+[node name="Visual19" type="Polygon2D" parent="Body"]
+polygon = PackedVector2Array(26.22087, -148.70597, 29.34654, -166.43251, 57.80140, -158.80805, 51.64504, -141.89359)
+color = Color(0.24,0.47,0.42,1)
+[node name="Segment20" type="CollisionPolygon2D" parent="Body"]
+polygon = PackedVector2Array(51.64504, -141.89359, 57.80140, -158.80805, 84.50000, -146.35829, 75.50000, -130.76984)
+[node name="Visual20" type="Polygon2D" parent="Body"]
+polygon = PackedVector2Array(51.64504, -141.89359, 57.80140, -158.80805, 84.50000, -146.35829, 75.50000, -130.76984)
+color = Color(0.24,0.47,0.42,1)
+[node name="Segment21" type="CollisionPolygon2D" parent="Body"]
+polygon = PackedVector2Array(75.50000, -130.76984, 84.50000, -146.35829, 108.63111, -129.46151, 97.06093, -115.67271)
+[node name="Visual21" type="Polygon2D" parent="Body"]
+polygon = PackedVector2Array(75.50000, -130.76984, 84.50000, -146.35829, 108.63111, -129.46151, 97.06093, -115.67271)
+color = Color(0.24,0.47,0.42,1)
+[node name="Segment22" type="CollisionPolygon2D" parent="Body"]
+polygon = PackedVector2Array(97.06093, -115.67271, 108.63111, -129.46151, 129.46151, -108.63111, 115.67271, -97.06093)
+[node name="Visual22" type="Polygon2D" parent="Body"]
+polygon = PackedVector2Array(97.06093, -115.67271, 108.63111, -129.46151, 129.46151, -108.63111, 115.67271, -97.06093)
+color = Color(0.24,0.47,0.42,1)
+[node name="Segment23" type="CollisionPolygon2D" parent="Body"]
+polygon = PackedVector2Array(115.67271, -97.06093, 129.46151, -108.63111, 146.35829, -84.50000, 130.76984, -75.50000)
+[node name="Visual23" type="Polygon2D" parent="Body"]
+polygon = PackedVector2Array(115.67271, -97.06093, 129.46151, -108.63111, 146.35829, -84.50000, 130.76984, -75.50000)
+color = Color(0.24,0.47,0.42,1)
