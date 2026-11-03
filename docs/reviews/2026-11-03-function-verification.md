@@ -79,4 +79,4 @@
 
 PR #7首次Linux CI中Import and run behavior checks步骤成功，UI integration在原114行标题与收益区重叠断言失败。诊断日志保留.local/feature_review/ci-job.log。补较高字体行距8的Windows复现后旧实现同样失败；run_hud新增依据实际字体最小高度收紧字号，固定区域/原严格断言保留，修复后本地UI通过。继续复测新包、相关成长接线及Linux CI；最终远端状态见PR。
 
-此次字体修复已获独立只读增量复核无阻塞；新实包UI集成、98项成长接线通过，1024×576前后及1280×720实际Compatibility四卡截图已保存.local/feature_review/cards-*.png，标题/收益/正文无重叠。新构建ID为function-verified-r2，EXE SHA256=CE41033C00D345329C0BD25F357A2BA4495F17656B21A86049AE378A43EBB2E9，输入指纹726065F811B88EAA7AF29F0E6A8F94361898D5CC2BF3CAC9FC1CEF33A0A2FE7C；替换同一路径最终包，之前function-verified段落保留初轮验证语境。38套完整重跑及第二次Linux CI继续确认。
+此次字体修复已获独立只读增量复核无阻塞；新实包UI集成、98项成长接线通过，1024×576前后及1280×720实际Compatibility四卡截图已保存.local/feature_review/cards-*.png，标题/收益/正文无重叠。新构建ID为function-verified-r2，EXE SHA256=CE41033C00D345329C0BD25F357A2BA4495F17656B21A86049AE378A43EBB2E9，输入指纹726065F811B88EAA7AF29F0E6A8F94361898D5CC2BF3CAC9FC1CEF33A0A2FE7C；替换同一路径最终包，之前function-verified段落保留初轮验证语境。字体修复后38套完整重跑通过且无错误/警告（.local/feature_review/full-r2.*）；远端CI与最终合并状态以[PR #7](https://github.com/Ziran-Ziran/playAball/pull/7)为准。
