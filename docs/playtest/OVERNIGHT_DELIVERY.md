@@ -1,6 +1,6 @@
 # 玩个球 / playAball：本地候验收交付
 
-后续功能复验已修复翻板旋转，并更新同一路径的普通包；最新构建ID为function-verified，逐项功能/原生输入结果见[本轮复验记录](../reviews/2026-11-03-function-verification.md)。下文整夜批次的未测项与数值是当时记录；生图不认可的状态保持。汇总证据ZIP追加function-verification-2026-11-03目录，旧批次条目保留。
+后续功能复验已修复翻板旋转，并更新同一路径的普通包；最新构建ID为function-verified-r2，逐项功能/原生输入结果见[本轮复验记录](../reviews/2026-11-03-function-verification.md)。下文整夜批次的未测项与数值是当时记录；生图不认可的状态保持。汇总证据ZIP追加function-verification-2026-11-03目录，旧批次条目保留。
 
 **最新用户反馈：用户尚未验收本轮工作；当前生图明确不认可，留待后续对话修改。自动测试通过不代表用户认可。** 文件名final只是该轮导出标记。
 

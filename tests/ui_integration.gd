@@ -111,9 +111,17 @@ func check_game() -> void:
 			var heading: Label = card.get_node("Content/Heading")
 			var preview: Label = card.get_node("Content/Preview")
 			var detail: Label = card.get_node("Content/Detail")
+			print("CARD_LAYOUT: ", heading.text.replace("\n", " / "), " heights=", heading.get_minimum_size().y, ",", preview.get_minimum_size().y, ",", detail.get_minimum_size().y)
 			assert(heading.position.y+heading.get_minimum_size().y < preview.position.y)
 			assert(preview.position.y+preview.get_minimum_size().y < 209.0)
 			assert(detail.position.y+detail.get_minimum_size().y < card.size.y-18.0)
+	# 模拟另一平台的较高字体行距，必须仍在固定卡面槽位内显示完整标题。
+	var tall_heading: Label = hud.cards.get_child(0).get_node("Content/Heading")
+	tall_heading.add_theme_constant_override("line_spacing", 8)
+	await process_frame
+	if hud.has_method("_fit_card_label"):
+		hud._fit_card_label(tall_heading, 78.0)
+	assert(tall_heading.position.y + tall_heading.get_minimum_size().y < 122.0)
 	hud.clear_cards()
 	game.set_paused(true)
 	game.reset_range()

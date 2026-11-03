@@ -93,6 +93,10 @@ func show_choices(choices: Array, levels: Dictionary = {}, pending_count: int = 
 		content.add_child(preview)
 		card.pressed.connect(func(): upgrade_selected.emit(choice.id, offer_id))
 		cards.add_child(card)
+		# 系统CJK字体的行高各异；依据实际字体尺寸收紧字号，保留卡面的固定槽位。
+		_fit_card_label(heading, preview.position.y - heading.position.y - 6.0)
+		_fit_card_label(preview, detail.position.y - preview.position.y - 16.0)
+		_fit_card_label(detail, card.custom_minimum_size.y - detail.position.y - 20.0)
 		var flow := Control.new()
 		flow.set_script(load("res://scripts/ui/card_flow.gd"))
 		card.add_child(flow)
@@ -100,6 +104,13 @@ func show_choices(choices: Array, levels: Dictionary = {}, pending_count: int = 
 		card.modulate.a = 0.0
 		_animate_card.call_deferred(card, float(cards.get_child_count() - 1) * 0.1)
 	panel.show()
+
+func _fit_card_label(label: Label, max_height: float) -> void:
+	var initial_size: int = label.get_theme_font_size("font_size")
+	for font_size in range(initial_size, 11, -1):
+		label.add_theme_font_size_override("font_size", font_size)
+		if label.get_minimum_size().y <= max_height:
+			break
 
 func _animate_card(card: Button, delay: float) -> void:
 	await get_tree().process_frame

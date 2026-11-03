@@ -74,3 +74,9 @@
 生图仍为用户不认可的已接入候选，后续对话修改；没有新生成素材。用户仍未完成本轮玩法/美术/音质验收。Git合并是本轮明确授权的工程动作，不能写为用户审美认可。
 
 原有project.godot编辑器规范化修改保留在工作区，SHA256为0D979E682E04F6E1066F2CA20B0FBBA358FC74D0A3C1B7F7820998E5C1EBE799，不纳入本轮提交。不提交.local、builds、导出暂存或凭据。整夜定时任务保持停用。功能边界、工具日志和旧证据中的“当时状态”不替代本记录的最新结论。
+
+## 首次远端CI失败后的修复
+
+PR #7首次Linux CI中Import and run behavior checks步骤成功，UI integration在原114行标题与收益区重叠断言失败。诊断日志保留.local/feature_review/ci-job.log。补较高字体行距8的Windows复现后旧实现同样失败；run_hud新增依据实际字体最小高度收紧字号，固定区域/原严格断言保留，修复后本地UI通过。继续复测新包、相关成长接线及Linux CI；最终远端状态见PR。
+
+此次字体修复已获独立只读增量复核无阻塞；新实包UI集成、98项成长接线通过，1024×576前后及1280×720实际Compatibility四卡截图已保存.local/feature_review/cards-*.png，标题/收益/正文无重叠。新构建ID为function-verified-r2，EXE SHA256=CE41033C00D345329C0BD25F357A2BA4495F17656B21A86049AE378A43EBB2E9，输入指纹726065F811B88EAA7AF29F0E6A8F94361898D5CC2BF3CAC9FC1CEF33A0A2FE7C；替换同一路径最终包，之前function-verified段落保留初轮验证语境。38套完整重跑及第二次Linux CI继续确认。
