@@ -1,0 +1,87 @@
+{
+  "version": "cooldown_rules_v1",
+  "locked_before_candidates": true,
+  "physics_hz": 120,
+  "time_scale": 1,
+  "duration": 20,
+  "train_seeds": [
+    42,
+    20261103
+  ],
+  "holdout_seeds": [
+    123456
+  ],
+  "strategies": [
+    "nearest",
+    "safe",
+    "relay"
+  ],
+  "scenarios": [
+    "single",
+    "crowd",
+    "corner",
+    "reverse",
+    "relay",
+    "mechanisms"
+  ],
+  "weights": {
+    "control": 25,
+    "impact": 25,
+    "growth": 20,
+    "fairness": 20,
+    "rhythm": 10
+  },
+  "score_policy": "Do not publish a combined score when growth/full-run evidence is absent. Choose by paired measured outcomes and hard gates, not a score target.",
+  "definitions": {
+    "effective_damage": "Sum actual HP lost from real enemy presentation hurt events; excludes overkill; includes legitimate echoes/explosions.",
+    "nominal_damage": "Accepted collision requested damage; may include overkill.",
+    "cooldown_wait": "Seconds with living threats and formal launch unavailable, while player is alive.",
+    "corner_time": "Low velocity (<80) in70px boundary band while targets remain; a stall proxy, not proof of a softlock.",
+    "mechanism_hp": "All HP lost across20s, including moving hazards after target clear; inspect full runs before difficulty claims.",
+    "reversal_time": "Delay after fixed2.35s reverse-intent time until velocity.x<-50; includes input/cooldown response.",
+    "censored": "Fixture or run timed out; never counted as a victory."
+  },
+  "hard_gates": {
+    "physics_failures": 0,
+    "max_total_hp_loss_increase": 0,
+    "no_infinite_chain": true,
+    "all_four_cooldown_ranks_positive": true
+  },
+  "selection": {
+    "required_mean_paired_clear_time_improvement": 0.05,
+    "reverse_clear_or_response_improvement": 0.1,
+    "max_worst_paired_clear_time_regression": 0.2,
+    "must_validate_holdout_and_natural_ai_three_routes": true,
+    "candidate_is_not_user_approval": true,
+    "target_metric": "total_threat_cooldown_wait",
+    "target_improvement": 0.1,
+    "note": "The reverse10% gate belongs to the control group; this separate pre-search cooldown rule requires total live-threat waiting reduction10%. Common clear-time, HP and worst-case gates remain unchanged."
+  },
+  "baseline_reference": "75BE159E8022E0A0964A39DE0CCD7605556C892ADCD65E62F01BB7187725C3BE",
+  "baseline_summary": {
+    "single": {
+      "median_clear_time": 0.8624999999999995,
+      "mean_hp_loss": 0
+    },
+    "crowd": {
+      "median_clear_time": 9.10833333333344,
+      "mean_hp_loss": 0
+    },
+    "corner": {
+      "median_clear_time": 4.83333333333336,
+      "mean_hp_loss": 0
+    },
+    "reverse": {
+      "median_clear_time": 5.81250000000008,
+      "mean_hp_loss": 0
+    },
+    "relay": {
+      "median_clear_time": 0.6,
+      "mean_hp_loss": 0
+    },
+    "mechanisms": {
+      "median_clear_time": 3.41250000000001,
+      "mean_hp_loss": 4
+    }
+  }
+}

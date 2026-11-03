@@ -5,8 +5,8 @@
 [resource]
 script = ExtResource("1")
 id = "echo"
-title = "二次撞击"
-description = "主球或小弟有效命中后 0.12 秒追加 1 伤害；每球、目标、链一次，不递归。"
+title = "补刀"
+description = "主球或外包伙伴有效命中后 0.12 秒追加 1 点伤害；每球、目标、链一次，不递归。"
 max_level = 1
 category = "火力"
 weight = 0.9

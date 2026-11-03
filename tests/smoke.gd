@@ -84,6 +84,8 @@ func _run() -> void:
 	check(not ball.launch(Vector2(100, -100)), "Winning disables shooting")
 	level.queue_free()
 	await process_frame
+	# 与反馈集成夹具相同，等待后台混音线程消费停止队列后再退出引擎。
+	await create_timer(0.5).timeout
 	if failures == 0:
 		print("ALL CHECKS PASSED")
 	quit(0 if failures == 0 else 1)

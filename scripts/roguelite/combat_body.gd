@@ -5,6 +5,7 @@ signal contact_report(actor: DemoBody, other: Node, speed: float, point: Vector2
 ## 所有真实接触的诊断样本；攻击资格与伤害取舍仍由 DemoCombat 决定。
 signal contact_sampled(actor: DemoBody, other: Node, speed: float, point: Vector2, attacking: bool)
 signal impacted(point: Vector2, strength: float)
+signal teleport_applied(from_point: Vector2, to_point: Vector2)
 @export var speed_limit: float = 1500.0
 var chain_id: int = 0
 var generation: int = 0
@@ -18,16 +19,34 @@ var _reset_revision: int = 0
 ## 默认关闭完整拒伤诊断；实验室打开后，无攻击资格接触也交给规则层记录原因。
 var contact_diagnostics_enabled: bool = false
 var _debug_state_request: Dictionary = {}
+var _teleport_request: Dictionary = {}
+
+func can_teleport() -> bool:
+	return not reset_pending and not is_queued_for_deletion() and not ("dead" in self and get("dead"))
+
+func request_teleport(point: Vector2, guard: Callable = Callable()) -> bool:
+	if not can_teleport() or not _teleport_request.is_empty():
+		return false
+	# 丢弃旧地点的延后接触；不清攻击链、资格、速度或伙伴剩余时间。
+	_reset_revision += 1
+	_teleport_request = {"point": point, "guard": guard}
+	sleeping = false
+	return true
+
+func cancel_teleport() -> void:
+	_teleport_request.clear()
 
 func request_debug_state(property: String, value: Variant) -> void:
 	# 完整调参的一次性状态编辑仍交给物理接口；不在绘制/每帧强写刚体位置。
 	_debug_state_request[property] = value
 	if property in ["position","global_position","transform","global_transform","rotation","global_rotation"]:
+		cancel_teleport()
 		_reset_revision += 1
 		chain_id = 0
 	sleeping = false
 
 func _ready() -> void:
+	add_to_group("demo_bodies")
 	# 新玩法派生刚体统一禁用环境重力，旧原型不继承此类。
 	gravity_scale = 0.0
 	contact_monitor = true
@@ -39,6 +58,7 @@ func attacking() -> bool:
 	return chain_id > 0
 
 func reset_body(point: Vector2) -> void:
+	cancel_teleport()
 	_debug_state_request.clear()
 	_reset_revision += 1
 	_feedback_left = 0.0
@@ -58,6 +78,18 @@ func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
 		_velocity_frame = Engine.get_physics_frames()
 		reset_pending = false
 		return
+	if not _teleport_request.is_empty():
+		var request: Dictionary = _teleport_request
+		_teleport_request = {}
+		var guard: Callable = request.guard
+		if can_teleport() and (guard.is_null() or (guard.is_valid() and guard.call())):
+			var previous_point: Vector2 = state.transform.origin
+			state.transform.origin = request.point
+			publish_teleport.call_deferred(previous_point,request.point,_reset_revision)
+			incoming_velocity = state.linear_velocity
+			_previous_velocity = incoming_velocity
+			_velocity_frame = Engine.get_physics_frames()
+			return
 	if not _debug_state_request.is_empty():
 		var parent_transform: Transform2D = get_parent().global_transform if get_parent() is Node2D else Transform2D.IDENTITY
 		for property: String in _debug_state_request:
@@ -105,6 +137,10 @@ func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
 func velocity_for_contact(frame: int) -> Vector2:
 	# 本帧已经回调过的刚体须回读上一份快照，避免误用撞飞后的速度漏伤。
 	return _previous_velocity if _velocity_frame == frame else incoming_velocity
+
+func publish_teleport(from_point: Vector2, to_point: Vector2, revision: int) -> void:
+	if revision == _reset_revision and is_inside_tree() and not get_tree().paused and can_teleport():
+		teleport_applied.emit(from_point,to_point)
 
 func publish_impact(point: Vector2, speed: float, revision: int) -> void:
 	if revision == _reset_revision and not reset_pending:

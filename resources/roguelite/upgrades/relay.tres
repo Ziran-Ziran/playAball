@@ -6,7 +6,7 @@
 script = ExtResource("1")
 id = "relay"
 title = "接力"
-description = "至少已有两颗小弟后可选；小弟接力每球每链一次有限补偿，最多 262.5 冲量。"
+description = "至少两个外包伙伴时可选；增强已有基础传能，每球每链一次，额外冲量最多 262.5。"
 max_level = 1
 category = "伙伴"
 weight = 1

@@ -2,6 +2,7 @@ class_name DemoCombat
 extends Node
 signal hit(point: Vector2, speed: float)
 signal relay(point: Vector2, generation: int)
+signal explosion_triggered(point: Vector2, radius: float)
 ## 逻辑判定证据；实验室只消费，不重新执行伤害或去重。
 signal contact_outcome(event: Dictionary)
 @export var minimum_speed: float = 180.0
@@ -9,6 +10,7 @@ signal contact_outcome(event: Dictionary)
 @export var heavy_speed: float = 850.0
 @export var pair_cooldown: float = 0.18
 @export var max_generation: int = 3
+@export_range(0.0,1.0) var transfer_retention: float = 0.85
 var elapsed: float = 0.0
 var pairs: Dictionary = {}
 var events: Array[Dictionary] = []
@@ -101,6 +103,8 @@ func resolve(actor: DemoBody, other: Node, speed: float, point: Vector2) -> void
 	record({"chain": actor.chain_id, "source": actor.get_instance_id(), "target": other.get_instance_id(), "generation": actor.generation, "damage": amount})
 	_report_outcome(actor, other, speed, point, "accepted", "valid_damage", amount)
 	hit.emit(point, speed)
+	if actor is DemoPlayer:
+		actor.visual_event.emit(&"damage", {"speed": speed, "amount": amount})
 	if (actor is DemoPlayer or actor is DemoCompanion) and upgraded("echo"):
 		_schedule_echo(actor, other, speed)
 	if actor is DemoCompanion and upgraded("explosion") and not exploded_chains.has(actor.chain_id):
@@ -161,6 +165,7 @@ func explode(actor: DemoBody, point: Vector2) -> void:
 		if target is Node2D and damageable(target) and target.global_position.distance_to(point) <= 80.0:
 			target.call("hurt", 1)
 			record({"chain": actor.chain_id, "source": actor.get_instance_id(), "target": target.get_instance_id(), "generation": actor.generation, "damage": 1, "effect": "explosion"})
+	explosion_triggered.emit(point, 80.0)
 
 func trim_history(history: Dictionary) -> void:
 	# 活跃小兵仅持续3秒；保留最近256个链路标记足够且不会随整局无限增长。
@@ -178,7 +183,7 @@ func activate(source: DemoBody, receiver: DemoCompanion) -> bool:
 	if damage_for(speed) == 0 or not accept_pair(source, receiver):
 		return false
 	# 传感器交接没有实体碰撞，只有此处一次传能；出击球之间不额外补冲量。
-	receiver.activate(source.chain_id, next_generation, direction * minf(speed * receiver.mass * 0.85, 1050.0))
+	receiver.activate(source.chain_id, next_generation, direction * minf(speed * receiver.mass * clampf(transfer_retention,0.0,1.0), 1050.0))
 	var bonus_key: String = "%d:%d" % [source.chain_id, receiver.get_instance_id()]
 	if source is DemoCompanion and upgraded("relay") and not relay_bonuses.has(bonus_key):
 		relay_bonuses[bonus_key] = true

@@ -5,8 +5,8 @@
 [resource]
 script = ExtResource("1")
 id = "pulse"
-title = "护身震退"
-description = "每 4 战斗秒弹开半径 150 内敌人一次，不直接伤害或触发升级。"
+title = "退！退！退！"
+description = "每 4 战斗秒震退半径 150 内敌人，不直接造成伤害或授予免疫。"
 max_level = 1
 category = "生存"
 weight = 0.9

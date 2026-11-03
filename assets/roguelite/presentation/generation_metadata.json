@@ -1,0 +1,65 @@
+{
+  "tool": "image_gen.imagegen",
+  "date": "2026-11-03",
+  "fish": {
+    "prompt": "Production game sprite, stylized-concept. A SINGLE cute very chubby round BLUE FISH BALL protagonist for an existing top-down 2D physics game named playAball. Actual transparent background, isolated full subject, square canvas. Its round body nearly fills the canvas with a small clear margin (roughly 86% diameter); tiny side fins and a tiny tail, white rounded belly, friendly confident face facing viewer, simple large expressive dark eyes and a small delighted smile. The main body silhouette is circular, easy to align with a round collision body. Established colors sky blue #59c7f5, icy white #effaff, dark blue-green outline #224764. Polished hand-painted cartoon GAME ASSET with three clean shading tones, tasteful soft highlights and slightly chunky readable outline, charming plump fish character, excellent readability when reduced to only 46 pixels wide. Subtle dimensional volume without glossy plastic or realistic fish scales. No humanoid girl, no clothes, no props, no UI, no text, no ring around the fish, no aura, no particles, no environment, no floor shadow, no checkerboard background. Clean alpha edges. One subject only, front-facing game sprite, not a whole scene or concept board.",
+    "source": "C:/Users/Ziran/.codex/generated_images/01a19d16-c970-7f03-b20e-4a465d088aae/exec-ac056634-cc7d-4878-8d00-dacc78eac4be.png",
+    "asset": "fat_fish_ball_v1.png"
+  },
+  "crate": {
+    "prompt": "Production isolated game sprite, stylized-concept. ONE breakable sci-fi square CARGO CRATE for an existing cartoon 2D top-down physics arena game. Actual transparent background. Orthographic straight-on top view, truly square footprint, no isometric perspective, no surrounding scene. Main crate occupies about 80 percent of a square canvas with at least 8 percent transparent padding on EVERY edge, nothing cropped. Rounded tiny corner protectors, a simple thin diagonal crack across one face (the established fragile enemy silhouette is a plain cracked square). Neutral desaturated light steel-gray/ivory main panels, deep charcoal-blue-green ink outline, three clean painted shading tones, dark inset seams. This is designed to be color-tinted teal, gold or purple by the game according to current HP, so keep the broad panel surfaces NEUTRAL GRAYSCALE and sufficiently light, no saturated color lights. Bold simple readable silhouette and a few chunky detail shapes that remain readable at only 38 pixels wide. Polished hand-painted cartoon game asset with restrained sci-fi material, matching a cute round blue fish protagonist in a minimalist dark green arena. No eyes, no face, no limbs, no new character, no text, no numbers, no symbols, no locks, no floating particles, no glow, no floor shadow, no background, no checkerboard. Single game-ready crate sprite only, not a whole screen or concept sheet.",
+    "source": "C:/Users/Ziran/.codex/generated_images/01a19d16-c970-7f03-b20e-4a465d088aae/exec-c4d9ac54-a02f-438f-8a83-fd67a3d475e6.png",
+    "asset": "fragile_crate_v1.png"
+  },
+  "approval": "Rejected by user on 2026-11-03. Whole work not yet user-accepted; generated art revision deferred to a later conversation.",
+  "heavy": {
+    "prompt": "Use case: game-asset. Make ONE independent transparent-background 2D game enemy sprite, not a scene or mockup. The existing enemy is a simple perfectly circular heavy armored ball, seen from directly overhead/orthographic, with one wide horizontal armored band across its middle. Preserve that circular silhouette. Neutral pale gray flat-painted sci-fi armor, dark charcoal outer contour, 3 to 5 large broad bevel planes, simple corner seams, subtle soft cool highlights, matte material. Match a restrained dark-green minimalist sci-fi game with thin walls and cute blue fish player; this is a mechanical obstacle/enemy, not a new humanoid character. No eyes, face, limbs, weapons or extra appendages. No photoreal metal, chrome, bloom, neon, glow, fire, dust, cast shadow, floor, background, perspective depth or tilt. Compact round silhouette occupying 88% of square canvas, complete uncropped edges, centered. Bold clean filled panels readable when reduced to only 60 logical pixels diameter. Leave center uncluttered for game-rendered HP numeral, but do NOT draw any numbers, letters, icons or UI. Monochrome neutral gray so runtime green/yellow/purple HP tint can be applied. Output PNG with actual alpha transparency, opaque body and clean transparent exterior.",
+    "source": "C:/Users/Ziran/.codex/generated_images/01a19d16-c970-7f03-b20e-4a465d088aae/exec-ad3a5d20-ed34-4113-b326-bf2103914617.png",
+    "asset": "heavy_shell_v1.png",
+    "source_size": [
+      1254,
+      1254
+    ],
+    "source_region": [
+      36,
+      56,
+      1175,
+      1172
+    ],
+    "logical_draw_size": [
+      62,
+      62
+    ],
+    "armor_value_gain": 1.2,
+    "import_limit": 256,
+    "reuse": "Existing reused armor remains in current package as a rejected art candidate pending later revision; not user-approved final art."
+  },
+  "turret": {
+    "prompt": "Use case: game-asset. Make ONE independent transparent-background 2D game enemy housing sprite, not a scene or mockup. Existing enemy silhouette is a simple equilateral triangular turret base pointing straight UP, viewed directly overhead in flat orthographic 2D. Preserve that upright triangular silhouette, slightly rounded clipped corners, broad solid filled body, a small central circular pivot mount, NO protruding barrel (the game will draw a movable barrel separately). Neutral pale gray matte painted sci-fi armor with dark charcoal contour and 3 to 5 large broad bevel panels and minimal seams. Restrained minimalist dark-green sci-fi game style, readable at 48 logical pixels high. No new character design, no face, eyes, limbs, extra weapons, wheels or appendages. No photorealistic metal, chrome, detailed tiny greebles, bloom, neon, fire, smoke, cast shadow, floor, perspective, tilt, text, numbers, symbols or UI. Centered complete triangle taking about 88% of square canvas; no clipping, no detached parts. Leave a clean central area where the game can overlay its HP numeral. Monochrome neutral gray for runtime green/yellow/purple HP tint. Actual alpha transparent background; body should be opaque with crisp antialiased edges.",
+    "source": "C:/Users/Ziran/.codex/generated_images/01a19d16-c970-7f03-b20e-4a465d088aae/exec-6b1901b8-a275-4136-9ef7-9aadcf584df8.png",
+    "asset": "turret_base_v1.png",
+    "source_size": [
+      1254,
+      1254
+    ],
+    "source_region": [
+      36,
+      113,
+      1179,
+      1018
+    ],
+    "logical_draw_size": [
+      48,
+      48
+    ],
+    "armor_value_gain": 1.2,
+    "import_limit": 256
+  },
+  "crop_note": "Raw source regions are scaled by actual imported texture size/1254; never use raw PNG pixels directly after size_limit import.",
+  "user_feedback": {
+    "recorded_at": "2026-11-03T11:27:48.305663+08:00",
+    "work_acceptance": "not_yet_accepted",
+    "generated_art": "rejected",
+    "followup": "revise in a later conversation; no art changes in this cleanup"
+  }
+}

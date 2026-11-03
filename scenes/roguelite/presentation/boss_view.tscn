@@ -1,0 +1,39 @@
+[gd_scene load_steps=5 format=3]
+[ext_resource type="Script" path="res://scripts/roguelite/presentation/boss_view.gd" id="1"]
+[sub_resource type="SystemFont" id="Font"]
+font_names = PackedStringArray("Microsoft YaHei","PingFang SC","Noto Sans CJK SC")
+[sub_resource type="StyleBoxFlat" id="LifeBackground"]
+bg_color = Color(0.05,0.12,0.14,1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_left = 2
+corner_radius_bottom_right = 2
+[sub_resource type="StyleBoxFlat" id="LifeFill"]
+bg_color = Color(0.82,0.65,0.3,1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_left = 2
+corner_radius_bottom_right = 2
+[node name="Presentation" type="Node2D"]
+texture_filter = 4
+script = ExtResource("1")
+[node name="Status" type="CanvasLayer" parent="."]
+layer = 2
+[node name="Label" type="Label" parent="Status"]
+offset_left = 475.0
+offset_top = 14.0
+offset_right = 795.0
+offset_bottom = 76.0
+mouse_filter = 2
+horizontal_alignment = 1
+theme_override_fonts/font = SubResource("Font")
+theme_override_font_sizes/font_size = 20
+[node name="Life" type="ProgressBar" parent="Status"]
+offset_left = 505.0
+offset_top = 85.0
+offset_right = 765.0
+offset_bottom = 94.0
+mouse_filter = 2
+show_percentage = false
+theme_override_styles/background = SubResource("LifeBackground")
+theme_override_styles/fill = SubResource("LifeFill")

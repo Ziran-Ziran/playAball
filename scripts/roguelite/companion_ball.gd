@@ -13,6 +13,8 @@ var slot: int = 0
 var slot_count: int = 1
 var active_left: float = 0.0
 var low_speed_time: float = 0.0
+var arena_bounds: Rect2 = Rect2(40, 125, 1200, 553)
+var map_provider: Node
 const DEFAULT_THEME: DemoTheme = preload("res://resources/roguelite/themes/fat_fish.tres")
 @export var theme: DemoTheme = DEFAULT_THEME
 @onready var sensor: Area2D = $Sensor
@@ -53,7 +55,8 @@ func _physics_process(delta: float) -> void:
 	else:
 		if follow_enabled:
 			speed_limit = return_speed
-			var target: Vector2 = (player.global_position + follow_offset()).clamp(Vector2(80, 165), Vector2(1200, 640))
+			var safe_bounds: Rect2 = arena_bounds.grow(-30.0)
+			var target: Vector2 = (player.global_position + follow_offset()).clamp(safe_bounds.position, safe_bounds.end)
 			var difference: Vector2 = target - global_position
 			# 升级后的引导仍使用物理力，不以穿墙或瞬移解决被挡住的问题。
 			apply_central_force((difference * 9.0 - linear_velocity * 5.0).limit_length(return_force))
@@ -63,15 +66,23 @@ func _physics_process(delta: float) -> void:
 			if body is DemoBody and body != self:
 				if combat.activate(body, self):
 					break
-	if global_position.y > 820 or global_position.y < -100 or global_position.x < -100 or global_position.x > 1380:
+	if not arena_bounds.grow(100.0).has_point(global_position):
 		end_attack()
-		reset_body(player.global_position + Vector2(0, -80))
+		var preferred: Vector2 = player.global_position + Vector2(0, -80)
+		if is_instance_valid(map_provider):
+			var exclusions: Array[RID] = [get_rid()]
+			preferred = map_provider.find_safe_point(preferred, 14.0, exclusions)
+		if preferred.is_finite():
+			if is_instance_valid(map_provider):
+				map_provider.recovery_requested.emit(self, global_position, preferred)
+			reset_body(preferred)
 	queue_redraw()
 
 func follow_offset() -> Vector2:
 	return Vector2.from_angle(-PI / 2.0 + TAU * slot / maxi(1, slot_count)) * follow_distance
 
 func _draw() -> void:
+	if has_node("Presentation") and $Presentation.visible: return
 	var palette: DemoTheme = theme if theme != null else DEFAULT_THEME
 	var color: Color = palette.active_color if mode == Mode.ACTIVE else palette.companion_color
 	# 尾迹始终沿速度反向，脸保持正向，避免旋转表情干扰主球辨识。
@@ -90,4 +101,8 @@ func _draw() -> void:
 	if mode == Mode.RETURNING:
 		draw_line(Vector2(-4, 8), Vector2(0, 11), palette.outline_color, 1.5, true)
 		draw_line(Vector2(0, 11), Vector2(4, 8), palette.outline_color, 1.5, true)
+
+func presentation_snapshot() -> Dictionary:
+	var palette: DemoTheme = theme if theme != null else DEFAULT_THEME
+	return {"mode":int(mode),"velocity":linear_velocity,"active_left":active_left,"active_duration":active_duration,"theme_id":palette.id}
 

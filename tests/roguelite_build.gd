@@ -35,10 +35,11 @@ func run() -> void:
 	var build = load("res://scripts/roguelite/run_build.gd").new()
 	var rng := RandomNumberGenerator.new()
 	rng.seed = 42
-	check(build.companion_count() == 1 and is_equal_approx(build.launch_cooldown(), 2.2), "New run starts with one companion and base cooldown")
+	check(build.companion_count() == 0 and is_equal_approx(build.launch_cooldown(), 2.2), "New run starts with zero companions and base cooldown")
 	for index in 3:
 		check(build.choose("companion"), "Companion rank accepted")
-	check(build.companion_count() == 4 and not build.choose("companion"), "Companion cap is four")
+		check(build.companion_count() == index + 1, "Each outsource rank adds exactly one companion")
+	check(build.companion_count() == 3 and not build.choose("companion"), "Companion cap is three")
 	for index in 4:
 		check(build.choose("cooldown"), "Cooldown accepts four ranks")
 	check(is_equal_approx(build.launch_cooldown(), 1.2) and not build.choose("cooldown"), "Cooldown cap is 1.2 seconds")
@@ -49,7 +50,7 @@ func run() -> void:
 		check(build.choose(id) and not build.choose(id), "One-rank upgrade cap: " + id)
 	check(build.choose("heal") and build.choose("heal") and not build.choose("unknown"), "Heal repeats and unknown IDs are rejected")
 	build.reset_build()
-	check(build.levels.is_empty() and build.companion_count() == 1, "Restart clears all build ranks")
+	check(build.levels.is_empty() and build.companion_count() == 0, "Restart clears all build ranks")
 	for index in 30:
 		var cards = build.candidates(rng, true, 5, 5)
 		var ids: Array[String] = []
@@ -79,7 +80,16 @@ func new_reward_rules(build, rng: RandomNumberGenerator) -> void:
 		check(known_categories.has(upgrade.category) and upgrade.weight > 0.0, "Resource has category and weight: " + upgrade.id)
 	for index in 60:
 		var ids: Array[String] = card_ids(build.candidates(rng, false, 5, 5))
-		check(not ids.has("relay") and not ids.has("heal") and not ids.has("vigor"), "Base eligibility excludes relay, full-health heal and fallback")
+		check(not ids.has("relay") and not ids.has("follow") and not ids.has("explosion") and not ids.has("heal") and not ids.has("vigor"), "Zero companion eligibility excludes dependent cards, full-health heal and fallback")
+	build.choose("companion")
+	var saw_follow: bool = false
+	var saw_explosion: bool = false
+	for index in 60:
+		var single_ids: Array[String] = card_ids(build.candidates(rng, false, 5, 5))
+		saw_follow = saw_follow or single_ids.has("follow")
+		saw_explosion = saw_explosion or single_ids.has("explosion")
+		check(not single_ids.has("relay"), "One companion cannot draw relay")
+	check(saw_follow and saw_explosion, "One companion unlocks follow and explosion")
 	build.choose("companion")
 	var saw_relay: bool = false
 	var saw_heal: bool = false

@@ -5,8 +5,8 @@
 [resource]
 script = ExtResource("1")
 id = "glide"
-title = "轻盈滑行"
-description = "每级自身线性阻尼减少 25%、接触摩擦减少 30%。"
+title = "逍遥游"
+description = "每级自身阻尼乘 0.75、接触摩擦乘 0.70，最多 3 级。"
 max_level = 3
 category = "机动"
 weight = 1

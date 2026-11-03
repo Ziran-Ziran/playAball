@@ -1,12 +1,27 @@
-# 玩个球
+# 玩个球 / playAball
 
-## 当前集成入口（2026-11-02）
+**验收状态：用户尚未验收本轮工作；当前生图明确不认可，留待后续对话修改。自动测试通过不代表用户认可。** 当前功能表及Buff效果见[项目概况](docs/PROJECT.md)。
 
-F5进入肥鱼主菜单，开始后运行完整五波/成长/商店事件/首领/结算游戏。独立开发入口：F6运行`gameplay_lab.tscn`或`tuning_run.tscn`；正式游戏不含调参面板。旧实验仍可打开`scenes/main.tscn`后F6。下文旧F5描述属于历史入口；以本节为准。
+PC 端俯视 2D 物理碰撞游戏。空白处拖动发射主球，通过撞击、伙伴接力和击杀奖励成长，经过三张普通地图与独立首领地图。
 
-详见[集成教程026](docs/tutorials/026-ui-game-integration.md)。
+## 当前正式入口
 
-一款 PC 端 2D 物理碰撞游戏。当前 Demo 是俯视平面、零环境重力的碰撞拆迁肉鸽：主动发射主球，撞出小兵接力清场，击杀领奖成长。旧横版解谜实验原型继续保留；完整规则见 [设计方案](docs/ideas/COLLISION_ROGUELITE_DEMO.md)。
+在 Godot **4.7.1 stable 标准版**打开本目录的project.godot，F5进入肥鱼主菜单；开始后是零伙伴开局的完整流程。波1–2/3–4/5/6分别使用四张地图，保留成长、商店、补给、胜负、重开与回菜单。普通Windows包的当前版本与验证边界见[本地交付记录](docs/playtest/OVERNIGHT_DELIVERY.md)，解压后直接运行PlayABall.exe，不需安装Godot。
+
+在战斗空白处按住左键，朝目标反方向拖动，松开发射；运动中可再次发射，右键取消，Esc暂停。基础冷却2.2秒，球外环显示恢复；青色双短弧只表示真实返回一格。普通包不含F1调参、实验室或评估脚本。
+
+本轮翻转板轻碰/高速旋转修复、38套功能复验、71项挡板及98项成长接线证据见[功能复验记录](docs/reviews/2026-11-03-function-verification.md)；原理和参数见[教程033](docs/tutorials/033-paddle-response-and-feature-checks.md)。
+
+## 修改与验证
+
+- [项目概况](docs/PROJECT.md)、[最新状态](docs/STATUS.md)、[文件用途目录](docs/FILE_MAP.md)。
+- [Buff与零伙伴](docs/tutorials/027-zero-companion-buffs.md)、[物理机关](docs/tutorials/028-map-mechanisms-portals.md)、[四图整局](docs/tutorials/029-four-map-run.md)。
+- [数值评估](docs/tutorials/030-balance-evaluation.md)、[美术与反馈参数](docs/tutorials/031-fish-art-feedback.md)、[普通包验证](docs/tutorials/032-ordinary-export-validation.md)。
+- 使用tools/verify.ps1并通过-GodotExe指定本机固定版本的实际路径。不要沿用另一台电脑的路径；[AGENTS](AGENTS.md)和[Git前最终Review](docs/REVIEW.md)说明接手及授权边界。
+
+708次数值执行没有产生通过全部门槛的新默认值；失败候选未混入普通包。正常AI九局均在第三波死亡，没有人类/自然完整通关结论。已生成的鱼、箱子与装甲在实际游戏尺寸接入，内部保留版本仍需用户判断审美和手感；整夜批次的原生窗口激活限制在后续功能复验时未再出现，现已实测开始、发射、暂停和回菜单；未覆盖自然整局通关。
+
+以下保留旧实验与开发阶段记录；其中旧F5、一个伙伴、几何占位和旧包入口的描述不代表当前正式入口。
 
 ## 开始玩旧实验原型
 
@@ -65,3 +80,5 @@ Windows导出方法见[教程019](docs/tutorials/019-windows-export.md)，包内
 策划实时手感入口：`scenes/roguelite/tuning_run.tscn`，F1展开9项物理滑杆，同局即时应用、对照/恢复/保存参数。导出加`-LiveTuning`即可交给无需Godot的策划，见[教程024](docs/tutorials/024-live-feel-tuning.md)。策略/成长使用逐局反馈，手感直接现场调。
 
 完整调参台已扩展到引擎/求解器/全部工程设置、刚体/材质/形状、各玩法actor和资源，支持分类、中文/原名搜索与分页，默认从F1进入。完整覆盖与重启配置见[教程025](docs/tutorials/025-full-engine-tuning.md)。
+
+本轮整夜本地交付检查点见[普通包与证据说明](docs/playtest/OVERNIGHT_DELIVERY.md)，实际最新验证和未验项以[STATUS](docs/STATUS.md)顶部为准。普通包无F1调参入口。

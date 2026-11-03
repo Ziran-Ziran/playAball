@@ -5,8 +5,8 @@
 [resource]
 script = ExtResource("1")
 id = "companion"
-title = "新同伴"
-description = "新增一颗小兵，最多四颗。"
+title = "外包"
+description = "开局无伙伴；每级增加一个外包伙伴，最多 3 个。伙伴受撞后获得临时攻击资格。"
 max_level = 3
 category = "伙伴"
 weight = 1.2

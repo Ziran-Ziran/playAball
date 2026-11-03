@@ -25,6 +25,8 @@ func _draw() -> void:
 	draw_texture_rect_region(art, Rect2(1240,125,24,553), Rect2(1610,220,28,580))
 	for key in ["LeftRamp", "RightRamp"]:
 		var ramp := get_parent().get_node(key) as Node2D
+		if ramp.get_node("Shape").disabled:
+			continue
 		draw_set_transform(ramp.position, ramp.rotation)
 		draw_texture_rect_region(art, Rect2(-100,-11,200,22), Rect2(90,160,1480,28))
 	draw_set_transform(Vector2.ZERO)

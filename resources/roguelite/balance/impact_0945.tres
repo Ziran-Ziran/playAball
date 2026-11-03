@@ -1,0 +1,7 @@
+[gd_resource type="Resource" load_steps=2 format=3]
+[ext_resource type="Script" path="res://scripts/roguelite/evaluation/balance_profile.gd" id="1"]
+[resource]
+script = ExtResource("1")
+profile_id = "impact_0945"
+group = "launch_impulse"
+impulse = 945.0

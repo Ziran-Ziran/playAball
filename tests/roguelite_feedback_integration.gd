@@ -28,6 +28,18 @@ func run() -> void:
  arena.feedback.play_impact(Vector2(600, 350), 700.0)
  arena.feedback.play_cue(Vector2(600, 350))
  check(heard.has(&"light") and heard.has(&"heavy") and heard.has(&"rice"), "Real feedback routes light/heavy/rice")
+ arena.feedback.reset_feedback()
+ arena.feedback.play_contact(Vector2(500,350), 1200.0)
+ check(arena.feedback._rings.back().kind == &"contact" and arena.feedback._shake <= 0.8, "Fast wall contact stays visually modest")
+ arena.combat.relay.emit(Vector2(500,350),2)
+ check(arena.feedback._rings.back().kind == &"relay", "Actual relay signal routes a distinct cue")
+ arena.combat.explosion_triggered.emit(Vector2(500,350),80.0)
+ check(arena.feedback._rings.back().kind == &"explosion" and arena.feedback._rings.back().radius == 80.0, "Explosion outline consumes true gameplay radius")
+ for index in 40: arena.feedback.play_contact(Vector2(500,350),1200.0)
+ var particle_nodes: int = 0
+ for child in arena.feedback.get_children():
+  if child is CPUParticles2D: particle_nodes += 1
+ check(particle_nodes <= 18, "Dense collision bursts respect the particle budget")
  arena.director.health.hurt()
  check(heard.has(&"hurt"), "Health change routes hurt cue")
  check(arena.get_node("RunHUD").health_bar.value == arena.director.health.hp, "Integrated health bar follows actual damage")
@@ -46,7 +58,12 @@ func run() -> void:
  await process_frame
  check(heard.has(&"victory"), "Victory emits sound even as battle pauses")
  check(audio.active_voice_count() > 0, "Pause transition preserves result cue tail")
+ var enemy = load("res://scenes/roguelite/enemy.tscn").instantiate()
+ arena.director.enemies.add_child(enemy)
+ enemy.hurt(1)
+ check(not get_nodes_in_group("demo_combat_floats").is_empty(), "Real dying enemy leaves short presentation tails")
  arena.director.restart()
+ check(get_nodes_in_group("demo_combat_floats").is_empty(), "Restart clears old-run damage/death tails immediately")
  check(audio.active_voice_count() == 0, "Restart clears prior result and battle voices")
  check(arena.get_node("RunHUD").health_bar.value == arena.director.health.max_hp, "Restart restores full panel")
  arena.queue_free()

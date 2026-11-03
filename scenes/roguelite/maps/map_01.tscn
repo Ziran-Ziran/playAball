@@ -1,0 +1,24 @@
+[gd_scene load_steps=8 format=3]
+[ext_resource type="Script" path="res://scripts/roguelite/maps/map_layout.gd" id="layout"]
+[ext_resource type="Resource" path="res://resources/roguelite/maps/map_01.tres" id="data"]
+[ext_resource type="PackedScene" path="res://scenes/roguelite/mechanisms/pivot_paddle.tscn" id="pivot"]
+[ext_resource type="PackedScene" path="res://scenes/roguelite/mechanisms/moving_barrier.tscn" id="moving"]
+[ext_resource type="PackedScene" path="res://scenes/roguelite/mechanisms/spike_strip.tscn" id="spikes"]
+[ext_resource type="PackedScene" path="res://scenes/roguelite/mechanisms/portal_pair.tscn" id="portals"]
+[node name="Map01" type="Node2D"]
+process_mode = 1
+script = ExtResource("layout")
+definition = ExtResource("data")
+[node name="LeftPaddle" parent="." instance=ExtResource("pivot")]
+position = Vector2(300, 370)
+initial_angle = 0.45
+[node name="RightPaddle" parent="." instance=ExtResource("pivot")]
+position = Vector2(980, 370)
+initial_angle = -0.45
+[node name="UpperPaddle" parent="." instance=ExtResource("pivot")]
+position = Vector2(640, 240)
+angle_limit = 1.1
+[node name="EccentricPaddle" parent="." instance=ExtResource("pivot")]
+position = Vector2(640, 490)
+pivot_offset = Vector2(55,0)
+angle_limit = 1.2

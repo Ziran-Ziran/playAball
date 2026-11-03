@@ -1,0 +1,32 @@
+{
+  "version": "transfer_rules_v1",
+  "locked_before_candidates": true,
+  "target": "Partner growth has inconsistent clear-time benefit; test only receiver transfer retention, not enemies or hazards.",
+  "candidates": [0.75,0.95],
+  "baseline": 0.85,
+  "scenarios": ["single","crowd","corner","reverse","relay","mechanisms"],
+  "strategies": ["nearest","safe","relay"],
+  "train_seeds": [42,20261103],
+  "holdout_seeds": [123456],
+  "build_ids": ["companion","companion","follow","relay"],
+  "preselected_fixture_build_not_natural_rewards": true,
+  "physics_hz": 120,
+  "seconds": 20,
+  "time_scale": 1,
+  "selection": {
+    "required_mean_paired_clear_time_improvement": 0.05,
+    "required_relay_partner_direct_damage_per_threat_second_improvement": 0.1,
+    "max_worst_paired_clear_time_regression": 0.2,
+    "max_total_hp_loss_increase": 0,
+    "must_validate_holdout_and_natural_three_routes": true
+  },
+  "hard_gates": {
+    "physics_failures": 0,
+    "maximum_generation": 3,
+    "transfer_impulse_cap": 1050,
+    "relay_bonus_cap": 262.5,
+    "source_recoil_cap": 120,
+    "enemies_hazards_damage_cooldown_unchanged": true
+  },
+  "stop": "At most two rounds without improvement; analyze or move to another observed shortfall. Never publish a combined score or human approval."
+}

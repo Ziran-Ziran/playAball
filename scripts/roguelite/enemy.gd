@@ -101,6 +101,7 @@ func make_projectile(chain: int) -> void:
 func hurt(amount: int) -> void:
 	if dead or amount <= 0:
 		return
+	var effective_damage: int = mini(hp, amount)
 	hp = maxi(0, hp - amount)
 	stagger_left = maxf(0.0, hit_stagger)
 	# 有效命中打断敌人的预警/冲撞，给主动撞击一个防守用途。
@@ -108,7 +109,7 @@ func hurt(amount: int) -> void:
 	attack_active = false
 	charge_left = 0.0
 	attack_left = attack_cooldown
-	_notify_presentation(&"hurt", {"amount": amount, "hp": hp})
+	_notify_presentation(&"hurt", {"amount": amount, "effective_damage": effective_damage, "hp": hp})
 	if hp == 0:
 		dead = true
 		set_deferred("collision_layer", 0)

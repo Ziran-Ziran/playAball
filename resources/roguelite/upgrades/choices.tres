@@ -6,7 +6,7 @@
 script = ExtResource("1")
 id = "choices"
 title = "运筹"
-description = "之后的奖励从三选一变为四选一。"
+description = "后续成长从三选一变为四选一。"
 max_level = 1
 category = "节奏"
 weight = 0.8

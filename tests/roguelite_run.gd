@@ -33,7 +33,7 @@ func run() -> void:
 	director.set_process(false)
 	director.enable_stage_breaks = false
 	check(director.wave == 1 and director.health.hp == 5, "Run starts at wave one with full health")
-	check(director.companions.members.size() == 1 and not director.companions.follow_enabled, "Base run starts with one non-following companion")
+	check(director.companions.members.size() == 0 and not director.companions.follow_enabled, "Base run starts without companions")
 	check(director.pending.size() > 0 and director.enemies.get_child_count() == 0, "Spawn warning precedes enemy creation")
 	player_position_guard(director)
 	director.advance(0.81)
@@ -58,7 +58,7 @@ func run() -> void:
 	var choices: Array = director.current_choices
 	check(choices.any(func(choice): return choice.id == "companion"), "First upgrade guarantees new companion choice")
 	director.choose_upgrade("companion")
-	check(not paused and director.wave == 2 and director.companions.members.size() == 2, "Choosing upgrade resumes current wave and applies new companion")
+	check(not paused and director.wave == 2 and director.companions.members.size() == 1, "Choosing upgrade resumes current wave and applies new companion")
 	director.set_paused(true)
 	var time_before: float = director.wave_elapsed
 	director.advance(10.0)
@@ -69,7 +69,7 @@ func run() -> void:
 	check(director.state == director.State.DEFEAT and arena.launcher.blocked, "Zero health ends run once and blocks launch")
 	director.restart()
 	check(director.health.hp == 5 and director.wave == 1 and director.build.levels.is_empty(), "Restart resets health, wave and build")
-	check(director.companions.members.size() == 1 and director.enemies.get_child_count() == 0, "Restart removes old combatants and companions")
+	check(director.companions.members.size() == 0 and director.enemies.get_child_count() == 0, "Restart removes old combatants and companions")
 	# 跳到首领仅用于复现，不伪称真实玩家通关。
 	director.debug_wave(6)
 	check(director.boss != null, "Dedicated boss encounter remains available")
@@ -79,7 +79,7 @@ func run() -> void:
 	for attempt in 10:
 		director.restart()
 		await frames(2)
-	check(director.enemies.get_child_count() == 0 and director.hazards.get_child_count() == 0 and director.companions.members.size() == 1, "Ten restarts leave no growing combatant or hazard population")
+	check(director.enemies.get_child_count() == 0 and director.hazards.get_child_count() == 0 and director.companions.members.size() == 0, "Ten restarts leave no growing combatant or hazard population")
 	for number in range(1, 6):
 		director.wave_elapsed = director.spawn_duration + 1.0
 		director.pending.clear()
@@ -111,6 +111,22 @@ func run() -> void:
 	director.restart()
 	check(not director.rice.stored_bonus and director.rice.bound_chain == 0 and director.rice.rice == null, "Restart clears rice, bonus and bound launch")
 	target.queue_free()
+	# 完全占用场地时必须等待，而不是把新增伙伴塞进墙或主球。
+	var wall := StaticBody2D.new()
+	wall.collision_layer = 1
+	var wall_shape := CollisionShape2D.new()
+	var rectangle := RectangleShape2D.new()
+	rectangle.size = Vector2(1280, 720)
+	wall_shape.shape = rectangle
+	wall.add_child(wall_shape)
+	wall.position = Vector2(640, 360)
+	arena.add_child(wall)
+	await frames(2)
+	director.companions.set_count(1)
+	check(director.companions.members.is_empty(), "Blocked companion spawn waits without creating an overlapping body")
+	wall.queue_free()
+	await frames(24)
+	check(director.companions.members.size() == 1, "Pending companion appears after a safe space becomes available")
 	arena.queue_free()
 	await process_frame
 	check(not paused and Engine.time_scale == 1.0, "Leaving full run restores pause and time")
