@@ -1,0 +1,41 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/menu_character_view.gd" id="1_view"]
+[ext_resource type="Script" path="res://scripts/ui/menu_character.gd" id="2_actor"]
+[ext_resource type="Texture2D" path="res://assets/ui/fat_fish_menu_character.png" id="3_fallback"]
+
+[node name="MenuCharacter" type="Control"]
+layout_mode = 0
+offset_right = 680.0
+offset_bottom = 720.0
+mouse_filter = 2
+script = ExtResource("1_view")
+
+[node name="Stage" type="SubViewport" parent="."]
+transparent_bg = true
+size = Vector2i(1440,1440)
+size_2d_override = Vector2i(720,720)
+size_2d_override_stretch = true
+render_target_update_mode = 4
+
+[node name="Character" type="Node2D" parent="Stage"]
+script = ExtResource("2_actor")
+
+[node name="Portrait" type="TextureRect" parent="."]
+layout_mode = 0
+mouse_filter = 2
+texture_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Fallback" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("3_fallback")
+expand_mode = 1
+stretch_mode = 5

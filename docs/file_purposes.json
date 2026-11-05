@@ -247,9 +247,9 @@
     "docs/art/fat_fish_menu_preview.png": "1280×720肥鱼主题分层菜单截图，新标题/背景/按钮组合待评价。",
     "docs/art/fat_fish_menu_preview_v2.png": "完整生图三按钮替换后的肥鱼菜单截图，无后加图标/文字覆盖。",
     "docs/tutorials/024-fat-fish-menu.md": "肥鱼菜单独立生图来源、图层/参数、浏览器验证及B接线边界教程。",
-    "scripts/ui/main_menu.gd": "完整贴图主菜单、开始/退出/音量设置，导航到完整游戏。",
+    "scripts/ui/main_menu.gd": "正式开始/设置/退出导航，挂接Live2D菜单角色与设置遮挡、减少动态选项；不改变玩法",
     "scripts/ui/game.gd": "正式完整游戏外壳，隐藏调试控件，显示正式进度与暂停返回。",
-    "scenes/ui/main_menu.tscn": "F5正式主菜单入口。",
+    "scenes/ui/main_menu.tscn": "F5正式开始界面，挂可编辑MenuCharacter表现组件",
     "scenes/ui/game.tscn": "继承完整run的发布场景，无调参节点。",
     "tests/ui_integration.gd": "主菜单、开发隔离、真实血量、四卡和暂停重开的接线回归。",
     "docs/tutorials/026-ui-game-integration.md": "A/B快照汇合、入口分离、UI运行接入、调参保留与验证教程。",
@@ -449,6 +449,17 @@
     "tests/roguelite_feature_acceptance.gd": "逐张合法卡池到真实按钮选择的正式构筑接线与物理效果验证",
     "tests/roguelite_feature_acceptance.gd.uid": "逐项成长功能验收脚本UID",
     "docs/tutorials/033-paddle-response-and-feature-checks.md": "翻板限速限位原理、检查器调参与逐项功能验证教程",
-    "docs/reviews/2026-11-03-function-verification.md": "本轮完整功能实测清单、翻板数值对照、独立审查与Git边界证据"
+    "docs/reviews/2026-11-03-function-verification.md": "本轮完整功能实测清单、翻板数值对照、独立审查与Git边界证据",
+    "scenes/ui/menu_character.tscn": "菜单角色区域、1440透明SubViewport、Portrait与无本机资源时的原PNG回退",
+    "scripts/ui/menu_character.gd": "本机Native角色按需加载、私有Shader/纹理缓存别名、头眼/身体输入、眨眼与短回应；不读写玩法",
+    "scripts/ui/menu_character.gd.uid": "同名GDScript的稳定资源UID，随脚本保留",
+    "scripts/ui/menu_character_view.gd": "菜单与逻辑画布坐标换算、真实alpha点击/抚摸分类、GUI及窗口焦点阻断",
+    "scripts/ui/menu_character_view.gd.uid": "同名GDScript的稳定资源UID，随脚本保留",
+    "tests/menu_character_integration.gd": "正式菜单真实引擎输入、头眼/点击/遮挡/焦点/释放与游戏返回、缩放和回退检查",
+    "tests/menu_character_integration.gd.uid": "同名GDScript的稳定资源UID，随脚本保留",
+    "tests/test_prepare_menu_live2d.py": "本机菜单资源准备的幂等、内容保护、缺来源/复制失败及路径越界回归；不执行模型或Native库",
+    "tools/prepare_menu_live2d.py": "只从已有本机夹具准备.local私有模型/已适配桥接/Shader和图集缓存，不下载或打发行包",
+    "docs/tutorials/040-live2d-start-menu.md": "F5菜单角色节点/输入/私有资源加载、检查器调参、回归证据与发布边界教程",
+    "docs/reviews/2026-11-05-live2d-start-menu.md": "正式菜单最终自查、独立Review、问题修复与测试/发布边界记录"
   }
 }

@@ -6,6 +6,8 @@ PC 端俯视 2D 物理碰撞游戏。空白处拖动发射主球，通过撞击�
 
 ## 当前正式入口
 
+2026-11-05：当前设备的F5开始界面已接入成年DeepSeek-chan Live2D，支持头眼分速注视、摸头/脸颊点击、连点回应与设置/失焦阻断。原开始/设置/退出和游戏流程保留。运行与调参见[教程040](docs/tutorials/040-live2d-start-menu.md)；第三方模型/Native资源仅在本机.local，未准备资源的checkout或普通包使用原静态角色，不代表取得发行授权。手臂自然度与完整L0内存问题尚未解决，3D封存。
+
 在 Godot **4.7.1 stable 标准版**打开本目录的project.godot，F5进入肥鱼主菜单；开始后是零伙伴开局的完整流程。波1–2/3–4/5/6分别使用四张地图，保留成长、商店、补给、胜负、重开与回菜单。普通Windows包的当前版本与验证边界见[本地交付记录](docs/playtest/OVERNIGHT_DELIVERY.md)，解压后直接运行PlayABall.exe，不需安装Godot。
 
 在战斗空白处按住左键，朝目标反方向拖动，松开发射；运动中可再次发射，右键取消，Esc暂停。基础冷却2.2秒，球外环显示恢复；青色双短弧只表示真实返回一格。普通包不含F1调参、实验室或评估脚本。
@@ -43,7 +45,7 @@ PC 端俯视 2D 物理碰撞游戏。空白处拖动发射主球，通过撞击�
 - [原型实现教程](docs/tutorials/001-prototype.md)。
 - [目录维护与 Review 教程](docs/tutorials/002-project-map-and-review.md)。
 
-工程只依赖 Godot 内置功能；MCP 是可选的 Agent 辅助工具。没有 MCP 也能运行、修改和验证游戏。
+基础游戏只依赖Godot内置功能；本机可选Live2D菜单通过已有Native桥接加载，缺资源时静态回退不影响游戏。MCP是可选的Agent辅助工具，没有MCP也能运行、修改和验证游戏。
 
 新玩法入口为 `scenes/roguelite/arena.tscn`，在编辑器打开后按 F6；已迁移为俯视零重力 P0～P2 三靶场，可在窗口全屏空白处拖动发射，全程正常速度，待真实玩家复验。F5 的旧实验入口保持原样。操作与调参见 [教程 003](docs/tutorials/003-collision-roguelite.md)，后续按 [分阶段计划](docs/plans/003-collision-roguelite.md) 推进。
 

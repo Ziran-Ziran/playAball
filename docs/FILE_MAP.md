@@ -103,6 +103,7 @@ playAball/
 │   │   ├── 2026-11-01-gameplay-lab.md  # 本批S1表现接口和B线玩法实验室的最终Review范围、独立审查、问题处理、验证证据、未测项与授权边界。
 │   │   ├── 2026-11-02-ui-integration.md  # A/B快照集成与UI接线的验证/独立审查证据及未测项。
 │   │   ├── 2026-11-03-function-verification.md  # 本轮完整功能实测清单、翻板数值对照、独立审查与Git边界证据
+│   │   ├── 2026-11-05-live2d-start-menu.md  # 正式菜单最终自查、独立Review、问题修复与测试/发布边界记录
 │   │   └── collision-demo-final.md  # 当前Demo最终独立Review、首领真实接触修复、验证与人工未测证据。
 │   ├── tutorials/  # 每个功能的实现原理和手动修改教程
 │   │   ├── 001-prototype.md  # 球发射、碰撞表现、机关、目标和手动调参的初始教程。
@@ -140,7 +141,8 @@ playAball/
 │   │   ├── 030-balance-evaluation.md  # 固定场景、策略、真实指标、提速验证、候选取舍与证据复现教程
 │   │   ├── 031-fish-art-feedback.md  # 位图接入、UV修复、事件反馈、四卡排版与实录边界教程
 │   │   ├── 032-ordinary-export-validation.md  # 普通包过滤、内嵌资源探针、标准发布模板限制与原生验证边界教程
-│   │   └── 033-paddle-response-and-feature-checks.md  # 翻板限速限位原理、检查器调参与逐项功能验证教程
+│   │   ├── 033-paddle-response-and-feature-checks.md  # 翻板限速限位原理、检查器调参与逐项功能验证教程
+│   │   └── 040-live2d-start-menu.md  # F5菜单角色节点/输入/私有资源加载、检查器调参、回归证据与发布边界教程
 │   ├── .gdignore  # 让 Godot 跳过文档目录的资源导入，避免把交接图当作游戏素材。
 │   ├── FILE_MAP.md  # 自动生成的项目文件树、每个文件的用途及主要调用关系。
 │   ├── PROJECT.md  # 已采纳的游戏目标、技术选择、原型范围与模块边界。
@@ -238,7 +240,8 @@ playAball/
 │   │   └── tuning_run.tscn  # 策划完整属性调参入口，继承正式整局，含全量目录与原快捷面板。
 │   ├── ui/  # 正式主菜单与完整战斗入口
 │   │   ├── game.tscn  # 继承完整run的发布场景，无调参节点。
-│   │   └── main_menu.tscn  # F5正式主菜单入口。
+│   │   ├── main_menu.tscn  # F5正式开始界面，挂可编辑MenuCharacter表现组件
+│   │   └── menu_character.tscn  # 菜单角色区域、1440透明SubViewport、Portrait与无本机资源时的原PNG回退
 │   ├── ball.tscn  # 可复用的球刚体、圆形碰撞形状与物理材质。
 │   ├── main.tscn  # 实验关卡的障碍、球、机关、目标、镜头和 HUD 节点布局。
 │   └── mechanism.tscn  # 可复用的区域机关入口，运行时按参数生成检测形状。
@@ -382,8 +385,12 @@ playAball/
 │   │   ├── health_cell.gdshader.uid  # 关联表现资源的稳定标识。
 │   │   ├── health_skin.gd  # 消费DemoHealthView真实状态，动态分格生命与逐格提亮，保留准确数字。
 │   │   ├── health_skin.gd.uid  # 关联表现资源的稳定标识。
-│   │   ├── main_menu.gd  # 完整贴图主菜单、开始/退出/音量设置，导航到完整游戏。
-│   │   └── main_menu.gd.uid  # 关联GDScript稳定资源标识。
+│   │   ├── main_menu.gd  # 正式开始/设置/退出导航，挂接Live2D菜单角色与设置遮挡、减少动态选项；不改变玩法
+│   │   ├── main_menu.gd.uid  # 关联GDScript稳定资源标识。
+│   │   ├── menu_character.gd  # 本机Native角色按需加载、私有Shader/纹理缓存别名、头眼/身体输入、眨眼与短回应；不读写玩法
+│   │   ├── menu_character.gd.uid  # 同名GDScript的稳定资源UID，随脚本保留
+│   │   ├── menu_character_view.gd  # 菜单与逻辑画布坐标换算、真实alpha点击/抚摸分类、GUI及窗口焦点阻断
+│   │   └── menu_character_view.gd.uid  # 同名GDScript的稳定资源UID，随脚本保留
 │   ├── ball.gd  # 控制球的停稳、冲量发射、刚体复位与真实接触事件。
 │   ├── ball.gd.uid  # 关联GDScript稳定资源标识。
 │   ├── impact_feedback.gd  # 共用亮环/震动/粒子；run音频路由独立调度，旧场景保留原声音接口。
@@ -393,6 +400,8 @@ playAball/
 │   ├── mechanism.gd  # 管理区域内的加速、粘滞或反向重力及离开后的恢复。
 │   └── mechanism.gd.uid  # 关联GDScript稳定资源标识。
 ├── tests/  # 无需测试插件的游戏行为检查
+│   ├── menu_character_integration.gd  # 正式菜单真实引擎输入、头眼/点击/遮挡/焦点/释放与游戏返回、缩放和回退检查
+│   ├── menu_character_integration.gd.uid  # 同名GDScript的稳定资源UID，随脚本保留
 │   ├── roguelite_actor_views.gd  # 伙伴/首领物理不受表现影响、真实事件与快照隔离回归
 │   ├── roguelite_actor_views.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
 │   ├── roguelite_audio.gd  # 音组变体、PCM余量、优先级预算、混音与生命周期调度回归。
@@ -467,6 +476,7 @@ playAball/
 │   ├── roguelite_theme.gd.uid  # 关联GDScript稳定资源标识。
 │   ├── smoke.gd  # 旧原型停稳、发射、真实接触点、机关、复位、鼠标与进球回归。
 │   ├── smoke.gd.uid  # 关联GDScript稳定资源标识。
+│   ├── test_prepare_menu_live2d.py  # 本机菜单资源准备的幂等、内容保护、缺来源/复制失败及路径越界回归；不执行模型或Native库
 │   ├── ui_integration.gd  # 主菜单、开发隔离、真实血量、四卡和暂停重开的接线回归。
 │   └── ui_integration.gd.uid  # 关联GDScript稳定资源标识。
 ├── tools/  # 开发辅助工具，不属于游戏玩法
@@ -476,6 +486,7 @@ playAball/
 │   ├── export_windows.ps1  # 固定引擎暂存导出普通/显式调参包，隔离内嵌包探针、指纹与说明zip
 │   ├── package_probe.gd  # 编辑器引擎读取实际EXE内嵌包，验证资源排除与正式菜单/输入/重开流程
 │   ├── package_probe.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
+│   ├── prepare_menu_live2d.py  # 只从已有本机夹具准备.local私有模型/已适配桥接/Shader和图集缓存，不下载或打发行包
 │   ├── project_map.gd  # 读取 Git 文件列表和用途清单，生成/检查项目文件目录。
 │   ├── project_map.gd.uid  # 关联GDScript稳定资源标识。
 │   ├── validate_natural_runs.ps1  # 逐个引擎进程跑真实卡池与正常AI完整局，记录自然死亡/胜利/截尾并拒绝错误日志
@@ -553,3 +564,14 @@ tests/roguelite_gameplay_lab.gd（固定发射/八类夹具/预设/日志边界�
 ```
 
 图中关系是人工维护的架构摘要，文件树由工具生成；改变模块关系时也要更新生成器中的摘要，并通过 Review。维护方法见 [教程 002](tutorials/002-project-map-and-review.md)。
+## 可选Live2D开始界面
+
+```text
+main_menu.tscn/.gd → menu_character.tscn（透明SubViewport/原PNG回退）
+  └─ menu_character_view.gd（GUI/焦点/alpha命中/鼠标坐标）
+       └─ menu_character.gd（头眼输入/原物理/短回应）
+            └─ .local/menu_character_runtime（已有Native资源，仅本机）
+tools/prepare_menu_live2d.py → 私有目录（不下载，不打发行包）
+```
+
+缺少资源或headless使用静态回退；菜单不写玩法，开始/返回仍走原流程。见[教程040](tutorials/040-live2d-start-menu.md)。

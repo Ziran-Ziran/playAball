@@ -1,8 +1,13 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=3 format=3]
 [ext_resource type="Script" path="res://scripts/ui/main_menu.gd" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/ui/menu_character.tscn" id="2_character"]
 [node name="MainMenu" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource("1")
+
+[node name="MenuCharacter" parent="." instance=ExtResource("2_character")]
+offset_left = 600.0
+offset_right = 1280.0
