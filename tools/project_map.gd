@@ -64,6 +64,7 @@ func _initialize() -> void:
 	content += "tests/roguelite_gameplay_lab.gd（固定发射/八类夹具/预设/日志边界）\n"
 	content += "```\n\n"
 	content += "图中关系是人工维护的架构摘要，文件树由工具生成；改变模块关系时也要更新生成器中的摘要，并通过 Review。维护方法见 [教程 002](tutorials/002-project-map-and-review.md)。\n"
+	content += "## 可选Live2D开始界面\n\n```text\nmain_menu.tscn/.gd → menu_character.tscn（透明SubViewport/原PNG回退）\n  └─ menu_character_view.gd（GUI/焦点/alpha命中/鼠标坐标）\n       └─ menu_character.gd（头眼输入/原物理/短回应）\n            └─ .local/menu_character_runtime（已有Native资源，仅本机）\ntools/prepare_menu_live2d.py → 私有目录（不下载，不打发行包）\n```\n\n缺少资源或headless使用静态回退；菜单不写玩法，开始/返回仍走原流程。见[教程040](tutorials/040-live2d-start-menu.md)。\n"
 	if arguments[0] == "--check":
 		if not FileAccess.file_exists(MAP_PATH) or FileAccess.get_file_as_string(MAP_PATH).replace("\r\n", "\n") != content:
 			_fail("FILE_MAP 已过期，请运行同一脚本 -- --write 后重新检查")

@@ -92,3 +92,10 @@ jobs:
           /tmp/godot/Godot_v4.7.1-stable_linux.x86_64 --headless --path . --script tests/ui_integration.gd 2>&1 | tee /tmp/ui-integration.log
           ! grep -E "^(SCRIPT ERROR|ERROR):" /tmp/ui-integration.log
           grep -q "UI INTEGRATION CHECKS PASSED" /tmp/ui-integration.log
+      - name: Optional menu fallback and resource preparation
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p test_prepare_menu_live2d.py
+          /tmp/godot/Godot_v4.7.1-stable_linux.x86_64 --headless --path . --script tests/menu_character_integration.gd 2>&1 | tee /tmp/menu-character.log
+          ! grep -E '^(SCRIPT ERROR|ERROR):' /tmp/menu-character.log
+          grep -qE 'MENU CHARACTER CHECKS: [0-9]+ failures: 0' /tmp/menu-character.log

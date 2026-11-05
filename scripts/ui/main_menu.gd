@@ -2,6 +2,7 @@ extends Control
 ## 主菜单只负责导航和音量；正式战斗、奖励、物理仍由既有玩法校验。
 const ART := "res://assets/ui/"
 var settings_panel: PanelContainer
+@onready var character_view: Control = $MenuCharacter
 
 func picture(file: String, bounds: Rect2) -> TextureRect:
 	var node := TextureRect.new()
@@ -41,6 +42,7 @@ func action(node_name: String, file: String, bounds: Rect2, callback: Callable) 
 	add_child(button)
 
 func _ready() -> void:
+	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var font := SystemFont.new()
 	font.font_names = PackedStringArray(["Microsoft YaHei", "Noto Sans CJK SC"])
 	theme = Theme.new()
@@ -48,7 +50,8 @@ func _ready() -> void:
 	theme.default_font_size = 22
 	picture("fat_fish_menu_background", Rect2(0, 0, 1280, 720))
 	picture("fat_fish_menu_title", Rect2(64, 94, 576, 230))
-	picture("fat_fish_menu_character", Rect2(696, 0, 569, 684))
+	# 角色组件在背景之后、按钮/设置之前，透明区域不挡导航。
+	move_child(character_view,get_child_count()-1)
 	action("Start", "fat_fish_start_button_full", Rect2(102, 367, 461, 115), start_game)
 	action("Settings", "fat_fish_settings_button_full", Rect2(102, 504, 223, 101), show_settings)
 	action("Exit", "fat_fish_exit_button_full", Rect2(340, 504, 223, 101), func(): get_tree().quit())
@@ -71,19 +74,48 @@ func _ready() -> void:
 	apply_volume(slider.value)
 	slider.value_changed.connect(apply_volume)
 	content.add_child(slider)
+	var reduce := CheckButton.new()
+	reduce.text = "减少动态效果"
+	reduce.button_pressed = bool(config.get_value("visual","reduced_motion",false))
+	character_view.character.set_reduced_motion(reduce.button_pressed)
+	reduce.toggled.connect(apply_reduced_motion)
+	content.add_child(reduce)
 	var back := Button.new()
 	back.text = "返回"
 	back.pressed.connect(close_settings)
 	content.add_child(back)
 	settings_panel.hide()
+	if character_view.character.loaded:
+		var hint := Label.new()
+		hint.text = "移动鼠标，她会看向你。轻点头顶或脸颊，试试她的回应。"
+		hint.position = Vector2(76,638)
+		hint.add_theme_font_size_override("font_size",16)
+		hint.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		add_child(hint)
+		var credits := Label.new()
+		credits.text = "角色：神宫凉子  ·  Live2D：霓虹猫_NeonNeko"
+		credits.position = Vector2(76,679)
+		credits.add_theme_font_size_override("font_size",13)
+		credits.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		add_child(credits)
+		move_child(settings_panel,get_child_count()-1)
+
+func apply_reduced_motion(value: bool) -> void:
+	character_view.character.set_reduced_motion(value)
+	var config := ConfigFile.new()
+	config.load("user://ui_settings.cfg")
+	config.set_value("visual","reduced_motion",value)
+	config.save("user://ui_settings.cfg")
 
 func apply_volume(value: float) -> void:
 	AudioServer.set_bus_volume_db(0, linear_to_db(maxf(value, 0.0001)))
 	var config := ConfigFile.new()
+	config.load("user://ui_settings.cfg")
 	config.set_value("audio", "volume", value)
 	config.save("user://ui_settings.cfg")
 
 func show_settings() -> void:
+	character_view.set_suspended(true)
 	for child in get_children():
 		if child is TextureButton:
 			child.disabled = true
@@ -92,6 +124,7 @@ func show_settings() -> void:
 
 func close_settings() -> void:
 	settings_panel.hide()
+	character_view.set_suspended(false)
 	for child in get_children():
 		if child is TextureButton:
 			child.disabled = false
