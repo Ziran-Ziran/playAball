@@ -4,6 +4,6 @@
 script = ExtResource("1")
 map_id = "map_02"
 display_name = "十字与局部尖刺"
-player_spawn = Vector2(640, 600)
+player_spawn = Vector2(640, 245)
 boss_spawn = Vector2(640, 240)
-safe_regions = Array[Rect2]([Rect2(610,570,60,50)])
+safe_regions = Array[Rect2]([Rect2(620,225,40,40)])

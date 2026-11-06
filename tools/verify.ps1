@@ -1,4 +1,4 @@
-﻿param([string]$GodotExe = $env:GODOT_EXE)
+param([string]$GodotExe = $env:GODOT_EXE)
 $ErrorActionPreference = 'Stop'
 if (-not $GodotExe) {
     $godotCommand = Get-Command godot, godot4 -ErrorAction SilentlyContinue | Select-Object -First 1
@@ -28,6 +28,7 @@ foreach ($step in @(
     @{ Name = 'reward_effects'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_reward_effects.gd' },
     @{ Name = 'audio'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_audio.gd' },
     @{ Name = 'hud'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_hud.gd' },
+    @{ Name = 'card_art'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_card_art.gd' },
     @{ Name = 'feedback_integration'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_feedback_integration.gd' },
     @{ Name = 'stage_flow'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_stage_flow.gd' },
     @{ Name = 'shop_events'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_shop_events.gd' },
@@ -46,6 +47,19 @@ foreach ($step in @(
     @{ Name = 'maps'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_maps.gd' },
     @{ Name = 'map_flow'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_map_flow.gd' },
     @{ Name = 'map_navigation'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_map_navigation.gd' },
+    @{ Name = 'map_blueprints'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_map_blueprints.gd' },
+    @{ Name = 'ball_art'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_ball_art.gd' },
+    @{ Name = 'tactical_aim'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_tactical_aim.gd' },
+    @{ Name = 'card_typography'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_card_typography.gd' },
+    @{ Name = 'sea_ui'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_sea_ui.gd' },
+    @{ Name = 'sea_ui_integration'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_sea_ui_integration.gd' },
+    @{ Name = 'sea_ui_formal_game'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_sea_ui_formal_game.gd' },
+    @{ Name = 'sea_ui_mouse'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_sea_ui_mouse.gd' },
+    @{ Name = 'ball_animation'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_ball_animation.gd' },
+    @{ Name = 'hero_smooth'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_hero_smooth.gd' },
+    @{ Name = 'card_content_flow'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_card_content_flow.gd' },
+    @{ Name = 'music'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/music_manager.gd' },
+    @{ Name = 'menu_character'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/menu_character_integration.gd' },
     @{ Name = 'balance_metrics'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_balance_metrics.gd' },
     @{ Name = 'fish_view'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_fish_view.gd' },
     @{ Name = 'actor_views'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_actor_views.gd' },
@@ -75,6 +89,7 @@ foreach ($step in @(
     }
     $completionMarkers = @{ enemies = 'ENEMY CHECKS PASSED'; build = 'BUILD CHECKS PASSED'; boss = 'ROGUELITE BOSS: \d+ checks, 0 failures'; run = 'RUN CHECKS PASSED'; rice = 'RICE CHECKS PASSED'; theme = 'ROGUELITE THEME: \d+ checks, 0 failures' }
     $completionMarkers.kill_rewards = 'KILL REWARD CHECKS PASSED'
+    $completionMarkers.card_art = 'CARD ART CHECKS: \d+ checks, 0 failures'
     $completionMarkers.kill_run = 'KILL RUN CHECKS PASSED'
     $completionMarkers.launch_rewards = 'ROGUELITE LAUNCH REWARDS: \d+ checks, 0 failures'
     $completionMarkers.reward_effects = 'REWARD EFFECTS CHECKS PASSED'
@@ -98,6 +113,19 @@ foreach ($step in @(
     $completionMarkers.maps = 'MAP CHECKS PASSED'
     $completionMarkers.map_flow = 'MAP FLOW CHECKS PASSED'
     $completionMarkers.map_navigation = 'MAP NAVIGATION CHECKS PASSED'
+    $completionMarkers.map_blueprints = 'BLUEPRINT CHECKS: \d+ failures: 0'
+    $completionMarkers.ball_art = 'BALL ART CHECKS: \d+ failures: 0'
+    $completionMarkers.tactical_aim = 'tactical aim failures: 0'
+    $completionMarkers.card_typography = 'TYPOGRAPHY: \d+ checks, 0 failures'
+    $completionMarkers.sea_ui = 'SEA UI: \d+ checks, 0 failures'
+    $completionMarkers.sea_ui_integration = 'ACTUAL UI: \d+ checks, 0 failures'
+    $completionMarkers.sea_ui_formal_game = 'FORMAL GAME REGRESSION FAILURES 0'
+    $completionMarkers.sea_ui_mouse = 'SEA MOUSE FAILURES 0'
+    $completionMarkers.ball_animation = 'BALL ANIMATION INDEPENDENT \d+ checks failures 0'
+    $completionMarkers.hero_smooth = 'SMOOTH HERO failures 0'
+    $completionMarkers.card_content_flow = 'CONTENT FLOW 16 cards failures 0'
+    $completionMarkers.music = 'MUSIC CHECKS \d+ failures 0'
+    $completionMarkers.menu_character = 'MENU CHARACTER CHECKS: \d+ failures: 0'
     $completionMarkers.balance_metrics = 'BALANCE METRIC CHECKS PASSED'
     $completionMarkers.fish_view = 'FISH VIEW CHECKS PASSED'
     $completionMarkers.actor_views = 'ACTOR VIEW CHECKS PASSED'
@@ -110,4 +138,4 @@ foreach ($step in @(
         throw '未获得目录检查完成标志。'
     }
 }
-Write-Output 'VERIFIED: import + map + all 38 behavior suites including physical paddle response and all growth card wiring'
+Write-Output 'VERIFIED: import + map + all 52 behavior suites including persistent music, continuous hero motion and card content flow'

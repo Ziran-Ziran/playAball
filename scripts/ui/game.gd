@@ -74,7 +74,7 @@ func _ready() -> void:
 		option.button_pressed = original.button_pressed
 		option.toggled.connect(func(value: bool): original.button_pressed = value)
 		$HUD/Menu/Buttons.add_child(option)
-	for kind in ["音效", "提示"]:
+	for kind in ["音效", "提示", "音乐"]:
 		var row := HBoxContainer.new()
 		var label := Label.new()
 		label.text = kind
@@ -83,14 +83,18 @@ func _ready() -> void:
 		slider.custom_minimum_size = Vector2(260, 30)
 		slider.max_value = 1.0
 		slider.step = 0.01
-		slider.value = sfx_volume if kind == "音效" else ui_volume
+		slider.value = MusicManager.music_volume if kind == "音乐" else (sfx_volume if kind == "音效" else ui_volume)
+		if kind == "音乐":
+			slider.name = "MusicVolume"
 		slider.value_changed.connect(func(value: float):
-			if kind == "音效": sfx_volume = value
+			if kind == "音乐": MusicManager.set_music_volume(value)
+			elif kind == "音效": sfx_volume = value
 			else: ui_volume = value
 			sync_audio_mix()
 		)
 		row.add_child(slider)
 		$HUD/Menu/Buttons.add_child(row)
+	MusicManager.mix_changed.connect(_sync_music_pause_controls)
 	var health_skin := Control.new()
 	health_skin.set_script(load("res://scripts/ui/health_skin.gd"))
 	health_skin.source = $RunHUD.health_view
@@ -105,6 +109,12 @@ func _ready() -> void:
 	menu.add_theme_stylebox_override("panel", panel_style)
 	$RunHUD.panel.add_theme_stylebox_override("panel", panel_style)
 	director.rest_panel.get_node("Backdrop/Panel").add_theme_stylebox_override("panel", panel_style)
+
+func _sync_music_pause_controls() -> void:
+	$HUD/Menu/Buttons/Mute.set_pressed_no_signal(MusicManager.muted)
+	for row: Node in $HUD/Menu/Buttons.get_children():
+		var slider: HSlider = row.get_node_or_null("MusicVolume")
+		if slider != null: slider.set_value_no_signal(MusicManager.music_volume)
 
 func _process(delta: float) -> void:
 	super._process(delta)
@@ -125,13 +135,5 @@ func over_controls(point: Vector2) -> bool:
 	return (is_instance_valid(_pause_button) and _pause_button.is_visible_in_tree() and _pause_button.get_global_rect().has_point(point)) or (menu.visible and menu.get_global_rect().has_point(point))
 
 func _draw() -> void:
-	# 只替换网格和墙体，真实手势瞄准属于玩家反馈，必须保留。
-	if not is_instance_valid(launcher) or not launcher.aiming:
-		return
-	var drag: Vector2 = (launcher.anchor - launcher.pointer).limit_length(player.max_drag)
-	var world_drag: Vector2 = get_global_transform_with_canvas().affine_inverse().basis_xform(drag)
-	var end: Vector2 = player.position + world_drag
-	draw_line(player.position, end, Color("fff1ad"), 4, true)
-	if drag.length() >= 8:
-		draw_line(end, end - drag.normalized().rotated(0.5) * 18, Color("fff1ad"), 4, true)
-		draw_line(end, end - drag.normalized().rotated(-0.5) * 18, Color("fff1ad"), 4, true)
+	# 正式外壳隐藏试验场网格，但与试验场共享瞄准和回弹表现。
+	_draw_aim_feedback()

@@ -1,0 +1,32 @@
+{
+  "author": "Kenney Vleugels (Kenney.nl)",
+  "license": "CC0-1.0",
+  "checked": "2026-11-05",
+  "pages": [
+    "https://kenney.nl/assets/cursor-pack",
+    "https://kenney.nl/assets/particle-pack"
+  ],
+  "notes": "User explicitly requested web-sourced aim materials after rejecting repeated V arrows. Character textures remain built-in image_gen. PNG files unchanged; only renderer tint/transform/opacity used.",
+  "files": [
+    {
+      "path": "pointer_toon_a.png",
+      "source": "https://raw.githubusercontent.com/shorepine/kenney/3694c6879e487c108f55677be7dd2ca75b07cc3b/ui/Cursor%20Pack/Basic/Double/pointer_toon_a.png",
+      "sha256": "43338b67a5167c5a4a71b563c50b14f11e219531780fd220334289fbb04ea230"
+    },
+    {
+      "path": "navigation_e.png",
+      "source": "https://raw.githubusercontent.com/shorepine/kenney/3694c6879e487c108f55677be7dd2ca75b07cc3b/ui/Cursor%20Pack/Basic/Double/navigation_e.png",
+      "sha256": "96d308d1cca1f3958df78708cde12511f5ade75ce9207d1fbe32ea44ace07628"
+    },
+    {
+      "path": "trace_06.png",
+      "source": "https://raw.githubusercontent.com/Calinou/kenney-particle-pack/ab7086639ee73be31abd87feb21bf1402d4e8144/addons/kenney_particle_pack/trace_06.png",
+      "sha256": "7f9fde6077987e13760cdfc82cce5ab75c798999c53276abdfa807f4ef6e057d"
+    },
+    {
+      "path": "light_03.png",
+      "source": "https://raw.githubusercontent.com/Calinou/kenney-particle-pack/ab7086639ee73be31abd87feb21bf1402d4e8144/addons/kenney_particle_pack/light_03.png",
+      "sha256": "4e5ebf85c0b9b76336037330f6f6003aec0bfba4c266aba4e24f5876c0bd1d96"
+    }
+  ]
+}

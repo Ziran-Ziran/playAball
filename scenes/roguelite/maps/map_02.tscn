@@ -1,42 +1,105 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene load_steps=9 format=3]
 [ext_resource type="Script" path="res://scripts/roguelite/maps/map_layout.gd" id="layout"]
 [ext_resource type="Resource" path="res://resources/roguelite/maps/map_02.tres" id="data"]
 [ext_resource type="PackedScene" path="res://scenes/roguelite/mechanisms/pivot_paddle.tscn" id="pivot"]
 [ext_resource type="PackedScene" path="res://scenes/roguelite/mechanisms/moving_barrier.tscn" id="moving"]
 [ext_resource type="PackedScene" path="res://scenes/roguelite/mechanisms/spike_strip.tscn" id="spikes"]
-[ext_resource type="PackedScene" path="res://scenes/roguelite/mechanisms/portal_pair.tscn" id="portals"]
 [sub_resource type="RectangleShape2D" id="Vertical"]
-size = Vector2(18,180)
+size = Vector2(18,340)
+[sub_resource type="RectangleShape2D" id="Horizontal"]
+size = Vector2(340,18)
+[sub_resource type="RectangleShape2D" id="ShortSpike"]
+size = Vector2(36,13)
 [node name="Map02" type="Node2D"]
 process_mode = 1
 script = ExtResource("layout")
 definition = ExtResource("data")
 [node name="CrossPivot" parent="." instance=ExtResource("pivot")]
-position = Vector2(640, 400)
+position = Vector2(640,400)
+initial_angle = 0.7853981633974483
+length = 340.0
 angle_limit = 1.3
+[node name="Shape" parent="CrossPivot/Paddle" index="0"]
+shape = SubResource("Horizontal")
+[node name="Visual" parent="CrossPivot/Paddle" index="1"]
+polygon = PackedVector2Array(-170,-9,170,-9,170,9,-170,9)
 [node name="VerticalShape" type="CollisionShape2D" parent="CrossPivot/Paddle"]
 shape = SubResource("Vertical")
 [node name="VisualVertical" type="Polygon2D" parent="CrossPivot/Paddle"]
-polygon = PackedVector2Array(-9,-90,9,-90,9,90,-9,90)
+polygon = PackedVector2Array(-9,-170,9,-170,9,170,-9,170)
 [node name="MovingLeft" parent="." instance=ExtResource("moving")]
-position = Vector2(350, 300)
-rotation = 0.6
-travel = Vector2(0,60)
-[node name="MovingRight" parent="." instance=ExtResource("moving")]
-position = Vector2(930, 500)
-rotation = 0.6
-travel = Vector2(0,-60)
-[node name="TopSpikes" parent="." instance=ExtResource("spikes")]
-position = Vector2(640, 135)
-rotation = 3.141592653589793
-[node name="BottomSpikes" parent="." instance=ExtResource("spikes")]
-position = Vector2(640, 668)
-rotation = 0
-[node name="LeftSpikes" parent="." instance=ExtResource("spikes")]
-position = Vector2(55, 400)
+position = Vector2(300,260)
+travel = Vector2(0,40)
+[node name="Body" parent="MovingLeft" index="0"]
+rotation = -0.7853981633974483
+[node name="LeftSpikes0" parent="." instance=ExtResource("spikes")]
+position = Vector2(55,240)
 rotation = 1.5707963267948966
-[node name="RightSpikes" parent="." instance=ExtResource("spikes")]
-position = Vector2(1225, 400)
+length = 36.0
+tooth_depth = 8.0
+[node name="Shape" parent="LeftSpikes0" index="0"]
+shape = SubResource("ShortSpike")
+position = Vector2(0,-1.5)
+[node name="LeftSpikes1" parent="." instance=ExtResource("spikes")]
+position = Vector2(55,400)
+rotation = 1.5707963267948966
+length = 36.0
+tooth_depth = 8.0
+[node name="Shape" parent="LeftSpikes1" index="0"]
+shape = SubResource("ShortSpike")
+position = Vector2(0,-1.5)
+[node name="LeftSpikes2" parent="." instance=ExtResource("spikes")]
+position = Vector2(55,560)
+rotation = 1.5707963267948966
+length = 36.0
+tooth_depth = 8.0
+[node name="Shape" parent="LeftSpikes2" index="0"]
+shape = SubResource("ShortSpike")
+position = Vector2(0,-1.5)
+[node name="MovingRight" parent="." instance=ExtResource("moving")]
+position = Vector2(980,540)
+travel = Vector2(0,-40)
+[node name="Body" parent="MovingRight" index="0"]
+rotation = -0.7853981633974483
+[node name="RightSpikes0" parent="." instance=ExtResource("spikes")]
+position = Vector2(1225,240)
 rotation = -1.5707963267948966
+length = 36.0
+tooth_depth = 8.0
+[node name="Shape" parent="RightSpikes0" index="0"]
+shape = SubResource("ShortSpike")
+position = Vector2(0,-1.5)
+[node name="RightSpikes1" parent="." instance=ExtResource("spikes")]
+position = Vector2(1225,400)
+rotation = -1.5707963267948966
+length = 36.0
+tooth_depth = 8.0
+[node name="Shape" parent="RightSpikes1" index="0"]
+shape = SubResource("ShortSpike")
+position = Vector2(0,-1.5)
+[node name="RightSpikes2" parent="." instance=ExtResource("spikes")]
+position = Vector2(1225,560)
+rotation = -1.5707963267948966
+length = 36.0
+tooth_depth = 8.0
+[node name="Shape" parent="RightSpikes2" index="0"]
+shape = SubResource("ShortSpike")
+position = Vector2(0,-1.5)
 
 [editable path="CrossPivot"]
+
+[editable path="MovingLeft"]
+
+[editable path="MovingRight"]
+
+[editable path="LeftSpikes0"]
+
+[editable path="LeftSpikes1"]
+
+[editable path="LeftSpikes2"]
+
+[editable path="RightSpikes0"]
+
+[editable path="RightSpikes1"]
+
+[editable path="RightSpikes2"]

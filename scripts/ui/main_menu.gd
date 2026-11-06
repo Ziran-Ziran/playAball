@@ -1,6 +1,10 @@
 extends Control
 ## 主菜单只负责导航和音量；正式战斗、奖励、物理仍由既有玩法校验。
 const ART := "res://assets/ui/"
+var _music_slider: HSlider
+var _music_status: Label
+var _all_mute: CheckButton
+var interaction_status: Label
 var settings_panel: PanelContainer
 @onready var character_view: Control = $MenuCharacter
 
@@ -58,12 +62,19 @@ func _ready() -> void:
 	settings_panel = PanelContainer.new()
 	settings_panel.position = Vector2(340, 170)
 	settings_panel.size = Vector2(600, 350)
+	var settings_style := StyleBoxFlat.new()
+	settings_style.bg_color = Color("102c28")
+	settings_style.border_color = Color("667d66")
+	settings_style.set_border_width_all(1)
+	settings_style.set_corner_radius_all(14)
+	settings_style.set_content_margin_all(24)
+	settings_panel.add_theme_stylebox_override("panel",settings_style)
 	add_child(settings_panel)
 	var content := VBoxContainer.new()
-	content.add_theme_constant_override("separation", 20)
+	content.add_theme_constant_override("separation", 12)
 	settings_panel.add_child(content)
 	var heading := Label.new()
-	heading.text = "设置 · 音量"
+	heading.text = "设置 · 主音量"
 	content.add_child(heading)
 	var slider := HSlider.new()
 	slider.max_value = 1.0
@@ -80,6 +91,35 @@ func _ready() -> void:
 	character_view.character.set_reduced_motion(reduce.button_pressed)
 	reduce.toggled.connect(apply_reduced_motion)
 	content.add_child(reduce)
+	var music_row := HBoxContainer.new()
+	var music_label := Label.new()
+	music_label.text = "音乐"
+	music_row.add_child(music_label)
+	var music_slider := HSlider.new()
+	_music_slider = music_slider
+	music_slider.name = "MusicVolume"
+	music_slider.custom_minimum_size = Vector2(280,30)
+	music_slider.max_value = 1.0
+	music_slider.step = 0.01
+	music_slider.value = MusicManager.music_volume
+	music_slider.value_changed.connect(MusicManager.set_music_volume)
+	music_row.add_child(music_slider)
+	content.add_child(music_row)
+	var music_status := Label.new()
+	_music_status = music_status
+	music_status.name = "MusicStatus"
+	music_status.text = MusicManager.status_text()
+	music_status.add_theme_font_size_override("font_size",15)
+	content.add_child(music_status)
+	MusicManager.track_changed.connect(_sync_music_status)
+	var mute := CheckButton.new()
+	_all_mute = mute
+	mute.name = "AllMute"
+	mute.text = "全部静音"
+	mute.button_pressed = MusicManager.muted
+	mute.toggled.connect(MusicManager.set_muted)
+	content.add_child(mute)
+	MusicManager.mix_changed.connect(_sync_music_controls)
 	var back := Button.new()
 	back.text = "返回"
 	back.pressed.connect(close_settings)
@@ -87,21 +127,51 @@ func _ready() -> void:
 	settings_panel.hide()
 	if character_view.character.loaded:
 		var hint := Label.new()
-		hint.text = "移动鼠标，她会看向你。轻点头顶或脸颊，试试她的回应。"
-		hint.position = Vector2(76,638)
-		hint.add_theme_font_size_override("font_size",16)
+		hint.text = "头顶：点头笑 · 左脸：眨眼歪头 · 右脸：鼓脸摇头"
+		hint.position = Vector2(76,610)
+		hint.add_theme_font_size_override("font_size",14)
 		hint.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		add_child(hint)
+		var gesture_hint := Label.new()
+		gesture_hint.text = "上半身：鞠躬招呼 · 三连点：惊讶 · 抚摸头发：轻摆"
+		gesture_hint.position = Vector2(76,638)
+		gesture_hint.add_theme_font_size_override("font_size",14)
+		gesture_hint.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		add_child(gesture_hint)
+		interaction_status = Label.new()
+		interaction_status.name = "InteractionStatus"
+		interaction_status.position = Vector2(76,666)
+		interaction_status.add_theme_font_size_override("font_size",14)
+		interaction_status.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		add_child(interaction_status)
+		character_view.character.reaction_started.connect(func(kind: String):
+			interaction_status.text = {"pet":"点头微笑","pet_sway":"跟着抚摸轻摆","wink":"向左歪头眨眼","cheek":"鼓脸轻摇头","greet":"鞠躬招呼","surprised":"轻轻后仰：哎呀！","shy":"害羞歪头"}.get(kind,"回应你")
+		)
+		character_view.character.reaction_rejected.connect(func(reason: String): interaction_status.text = reason)
+		character_view.character.reaction_finished.connect(func(): _update_interaction_status())
+		_update_interaction_status()
 		var credits := Label.new()
 		credits.text = "角色：神宫凉子  ·  Live2D：霓虹猫_NeonNeko"
-		credits.position = Vector2(76,679)
-		credits.add_theme_font_size_override("font_size",13)
+		credits.position = Vector2(76,696)
+		credits.add_theme_font_size_override("font_size",11)
 		credits.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		add_child(credits)
 		move_child(settings_panel,get_child_count()-1)
 
+func _sync_music_status() -> void:
+	_music_status.text = MusicManager.status_text()
+
+func _sync_music_controls() -> void:
+	_music_slider.set_value_no_signal(MusicManager.music_volume)
+	_all_mute.set_pressed_no_signal(MusicManager.muted)
+
+func _update_interaction_status() -> void:
+	if is_instance_valid(interaction_status):
+		interaction_status.text = "减少动态已开启：设置中关闭后可互动" if character_view.character.reduced_motion else "左右按你看屏幕的方向 · 点一下，马上回应"
+
 func apply_reduced_motion(value: bool) -> void:
 	character_view.character.set_reduced_motion(value)
+	_update_interaction_status()
 	var config := ConfigFile.new()
 	config.load("user://ui_settings.cfg")
 	config.set_value("visual","reduced_motion",value)
@@ -114,12 +184,18 @@ func apply_volume(value: float) -> void:
 	config.set_value("audio", "volume", value)
 	config.save("user://ui_settings.cfg")
 
+func _layout_settings() -> void:
+	var visible_size: Vector2 = get_viewport().get_visible_rect().size
+	settings_panel.size.x = minf(600.0,visible_size.x-64.0)
+	settings_panel.position = (visible_size-settings_panel.size)*0.5
+
 func show_settings() -> void:
 	character_view.set_suspended(true)
 	for child in get_children():
 		if child is TextureButton:
 			child.disabled = true
 	settings_panel.show()
+	_layout_settings.call_deferred()
 	settings_panel.get_child(0).get_child(1).grab_focus()
 
 func close_settings() -> void:

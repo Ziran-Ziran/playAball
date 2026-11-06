@@ -81,6 +81,7 @@ func setup(owner_arena: Node2D) -> void:
 	health.process_mode = Node.PROCESS_MODE_PAUSABLE
 	add_child(health)
 	health.died.connect(func(): finish(false))
+	health.damaged.connect(func(amount: int): player.visual_event.emit(&"damage", {"effective_damage": amount}))
 	maps.player_health = health
 	rice = load("res://scripts/roguelite/rice_manager.gd").new()
 	rice.player = player
@@ -197,12 +198,12 @@ func start_wave(number: int, force_map: bool = false) -> void:
 func _process(delta: float) -> void:
 	advance_transition(delta)
 	advance(delta)
-	if state == State.BATTLE:
+	if state == State.BATTLE and not get_tree().paused:
 		_pulse_left = maxf(0.0, _pulse_left - delta)
 	queue_redraw()
 
 func advance(delta: float) -> void:
-	if state != State.BATTLE:
+	if get_tree().paused or state != State.BATTLE:
 		return
 	if health.hp <= 0:
 		finish(false)
@@ -389,6 +390,7 @@ func register_kill(instance_id: int) -> void:
 		return
 	if rewards.add_kill(instance_id):
 		kills = rewards.kills
+		player.visual_event.emit(&"kill", {"count": 1})
 		if not is_instance_valid(boss) or instance_id != boss.get_instance_id():
 			wallet.credit_kill(instance_id)
 		run_event.emit("kill")

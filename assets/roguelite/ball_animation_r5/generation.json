@@ -1,0 +1,26 @@
+{
+  "tool": "built-in image_gen",
+  "transparent_background": true,
+  "assets": [
+    {
+      "file": "hero_sheet.png",
+      "reference": "assets/roguelite/ball_art_r4/hero.png",
+      "prompt": "Create a game sprite animation sheet derived exactly from reference image. Preserve blue whale maid chibi ball identity, face detail, palette, outfit and tail. Actual transparent alpha background. Exactly four equally sized square cells in a 2 by 2 grid, no borders no text. Each pose centered within its cell with ample transparent margin, full character same size. Top left: subtle tall oval breathing pose, cheerful eyes. Top right: squat oval breathing pose with half closed relaxed eyes. Bottom left: impact reaction with cheeks puffed and tightly closed eyes, hair and whale tail spring backward. Bottom right: damage reaction with pained shut eyes and small open mouth, ruffled hair, no gore. These are animation poses of the same character, not redesigns. Keep all facial features crisp for 58px game display. No ground shadow no background."
+    },
+    {
+      "file": "virus_low_sheet.png",
+      "reference": "assets/roguelite/ball_art_r4/virus_low.png",
+      "prompt": "Animation sprite sheet of EXACT reference virus character, preserve its color, identity, eyes, armor and silhouette. True transparent alpha background. Exactly 2x2 equally sized square grid, four centered full poses with generous margins and same body scale, no text borders shadow. Top left: impact squash, eyes tightly squeezed with pain, antenna bent; top right: recoil stretched, angry hurt expression and tiny crack; bottom left: defeated shell bursting open, shut eyes, same colored fragments spreading; bottom right: only scattered matching jelly/armor fragments, no intact body. Hand painted chibi game asset, crisp face at 42px. Do not introduce robot identity or new design."
+    },
+    {
+      "file": "virus_mid_sheet.png",
+      "reference": "assets/roguelite/ball_art_r4/virus_mid.png",
+      "prompt": "Animation sprite sheet of EXACT reference virus character, preserve its color, identity, eyes, armor and silhouette. True transparent alpha background. Exactly 2x2 equally sized square grid, four centered full poses with generous margins and same body scale, no text borders shadow. Top left: impact squash, eyes tightly squeezed with pain, antenna bent; top right: recoil stretched, angry hurt expression and tiny crack; bottom left: defeated shell bursting open, shut eyes, same colored fragments spreading; bottom right: only scattered matching jelly/armor fragments, no intact body. Hand painted chibi game asset, crisp face at 42px. Do not introduce robot identity or new design."
+    },
+    {
+      "file": "virus_high_sheet.png",
+      "reference": "assets/roguelite/ball_art_r4/virus_high.png",
+      "prompt": "Animation sprite sheet of EXACT reference virus character, preserve its color, identity, eyes, armor and silhouette. True transparent alpha background. Exactly 2x2 equally sized square grid, four centered full poses with generous margins and same body scale, no text borders shadow. Top left: impact squash, eyes tightly squeezed with pain, antenna bent; top right: recoil stretched, angry hurt expression and tiny crack; bottom left: defeated shell bursting open, shut eyes, same colored fragments spreading; bottom right: only scattered matching jelly/armor fragments, no intact body. Hand painted chibi game asset, crisp face at 42px. Do not introduce robot identity or new design."
+    }
+  ]
+}

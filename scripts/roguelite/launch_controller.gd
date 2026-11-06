@@ -1,7 +1,10 @@
 class_name DemoLaunch
 extends Node
 signal fired(chain: int)
+signal aim_cancelled
 signal recharged
+@export var freeze_while_aiming: bool = true
+var _owns_aim_pause: bool = false
 @export var cooldown: float = 2.2
 var player: DemoPlayer
 var remaining: float = 0.0
@@ -10,6 +13,7 @@ var input_held: bool = false
 var blocked: bool = false
 var anchor: Vector2
 var pointer: Vector2
+var last_fired_drag: Vector2
 var shots: int = 0
 var capacity: int = 1
 var charges: int = 1
@@ -21,7 +25,7 @@ func _process(delta: float) -> void:
 	advance(delta)
 
 func advance(battle_delta: float) -> void:
-	if blocked:
+	if blocked or (is_inside_tree() and get_tree().paused):
 		return
 	_sync_single_charge()
 	if not aiming and remaining > 0.0:
@@ -84,6 +88,9 @@ func begin(point: Vector2) -> bool:
 	anchor = point
 	pointer = point
 	aiming = true
+	if freeze_while_aiming and is_inside_tree() and not get_tree().paused:
+		_owns_aim_pause = true
+		get_tree().paused = true
 	input_held = true
 	return true
 
@@ -110,6 +117,7 @@ func launch_with_drag(drag: Vector2) -> bool:
 	_sync_single_charge()
 	if blocked or not available() or not player.launch(drag, shots + 1):
 		return false
+	last_fired_drag = drag
 	shots += 1
 	charges -= 1
 	if remaining <= 0.0:
@@ -119,6 +127,11 @@ func launch_with_drag(drag: Vector2) -> bool:
 	return true
 
 func cancel() -> void:
+	aim_cancelled.emit()
+	# 外部阻塞已接管暂停；取消瞄准不能解除菜单或成长暂停。
+	if _owns_aim_pause and is_inside_tree() and not blocked:
+		get_tree().paused = false
+	_owns_aim_pause = false
 	aiming = false
 	input_held = false
 

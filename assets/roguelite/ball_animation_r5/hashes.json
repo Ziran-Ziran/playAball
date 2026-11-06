@@ -1,0 +1,18 @@
+[
+  {
+    "Path": "assets/roguelite/ball_animation_r5/hero_sheet.png",
+    "Hash": "04078A6B36978D86F93FB426EB313AFBF85BFB06A1D0B321548C05D4BC18D6C3"
+  },
+  {
+    "Path": "assets/roguelite/ball_animation_r5/virus_high_sheet.png",
+    "Hash": "B9ED270F97C3FA049CC03EAB32D4748E48EF724518FC4C5722DC84F19ABDBA5A"
+  },
+  {
+    "Path": "assets/roguelite/ball_animation_r5/virus_low_sheet.png",
+    "Hash": "FA68E72C7A3780A52D6474129A78F5EF514E3880E5C9E4363471ECF785016AA8"
+  },
+  {
+    "Path": "assets/roguelite/ball_animation_r5/virus_mid_sheet.png",
+    "Hash": "A6E21F230FBB7FE374065B3CEF77D3A0BA355AB8D6B4421304134E94F16654CC"
+  }
+]

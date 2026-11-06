@@ -11,6 +11,11 @@ func set_active(value: bool) -> void:
 func _ready() -> void:
 	add_to_group("map_spikes")
 	process_mode = Node.PROCESS_MODE_PAUSABLE
+	# 每个实例独享形状，缩短或变浅后不遗留旧伤害矩形，也不影响其他刺带。
+	var shape := RectangleShape2D.new()
+	shape.size = Vector2(length, tooth_depth + 5.0)
+	$Shape.shape = shape
+	$Shape.position = Vector2(0.0, (5.0 - tooth_depth) / 2.0)
 func _physics_process(_delta: float) -> void:
 	if not active or not is_instance_valid(player) or not is_instance_valid(health):
 		return

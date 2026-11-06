@@ -74,3 +74,15 @@ python -X utf8 -m unittest discover -s tests -p test_prepare_menu_live2d.py
 完整L0/进程私有内存增长尚未归因；菜单模型Node释放检查不证明没有GPU/Native泄漏。自然度和全部极值仍待用户体验。此改动没有修改HUD/卡片、Buff、经济、发射/碰撞或战斗物理。
 
 2026-11-05最终审查修复后：图形1280×720、1024×576各28项零失败；headless为12项、故意缺模型为13项零失败；准备工具8项测试通过。所有最终日志无ERROR/SCRIPT ERROR。初版的verify.ps1导入/目录/39套行为回归已通过，修复后重跑受影响检查，不冒充再次全量回归。Windows窗口实际点过头顶、设置/遮挡、返回、开始、暂停和回主菜单，未进行真人自然整局。完整证据位于`.local/art_audio_r2/menu_integration_20261105`；审查问题、复查及公开提交范围见[最终Review记录](../reviews/2026-11-05-live2d-start-menu.md)。
+
+## 本机 Windows Release 体验包（2026-11-05）
+
+用户要求一份发布版后，另做了包含当前 Live2D 的本机 Release 模板构建：`builds/playaball-live2d-release-20261105-215502/PlayABall.exe`，同名 ZIP 是整个目录的压缩包。采用当前工作区，包含另一对话已接入但尚未提交的卡面，不是仅从 cfe31a2 还原的纯提交包。源码指纹、EXE 哈希与验证边界见包内 build_info.json。
+
+默认共享导出器继续排除 .local，不改另一线的 export_windows.ps1、export_presets.cfg、project.godot 或 HUD。此次只在独立导出暂存副本中，把 menu_character.gd 的 model_path、extension_path、profile_path 三个默认值改为基于 `OS.get_executable_path().get_base_dir()` 拼接旁置 `menu_character_runtime`。其余游戏代码和物理不改，也没有重新构建 C++ 桥接。旁置目录包含已有模型、原 Shader、mipmap 图集缓存和 Native DLL，JSON 相对路径仍保持；不复制含原来源绝对路径的 preparation.json。
+
+因此从系统临时目录作为工作目录启动实际 Release EXE 也能加载角色，不依赖工程 .local 路径。EXE 内嵌主游戏资源；请完整解压并保留旁置目录，不能只搬一个 EXE。原始模型条款和引擎/桥接/Core 通知在包中保留。这仍是当前用户本机体验包，未解决公开/商业发行授权，不上传或公开分发模型；Release 模板不等于已取得商业发行许可。
+
+验证分为两层：同版编辑器用 `--main-pack <实际EXE>` 运行原 package_probe.gd，326 项资源清单、28 张卡面及实际包内导航/物理/合法发射等探针通过；真正 Release 窗口确认从旁置目录加载 release DLL，并实际检查左右注视、摸头、设置阻断、开始、失败重开、回 Live2D 菜单。UI 自动操作的等待期间到达失败，未完成人工自然战斗/整局通关，不将包内探针冒充 Release 模板内自动脚本。
+
+生成与检查日志、源文件快照、独立进程记录保存在 `.local/art_audio_r2/menu_release_20261105-215502`；本机一次性准备脚本为 `.local/art_audio_r2/build_current_live2d_release.py`。脚本只建唯一暂存/构建目录，不覆盖交付，不改原工程；压缩时须递归包含旁置资源。正式复用导出能力仍需由导出工具当前负责人协调接入，不能把这次暂存修改误写成共享导出器已有功能。

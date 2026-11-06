@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3]
+[sub_resource type="RectangleShape2D" id="Shape"]
+size = Vector2(180, 18)
+[node name="FixedBarrier" type="StaticBody2D"]
+collision_layer = 16
+collision_mask = 31
+[node name="Shape" type="CollisionShape2D" parent="."]
+shape = SubResource("Shape")
+[node name="Visual" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(-90,-9,90,-9,90,9,-90,9)

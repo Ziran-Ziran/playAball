@@ -14,6 +14,9 @@ $staging = Join-Path $projectRoot ('.local/export-' + $taskId)
 $output = Join-Path $projectRoot ('builds/' + $BuildName)
 if (Test-Path -LiteralPath $output) { throw '目标构建目录已存在，请换一个BuildName，避免覆盖已交付版本。' }
 New-Item -ItemType Directory -Path $staging,$output -Force | Out-Null
+# 成品目录不属于源资源；防止编辑器导入多份旁置模型并报告重复UID。
+$buildIgnore = Join-Path (Split-Path -Parent $output) '.gdignore'
+if (-not (Test-Path -LiteralPath $buildIgnore)) { [IO.File]::WriteAllText($buildIgnore, '') }
 
 function Invoke-GodotStep([string]$Name, [string]$Arguments) {
     $outFile = Join-Path $staging ($Name + '.out')
@@ -49,7 +52,7 @@ if (-not $LiveTuning) {
 }
 
 # Ordinal排序避免不同PowerShell/系统区域设置把同一资源集算成不同指纹。
-$sourceFiles = [string[]](Get-ChildItem -LiteralPath $staging -File -Recurse | Where-Object { $_.Extension -in @('.gd','.tscn','.tres','.godot','.png','.svg','.wav','.ogg','.ttf','.otf','.import','.uid','.cfg') } | ForEach-Object { $_.FullName })
+$sourceFiles = [string[]](Get-ChildItem -LiteralPath $staging -File -Recurse | Where-Object { $_.Extension -in @('.gd','.tscn','.tres','.godot','.png','.ico','.svg','.wav','.ogg','.mp3','.ttf','.otf','.import','.uid','.cfg','.json') } | ForEach-Object { $_.FullName })
 [Array]::Sort($sourceFiles, [StringComparer]::Ordinal)
 $fingerprintLines = foreach ($filePath in $sourceFiles) {
     $relative = $filePath.Substring($staging.Length).TrimStart([char[]]'\/').Replace('\','/')

@@ -136,7 +136,7 @@ func run() -> void:
 		_check(str(actor.get("state")) == "greet","body click triggers short greeting")
 		await settle_actor(actor,160)
 		for index: int in 3: await click(head)
-		_check(str(actor.get("state")) == "annoyed","rapid repeat clicks escalate once")
+		_check(str(actor.get("state")) == "surprised","rapid repeat clicks produce gentle surprise once")
 		count = int(actor.get("reaction_count"))
 		menu.call("show_settings")
 		await click(head)

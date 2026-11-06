@@ -44,7 +44,8 @@ func run() -> void:
 		actor.set_physics_process(false)
 		var signature: Array=[actor.mass,actor.collision_layer,actor.collision_mask,actor.get_node("Shape").shape.radius,actor.scale]
 		var art: Texture2D=actor.presentation.material_for_kind(kind)
-		var expected_file: String={DemoEnemy.Kind.FRAGILE:"fragile_crate_v1.png",DemoEnemy.Kind.HEAVY:"heavy_shell_v1.png",DemoEnemy.Kind.TURRET:"turret_base_v1.png"}[kind]
+		# 夹具出生HP为6，三种角色都应使用精英病毒身份，角色差异由喷口/铆钉表达。
+		var expected_file: String="virus_high.png"
 		assert(art!=null and art.resource_path.ends_with(expected_file))
 		if not actor.presentation.has_method("material_region_for_kind"):
 			push_error("Imported sprite crop must use runtime texture dimensions, not raw PNG pixels")

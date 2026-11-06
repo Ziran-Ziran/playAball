@@ -90,7 +90,8 @@ func check_game() -> void:
 	hud.show_choices(choices)
 	assert(hud.cards.get_child_count() == 4)
 	assert(hud.cards.get_child(2).get_node("Content/Preview").text.contains("2.20 → 1.95"))
-	assert(hud.cards.get_child(0).get_theme_stylebox("normal") is StyleBoxTexture)
+	# 正式卡框已采用可编辑实色边框，固定分隔位图会再次穿过内容流。
+	assert(hud.cards.get_child(0).get_theme_stylebox("normal") is StyleBoxFlat)
 	assert(hud.cards.get_child(0).disabled)
 	await create_timer(0.85).timeout
 	assert(not hud.cards.get_child(3).disabled)
@@ -111,17 +112,23 @@ func check_game() -> void:
 			var heading: Label = card.get_node("Content/Heading")
 			var preview: Label = card.get_node("Content/Preview")
 			var detail: Label = card.get_node("Content/Detail")
+			var illustration: TextureRect = card.get_node("Content/Illustration")
+			var level: Label = card.get_node("Content/Level")
+			var flavor: Label = card.get_node("Content/Flavor")
 			print("CARD_LAYOUT: ", heading.text.replace("\n", " / "), " heights=", heading.get_minimum_size().y, ",", preview.get_minimum_size().y, ",", detail.get_minimum_size().y)
-			assert(heading.position.y+heading.get_minimum_size().y < preview.position.y)
-			assert(preview.position.y+preview.get_minimum_size().y < 209.0)
-			assert(detail.position.y+detail.get_minimum_size().y < card.size.y-18.0)
-	# 模拟另一平台的较高字体行距，必须仍在固定卡面槽位内显示完整标题。
+			assert(illustration.texture != null)
+			assert(heading.position.y+heading.get_minimum_size().y <= illustration.position.y)
+			assert(illustration.position.y+illustration.size.y <= level.position.y)
+			assert(level.position.y+level.get_minimum_size().y <= preview.position.y)
+			assert(preview.position.y+preview.get_minimum_size().y <= detail.position.y)
+			assert(detail.position.y+detail.get_minimum_size().y <= flavor.position.y)
+			assert(flavor.position.y+flavor.get_minimum_size().y < card.size.y-10.0)
+	# 模拟另一平台的较高字体行距，标题仍应完整显示且不压到插画。
 	var tall_heading: Label = hud.cards.get_child(0).get_node("Content/Heading")
 	tall_heading.add_theme_constant_override("line_spacing", 8)
 	await process_frame
-	if hud.has_method("_fit_card_label"):
-		hud._fit_card_label(tall_heading, 78.0)
-	assert(tall_heading.position.y + tall_heading.get_minimum_size().y < 122.0)
+	hud.cards.get_child(0)._layout()
+	assert(tall_heading.position.y + tall_heading.get_minimum_size().y <= hud.cards.get_child(0).get_node("Content/Illustration").position.y)
 	hud.clear_cards()
 	game.set_paused(true)
 	game.reset_range()

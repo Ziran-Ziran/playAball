@@ -1,24 +1,31 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene load_steps=6 format=3]
 [ext_resource type="Script" path="res://scripts/roguelite/maps/map_layout.gd" id="layout"]
 [ext_resource type="Resource" path="res://resources/roguelite/maps/map_01.tres" id="data"]
 [ext_resource type="PackedScene" path="res://scenes/roguelite/mechanisms/pivot_paddle.tscn" id="pivot"]
-[ext_resource type="PackedScene" path="res://scenes/roguelite/mechanisms/moving_barrier.tscn" id="moving"]
-[ext_resource type="PackedScene" path="res://scenes/roguelite/mechanisms/spike_strip.tscn" id="spikes"]
-[ext_resource type="PackedScene" path="res://scenes/roguelite/mechanisms/portal_pair.tscn" id="portals"]
+[ext_resource type="PackedScene" path="res://scenes/roguelite/mechanisms/fixed_barrier.tscn" id="fixed"]
+[sub_resource type="RectangleShape2D" id="Wide"]
+size = Vector2(260,18)
 [node name="Map01" type="Node2D"]
 process_mode = 1
 script = ExtResource("layout")
 definition = ExtResource("data")
-[node name="LeftPaddle" parent="." instance=ExtResource("pivot")]
-position = Vector2(300, 370)
-initial_angle = 0.45
-[node name="RightPaddle" parent="." instance=ExtResource("pivot")]
-position = Vector2(980, 370)
-initial_angle = -0.45
+[node name="LeftPaddle" parent="." instance=ExtResource("fixed")]
+position = Vector2(300,400)
+rotation = 0.7853981633974483
+[node name="RightPaddle" parent="." instance=ExtResource("fixed")]
+position = Vector2(980,400)
+rotation = -0.7853981633974483
 [node name="UpperPaddle" parent="." instance=ExtResource("pivot")]
-position = Vector2(640, 240)
+position = Vector2(640,220)
+length = 260.0
 angle_limit = 1.1
-[node name="EccentricPaddle" parent="." instance=ExtResource("pivot")]
-position = Vector2(640, 490)
-pivot_offset = Vector2(55,0)
+[node name="Shape" parent="UpperPaddle/Paddle" index="0"]
+shape = SubResource("Wide")
+[node name="Visual" parent="UpperPaddle/Paddle" index="1"]
+polygon = PackedVector2Array(-130,-9,130,-9,130,9,-130,9)
+[node name="LowerPaddle" parent="." instance=ExtResource("pivot")]
+position = Vector2(640,540)
+initial_angle = 1.5707963267948966
 angle_limit = 1.2
+
+[editable path="UpperPaddle"]
