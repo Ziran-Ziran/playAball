@@ -1,6 +1,7 @@
 extends Node2D
 ## 菜单表现适配器：只写模型的已有输入，不读取或改变玩法状态。
 signal reaction_started(kind: String)
+signal reaction_rejected(reason: String)
 signal reaction_finished
 
 @export_file("*.model3.json") var model_path: String = "res://.local/menu_character_runtime/model/runtime.model3.json"
@@ -12,6 +13,10 @@ signal reaction_finished
 @export_range(0.0,30.0) var head_angle_limit: float = 22.0
 @export_range(0.0,1.0) var eye_range: float = 0.65
 @export_range(0.0,2.0) var idle_body_strength: float = 1.0
+@export_range(4.0,18.0) var gesture_head_degrees: float = 12.0
+@export_range(1.0,10.0) var gesture_body_strength: float = 5.0
+var gesture_head: Vector3 = Vector3.ZERO
+var gesture_body: Vector3 = Vector3.ZERO
 @export var response_seconds: float = 2.1
 
 var model: Node2D
@@ -32,6 +37,8 @@ var reaction_elapsed: float = 0.0
 var reaction_count: int = 0
 var cheek_side: float = 0.0
 var click_times: Array[float] = []
+var greeting_count: int = 0
+const SAFE_REACTIONS: Array[String] = ["pet","cheek","greet","shy","surprised","wink","pet_sway"]
 var runtime_resources: Array[Resource] = []
 
 func _ready() -> void:
@@ -82,6 +89,7 @@ func _ready() -> void:
 	model.position = Vector2(360,360)
 	loaded = true
 	for frame: int in 60: model.call("advance",1.0/60.0)
+	_reset_safe_face()
 	_start_idle()
 
 func _cache_runtime_resources() -> bool:
@@ -148,10 +156,40 @@ func step_character(delta: float) -> void:
 	head_target = head_target.lerp(target,1.0-exp(-delta/head_follow_time))
 	eye_target = eye_target.lerp(target,1.0-exp(-delta/eye_follow_time))
 	var weight: float = 0.3 if reduced_motion else 1.0
-	var response: float = sin(minf(reaction_elapsed*2.5,PI)) if state == "greet" else 0.0
-	_set_parameter("AngleX",head_target.x*head_angle_limit*weight)
-	_set_parameter("AngleY",(-head_target.y*head_angle_limit*0.65+response*3.0)*weight)
-	_set_parameter("AngleZ",head_target.x*-1.5*weight)
+	var envelope: float = minf(1.0,reaction_elapsed/0.15) * minf(1.0,reaction_remaining/0.35)
+	var progress: float = clampf(reaction_elapsed/maxf(0.7,response_seconds),0.0,1.0)
+	var head_motion := Vector3.ZERO
+	var body_motion := Vector3.ZERO
+	match state:
+		"pet":
+			head_motion.y = -sin(progress*TAU*2.0)*gesture_head_degrees
+			body_motion.y = -sin(progress*TAU)*gesture_body_strength*0.3
+		"wink":
+			head_motion.z = -sin(progress*PI)*gesture_head_degrees
+			head_motion.x = -sin(progress*PI)*gesture_head_degrees*0.4
+			body_motion.z = -sin(progress*PI)*gesture_body_strength*0.5
+		"cheek":
+			head_motion.x = sin(progress*TAU*1.5)*gesture_head_degrees
+			head_motion.z = sin(progress*TAU*1.5)*gesture_head_degrees*0.25
+		"greet":
+			head_motion.y = -sin(progress*PI)*gesture_head_degrees
+			body_motion.y = -sin(progress*PI)*gesture_body_strength
+			body_motion.z = sin(progress*TAU)*gesture_body_strength*0.6
+		"shy":
+			head_motion.z = sin(progress*PI)*gesture_head_degrees*0.7
+		"surprised":
+			head_motion.y = sin(progress*PI)*gesture_head_degrees
+			body_motion.y = sin(progress*PI)*gesture_body_strength*0.8
+		"pet_sway":
+			head_motion.z = sin(progress*TAU)*gesture_head_degrees
+			body_motion.x = sin(progress*TAU)*gesture_body_strength
+	gesture_head = gesture_head.lerp(head_motion*envelope,1.0-exp(-delta/0.07))
+	gesture_body = gesture_body.lerp(body_motion*envelope,1.0-exp(-delta/0.12))
+	# 动作期间降低鼠标头部跟随权重，避免点头/歪头被追鼠标抵消；眼神仍先行。
+	var follow_weight: float = lerpf(1.0,0.2,envelope) if state != "idle" else 1.0
+	_set_parameter("AngleX",(head_target.x*head_angle_limit*follow_weight+gesture_head.x)*weight)
+	_set_parameter("AngleY",(-head_target.y*head_angle_limit*0.65*follow_weight+gesture_head.y)*weight)
+	_set_parameter("AngleZ",(head_target.x*-1.5*follow_weight+gesture_head.z)*weight)
 	# Angle/Position是输入；ParamAngle/ParamBodyAngle为原物理输出，正常模式不强写。
 	if reduced_motion:
 		_set_parameter("ParamAngleX",head_target.x*head_angle_limit*weight)
@@ -163,23 +201,58 @@ func step_character(delta: float) -> void:
 	if state != "idle": idle_weight *= 0.4
 	var desired := Vector3(2.2*sin(elapsed*0.62)+0.7*sin(elapsed*0.31+0.8),0.4*sin(elapsed*1.45-0.4),1.3*sin(elapsed*0.49+0.6)+0.35*sin(elapsed*0.93))*idle_weight
 	body_input = body_input.lerp(desired,1.0-exp(-delta/0.5))
-	_set_parameter("PositionX",body_input.x)
-	_set_parameter("PositionY",body_input.y)
-	_set_parameter("PositionZ",body_input.z)
+	_set_parameter("PositionX",body_input.x+gesture_body.x)
+	_set_parameter("PositionY",body_input.y+gesture_body.y)
+	_set_parameter("PositionZ",body_input.z+gesture_body.z)
 	var phase: float = fmod(elapsed,4.3)
 	var openness: float = absf(phase/0.085-1.0) if phase < 0.17 else 1.0
-	if state == "pet": openness = 0.12
-	_set_parameter("ParamEyeLOpen",openness)
-	_set_parameter("ParamEyeROpen",openness)
-	_set_parameter("ParamEyeLSmile",0.7 if state == "pet" else 0.0)
-	_set_parameter("ParamEyeRSmile",0.7 if state == "pet" else 0.0)
-	_set_parameter("ParamMouthForm",0.6 if state in ["pet","greet"] else 0.0)
-	_set_parameter("ParamBreath",0.5 if reduced_motion else 0.5+sin(elapsed*1.45)*0.32)
+	# 短反应两端平滑收回；所有参数均来自当前作者模型，不播放不受控表情文件。
+	var left_open: float = openness
+	var right_open: float = openness
+	var smile: float = 0.0
+	var mouth: float = 0.0
+	var mouth_open: float = 0.0
+	var blush: float = 0.0
 	var puff: float = 0.0
-	if state == "cheek": puff = maxf(0.0,sin(minf(reaction_elapsed*7.0,PI)))*0.55
-	if state == "annoyed": puff = maxf(0.0,sin(minf(reaction_elapsed*2.0,PI)))*0.3
+	match state:
+		"pet", "pet_sway":
+			left_open = lerpf(openness,0.10,envelope)
+			right_open = left_open
+			smile = 0.85 * envelope
+			mouth = 0.65 * envelope
+			blush = 0.3 * envelope
+		"cheek":
+			puff = 0.65 * envelope
+			mouth = -0.12 * envelope
+			blush = 0.25 * envelope
+		"greet", "wink":
+			left_open = lerpf(openness,0.05,envelope)
+			smile = 0.3 * envelope
+			mouth = 0.75 * envelope
+			mouth_open = 0.12 * envelope
+		"shy":
+			left_open = lerpf(openness,0.65,envelope)
+			right_open = left_open
+			smile = 0.25 * envelope
+			mouth = 0.35 * envelope
+			blush = 0.8 * envelope
+		"surprised":
+			left_open = lerpf(openness,1.15,envelope)
+			right_open = left_open
+			mouth_open = 0.32 * envelope
+	_set_parameter("ParamEyeLOpen",left_open)
+	_set_parameter("ParamEyeROpen",right_open)
+	_set_parameter("EyeSmile",smile)
+	_set_parameter("ParamMouthForm",mouth)
+	_set_parameter("ParamMouthOpenY",mouth_open)
+	_set_parameter("key7",blush)
+	_set_parameter("BrowInnerUp",0.3 * envelope if state == "surprised" else 0.0)
+	_set_parameter("ParamBreath",0.5 if reduced_motion or blocked else 0.5+sin(elapsed*1.45)*0.32)
 	_set_parameter("CheeckPuff",puff)
 	_set_parameter("MouthX",cheek_side*puff*0.35)
+	# key1是作者黑脸、key6是屑屑眼；禁止旧profile或待机动作重新激活它们。
+	_set_parameter("key1",0.0)
+	_set_parameter("key6",0.0)
 	model.call("advance",delta)
 
 func set_pointer(value: Vector2) -> void:
@@ -187,23 +260,47 @@ func set_pointer(value: Vector2) -> void:
 
 func set_blocked(value: bool) -> void:
 	blocked = value
-	if value: pointer_target = Vector2.ZERO
+	if value:
+		pointer_target = Vector2.ZERO
+		_reset_safe_face()
+
+func _reset_safe_face() -> void:
+	state = "idle"
+	reaction_remaining = 0.0
+	reaction_elapsed = 0.0
+	click_times.clear()
+	gesture_head = Vector3.ZERO
+	gesture_body = Vector3.ZERO
+	head_target = Vector2.ZERO
+	eye_target = Vector2.ZERO
+	if not loaded: return
+	model.call("stop_expression")
+	for id: String in ["key1","key6","key7","EyeSmile","ParamMouthForm","ParamMouthOpenY","BrowInnerUp","CheeckPuff","MouthX"]:
+		_set_parameter(id,0.0)
+	for id: String in ["AngleX","AngleY","AngleZ","PositionX","PositionY","PositionZ"]:
+		_set_parameter(id,0.0)
+	_set_parameter("ParamEyeLOpen",1.0)
+	_set_parameter("ParamEyeROpen",1.0)
 
 func request_reaction(kind: String, side: float = 0.0) -> bool:
-	if not loaded or blocked: return false
+	if not loaded or blocked or not kind in SAFE_REACTIONS: return false
+	if reduced_motion:
+		reaction_rejected.emit("减少动态已开启；在设置中关闭后可互动")
+		return false
 	while not click_times.is_empty() and elapsed-click_times[0] > 1.4: click_times.pop_front()
 	click_times.append(elapsed)
-	if click_times.size() >= 3: kind = "annoyed"
-	if reaction_remaining > 0.0 and (kind != "annoyed" or state == "annoyed"): return false
+	if click_times.size() >= 3: kind = "surprised"
+	if reaction_remaining > 0.0 and reaction_elapsed < 0.22 and kind != "surprised":
+		reaction_rejected.emit("已经收到啦，稍等一下再点")
+		return false
+	if kind == "surprised" and state == "surprised" and reaction_remaining > 0.0: return false
 	state = kind
 	cheek_side = clampf(side,-1.0,1.0)
 	reaction_elapsed = 0.0
 	reaction_remaining = response_seconds
 	reaction_count += 1
+	# 无论本机旧profile是否仍写annoyed=黑脸，都不再调用start_expression。
 	model.call("stop_expression")
-	var expression: String = str(profile.get("reactions",{}).get(kind,""))
-	if not expression.is_empty(): model.call("start_expression",expression)
-	# 未获认可的长抬手不默认绑到点击；短回应不争抢头眼跟随。
 	reaction_started.emit(kind)
 	return true
 
@@ -214,6 +311,7 @@ func _start_idle() -> void:
 
 func set_reduced_motion(value: bool) -> void:
 	reduced_motion = value
+	if value: _reset_safe_face()
 	if not loaded: return
 	model.set("physics_evaluate",not value)
 	if value:

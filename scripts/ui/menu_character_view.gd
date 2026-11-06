@@ -83,7 +83,7 @@ func _unhandled_input(event: InputEvent) -> void:
 			if not hits_character(event.position): return
 			var point: Vector2 = canonical_point(event.position)
 			var stroke: bool = Time.get_ticks_msec()-press_time > 200 and point.distance_to(press_position) > 16 and point.y < 215
-			var kind: String = "pet" if point.y < 145 or stroke else ("cheek" if point.y < 240 else "greet")
+			var kind: String = "pet_sway" if stroke else ("pet" if point.y < 145 else (("wink" if point.x < 360 else "cheek") if point.y < 240 else "greet"))
 			character.request_reaction(kind,signf(point.x-360))
 			get_viewport().set_input_as_handled()
 

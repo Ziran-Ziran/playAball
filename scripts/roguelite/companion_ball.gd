@@ -104,5 +104,5 @@ func _draw() -> void:
 
 func presentation_snapshot() -> Dictionary:
 	var palette: DemoTheme = theme if theme != null else DEFAULT_THEME
-	return {"mode":int(mode),"velocity":linear_velocity,"active_left":active_left,"active_duration":active_duration,"theme_id":palette.id}
+	return {"mode":int(mode),"velocity":linear_velocity,"active_left":active_left,"active_duration":active_duration,"theme_id":palette.id,"slot":slot}
 

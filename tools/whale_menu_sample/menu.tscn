@@ -1,0 +1,56 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://sample/menu.gd" id="1"]
+[ext_resource type="Script" path="res://sample/character.gd" id="2"]
+
+[sub_resource type="ViewportTexture" id="StageTexture"]
+viewport_path = NodePath("Stage")
+
+[node name="WhaleMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1")
+
+[node name="Backdrop" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.035, 0.067, 0.11, 1)
+
+[node name="CharacterView" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 500.0
+offset_top = 0.0
+offset_right = 1260.0
+offset_bottom = 720.0
+mouse_filter = 2
+texture_filter = 2
+texture = SubResource("StageTexture")
+expand_mode = 1
+stretch_mode = 0
+
+[node name="Stage" type="SubViewport" parent="."]
+transparent_bg = true
+msaa_3d = 3
+size = Vector2i(1520, 1440)
+render_target_update_mode = 4
+
+[node name="World" type="Node3D" parent="Stage"]
+
+[node name="Camera" type="Camera3D" parent="Stage/World"]
+position = Vector3(0, 1.08, 3.2)
+current = true
+projection = 1
+size = 1.65
+
+[node name="Character" type="Node3D" parent="Stage/World"]
+script = ExtResource("2")

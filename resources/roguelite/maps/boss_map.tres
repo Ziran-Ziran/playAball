@@ -4,6 +4,6 @@
 script = ExtResource("1")
 map_id = "boss_map"
 display_name = "内外旋转场"
-player_spawn = Vector2(640, 630)
-boss_spawn = Vector2(640, 400)
-safe_regions = Array[Rect2]([Rect2(610,620,60,30), Rect2(620,380,40,40)])
+player_spawn = Vector2(150, 590)
+boss_spawn = Vector2(1110, 230)
+safe_regions = Array[Rect2]([Rect2(130,570,40,40), Rect2(1030,150,160,160)])

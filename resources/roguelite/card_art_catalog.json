@@ -1,0 +1,262 @@
+{
+  "schema_version": 1,
+  "purpose": "Shared read-only next-rank illustration mapping for formal reward HUD and independent gallery; does not decide gameplay rewards",
+  "cards": [
+    {
+      "asset_id": "heavy_lv1",
+      "id": "heavy",
+      "level": 1,
+      "path": "res://assets/cards/heavy_lv1.png",
+      "approved": false,
+      "historical_approval": "Round-eye level-one master accepted before whole-set homogeneity feedback on 2026-11-04; retained as history only",
+      "review_status": "integrated_pending_user_review",
+      "production_revision": "historical_round_eye_master_reused"
+    },
+    {
+      "asset_id": "companion_lv1",
+      "id": "companion",
+      "level": 1,
+      "path": "res://assets/cards/companion_lv1.png",
+      "approved": false,
+      "historical_approval": "Round-eye level-one master accepted before whole-set homogeneity feedback on 2026-11-04; retained as history only",
+      "review_status": "integrated_pending_user_review",
+      "production_revision": "historical_round_eye_master_reused"
+    },
+    {
+      "asset_id": "cooldown_lv1",
+      "id": "cooldown",
+      "level": 1,
+      "path": "res://assets/cards/cooldown_lv1.png",
+      "approved": false,
+      "historical_approval": "Round-eye level-one master accepted before whole-set homogeneity feedback on 2026-11-04; retained as history only",
+      "review_status": "integrated_pending_user_review",
+      "production_revision": "historical_round_eye_master_reused"
+    },
+    {
+      "asset_id": "shrink_lv2",
+      "id": "shrink",
+      "level": 2,
+      "path": "res://assets/cards/shrink_lv2.png",
+      "approved": false,
+      "review_status": "integrated_pending_user_review",
+      "production_revision": "r3_revised"
+    },
+    {
+      "asset_id": "heavy_lv2",
+      "id": "heavy",
+      "level": 2,
+      "path": "res://assets/cards/heavy_lv2.png",
+      "approved": false,
+      "review_status": "integrated_pending_user_review",
+      "production_revision": "r3_revised"
+    },
+    {
+      "asset_id": "heavy_lv3",
+      "id": "heavy",
+      "level": 3,
+      "path": "res://assets/cards/heavy_lv3.png",
+      "approved": false,
+      "review_status": "integrated_pending_user_review",
+      "production_revision": "r3_revised"
+    },
+    {
+      "asset_id": "companion_lv2",
+      "id": "companion",
+      "level": 2,
+      "path": "res://assets/cards/companion_lv2.png",
+      "approved": false,
+      "review_status": "integrated_pending_user_review",
+      "production_revision": "r3_revised"
+    },
+    {
+      "asset_id": "companion_lv3",
+      "id": "companion",
+      "level": 3,
+      "path": "res://assets/cards/companion_lv3.png",
+      "approved": false,
+      "review_status": "integrated_pending_user_review",
+      "production_revision": "r3_revised"
+    },
+    {
+      "asset_id": "cooldown_lv2",
+      "id": "cooldown",
+      "level": 2,
+      "path": "res://assets/cards/cooldown_lv2.png",
+      "approved": false,
+      "review_status": "integrated_pending_user_review",
+      "production_revision": "r3_revised"
+    },
+    {
+      "asset_id": "cooldown_lv3",
+      "id": "cooldown",
+      "level": 3,
+      "path": "res://assets/cards/cooldown_lv3.png",
+      "approved": false,
+      "review_status": "integrated_pending_user_review",
+      "production_revision": "r3_revised"
+    },
+    {
+      "asset_id": "cooldown_lv4",
+      "id": "cooldown",
+      "level": 4,
+      "path": "res://assets/cards/cooldown_lv4.png",
+      "approved": false,
+      "review_status": "integrated_pending_user_review",
+      "production_revision": "r3_revised"
+    },
+    {
+      "asset_id": "shrink_lv1",
+      "id": "shrink",
+      "level": 1,
+      "path": "res://assets/cards/shrink_lv1.png",
+      "approved": false,
+      "review_status": "integrated_pending_user_review",
+      "production_revision": "r3_revised"
+    },
+    {
+      "asset_id": "bowling_lv1",
+      "id": "bowling",
+      "level": 1,
+      "path": "res://assets/cards/bowling_lv1.png",
+      "approved": false,
+      "review_status": "integrated_pending_user_review",
+      "production_revision": "r3_revised"
+    },
+    {
+      "asset_id": "choices_lv1",
+      "id": "choices",
+      "level": 1,
+      "path": "res://assets/cards/choices_lv1.png",
+      "approved": false,
+      "review_status": "integrated_pending_user_review",
+      "production_revision": "r3_revised"
+    },
+    {
+      "asset_id": "double_launch_lv1",
+      "id": "double_launch",
+      "level": 1,
+      "path": "res://assets/cards/double_launch_lv1.png",
+      "approved": false,
+      "review_status": "integrated_pending_user_review",
+      "production_revision": "r3_revised"
+    },
+    {
+      "asset_id": "echo_lv1",
+      "id": "echo",
+      "level": 1,
+      "path": "res://assets/cards/echo_lv1.png",
+      "approved": false,
+      "review_status": "integrated_pending_user_review",
+      "production_revision": "r3_revised"
+    },
+    {
+      "asset_id": "explosion_lv1",
+      "id": "explosion",
+      "level": 1,
+      "path": "res://assets/cards/explosion_lv1.png",
+      "approved": false,
+      "review_status": "integrated_pending_user_review",
+      "production_revision": "r3_revised"
+    },
+    {
+      "asset_id": "follow_lv1",
+      "id": "follow",
+      "level": 1,
+      "path": "res://assets/cards/follow_lv1.png",
+      "approved": false,
+      "review_status": "integrated_pending_user_review",
+      "production_revision": "r3_revised"
+    },
+    {
+      "asset_id": "glide_lv1",
+      "id": "glide",
+      "level": 1,
+      "path": "res://assets/cards/glide_lv1.png",
+      "approved": false,
+      "review_status": "integrated_pending_user_review",
+      "production_revision": "r3_revised"
+    },
+    {
+      "asset_id": "glide_lv2",
+      "id": "glide",
+      "level": 2,
+      "path": "res://assets/cards/glide_lv2.png",
+      "approved": false,
+      "review_status": "integrated_pending_user_review",
+      "production_revision": "r3_revised"
+    },
+    {
+      "asset_id": "glide_lv3",
+      "id": "glide",
+      "level": 3,
+      "path": "res://assets/cards/glide_lv3.png",
+      "approved": false,
+      "review_status": "integrated_pending_user_review",
+      "production_revision": "r3_revised"
+    },
+    {
+      "asset_id": "heal_repeat",
+      "id": "heal",
+      "level": 1,
+      "path": "res://assets/cards/heal_repeat.png",
+      "approved": false,
+      "review_status": "integrated_pending_user_review",
+      "production_revision": "r3_revised"
+    },
+    {
+      "asset_id": "launch_power_lv1",
+      "id": "launch_power",
+      "level": 1,
+      "path": "res://assets/cards/launch_power_lv1.png",
+      "approved": false,
+      "review_status": "integrated_pending_user_review",
+      "production_revision": "r3_revised"
+    },
+    {
+      "asset_id": "launch_power_lv2",
+      "id": "launch_power",
+      "level": 2,
+      "path": "res://assets/cards/launch_power_lv2.png",
+      "approved": false,
+      "review_status": "integrated_pending_user_review",
+      "production_revision": "r3_revised"
+    },
+    {
+      "asset_id": "launch_power_lv3",
+      "id": "launch_power",
+      "level": 3,
+      "path": "res://assets/cards/launch_power_lv3.png",
+      "approved": false,
+      "review_status": "integrated_pending_user_review",
+      "production_revision": "r3_revised"
+    },
+    {
+      "asset_id": "pulse_lv1",
+      "id": "pulse",
+      "level": 1,
+      "path": "res://assets/cards/pulse_lv1.png",
+      "approved": false,
+      "review_status": "integrated_pending_user_review",
+      "production_revision": "r3_revised"
+    },
+    {
+      "asset_id": "relay_lv1",
+      "id": "relay",
+      "level": 1,
+      "path": "res://assets/cards/relay_lv1.png",
+      "approved": false,
+      "review_status": "integrated_pending_user_review",
+      "production_revision": "r3_revised"
+    },
+    {
+      "asset_id": "vigor_repeat",
+      "id": "vigor",
+      "level": 1,
+      "path": "res://assets/cards/vigor_repeat.png",
+      "approved": false,
+      "review_status": "integrated_pending_user_review",
+      "production_revision": "r3_revised"
+    }
+  ],
+  "latest_review": "2026-11-04 R3 revisions integrated under explicit user request; whole-set aesthetic approval pending, historical master approvals retained separately"
+}

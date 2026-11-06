@@ -24,7 +24,7 @@ func _draw() -> void:
 		var point: Vector2 = _state.points[index]
 		var normal: Vector2 = _state.normals[index]
 		var radius: float = _state.radius
-		var color: Color = Color("77dfd0") if index==0 else Color("94cee6")
+		var color: Color = _state.colors[index]
 		if not bool(_state.active): color.a=0.35
 		draw_circle(point,radius,Color(0.12,0.35,0.36,0.28))
 		draw_arc(point,radius,0,TAU,48,color,1.5,true)

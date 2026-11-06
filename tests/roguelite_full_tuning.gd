@@ -119,9 +119,11 @@ func run() -> void:
 	await frames(3)
 	check(is_equal_approx(arena.player.rotation,0.4), "Rigid-body state edits pass through physics state interface")
 	arena.player.request_debug_state("position",Vector2(900,500))
-	arena.player.reset_body(Vector2(640,540))
+	# 复位取消旧请求的断言需使用安全点，不能在新竖板轴心量碰撞后的位移。
+	var reset_destination: Vector2 = arena.director.maps.definition.player_spawn
+	arena.player.reset_body(reset_destination)
 	await frames(3)
-	check(arena.player.position.distance_to(Vector2(640,540))<2, "Normal reset cancels a stale queued debug move")
+	check(arena.player.position.distance_to(reset_destination)<2, "Normal reset cancels a stale queued debug move")
 	var empty_vectors: Array[Vector2] = []
 	check(codec.from_parts([[2,3]],empty_vectors)==[Vector2(2,3)], "Empty typed vector arrays accept structured JSON without type errors")
 	check(codec.from_parts(["wrong"],PackedFloat32Array())==null, "Malformed packed arrays reject string components")

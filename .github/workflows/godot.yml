@@ -48,10 +48,21 @@ jobs:
           "$GODOT" --headless --path . --script tests/roguelite_full_tuning.gd 2>&1 | tee /tmp/full-tuning.log
           ! grep -E '^(SCRIPT ERROR|ERROR):' /tmp/full-tuning.log
           grep -q 'FULL TUNING CHECKS PASSED' /tmp/full-tuning.log
-          for spec in enemies build boss run rice theme kill_rewards kill_run launch_rewards reward_effects audio hud feedback_integration stage_flow shop_events crowd difficulty damage_contacts enemy_readability splitting map_mechanisms portals maps map_flow map_navigation balance_metrics fish_view actor_views; do
+          for spec in enemies build boss run rice theme kill_rewards kill_run launch_rewards reward_effects audio hud feedback_integration stage_flow shop_events crowd difficulty damage_contacts enemy_readability splitting map_mechanisms portals maps map_flow map_navigation map_blueprints ball_art tactical_aim card_typography sea_ui sea_ui_integration sea_ui_formal_game sea_ui_mouse ball_animation hero_smooth card_content_flow balance_metrics fish_view actor_views; do
             "$GODOT" --headless --path . --script "tests/roguelite_${spec}.gd" 2>&1 | tee "/tmp/${spec}.log"
             ! grep -E '^(SCRIPT ERROR|ERROR):' "/tmp/${spec}.log"
           done
+          grep -qE 'BLUEPRINT CHECKS: [0-9]+ failures: 0' /tmp/map_blueprints.log
+          grep -qE 'BALL ART CHECKS: [0-9]+ failures: 0' /tmp/ball_art.log
+          grep -q 'tactical aim failures: 0' /tmp/tactical_aim.log
+          grep -qE 'TYPOGRAPHY: [0-9]+ checks, 0 failures' /tmp/card_typography.log
+          grep -qE 'SEA UI: [0-9]+ checks, 0 failures' /tmp/sea_ui.log
+          grep -qE 'ACTUAL UI: [0-9]+ checks, 0 failures' /tmp/sea_ui_integration.log
+          grep -q 'FORMAL GAME REGRESSION FAILURES 0' /tmp/sea_ui_formal_game.log
+          grep -q 'SEA MOUSE FAILURES 0' /tmp/sea_ui_mouse.log
+          grep -qE 'BALL ANIMATION INDEPENDENT [0-9]+ checks failures 0' /tmp/ball_animation.log
+          grep -q 'SMOOTH HERO failures 0' /tmp/hero_smooth.log
+          grep -q 'CONTENT FLOW 16 cards failures 0' /tmp/card_content_flow.log
           grep -q 'ENEMY CHECKS PASSED' /tmp/enemies.log
           grep -q 'BUILD CHECKS PASSED' /tmp/build.log
           grep -q 'MAP MECHANISM CHECKS PASSED' /tmp/map_mechanisms.log
@@ -92,6 +103,12 @@ jobs:
           /tmp/godot/Godot_v4.7.1-stable_linux.x86_64 --headless --path . --script tests/ui_integration.gd 2>&1 | tee /tmp/ui-integration.log
           ! grep -E "^(SCRIPT ERROR|ERROR):" /tmp/ui-integration.log
           grep -q "UI INTEGRATION CHECKS PASSED" /tmp/ui-integration.log
+      - name: Persistent background music
+        run: |
+          set -euo pipefail
+          /tmp/godot/Godot_v4.7.1-stable_linux.x86_64 --headless --path . --script tests/music_manager.gd 2>&1 | tee /tmp/music.log
+          ! grep -E '^(SCRIPT ERROR|ERROR):' /tmp/music.log
+          grep -qE 'MUSIC CHECKS [0-9]+ failures 0' /tmp/music.log
       - name: Optional menu fallback and resource preparation
         run: |
           set -euo pipefail

@@ -125,7 +125,8 @@ func run() -> void:
 	check(is_equal_approx(arena.player.max_impulse, 1050.0) and is_equal_approx(arena.launcher.cooldown, 2.2), "One click restores the checked-in physical baseline")
 	tuning.set_parameter("launch_impulse", 1400.0)
 	tuning.set_parameter("linear_damping", 0.0)
-	arena.player.reset_body(Vector2(640, 540))
+	# 发射测速应从当前地图安全出生点开始；旧(640,540)现在是下方实体翻板轴心。
+	arena.player.reset_body(director.maps.definition.player_spawn)
 	await frames(3)
 	check(arena.launcher.launch_with_drag(Vector2(160, 0)), "Tuned impulse still uses the formal launch contract")
 	await frames(2)

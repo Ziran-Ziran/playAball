@@ -1,13 +1,14 @@
 extends Node2D
 ## 保留核心+四模块轮廓，读取只读状态，阶段预警绝不参与伤害判定。
-const ARMOR_ART: Texture2D=preload("res://assets/roguelite/presentation/heavy_shell_v1.png")
-@export_range(0.8,1.5) var armor_value_gain: float=1.2
+const ARMOR_ART: Texture2D=preload("res://assets/roguelite/ball_art_r4/virus_high.png")
+var _idle_clock: float = 0.0
 var source: Node2D
 var _state: Dictionary = {}
 var _flash: float = 0.0
 var module_flash_left: PackedFloat32Array=PackedFloat32Array([0.0,0.0,0.0,0.0])
 var module_break_left: PackedFloat32Array=PackedFloat32Array([0.0,0.0,0.0,0.0])
 func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_PAUSABLE
 	source = get_parent()
 	source.presentation_event.connect(_on_event)
 	source.died.connect(func(_boss): $Status.hide())
@@ -21,6 +22,7 @@ func _on_event(event: StringName,payload: Dictionary) -> void:
 		# 伤害已结算，读取最新真实模块生命；旧绘制快照可能尚未刷新。
 		if int(source.presentation_snapshot().modules[index].hp)<=0:module_break_left[index]=0.16
 func _process(delta: float) -> void:
+	_idle_clock += delta
 	_state = source.presentation_snapshot()
 	_flash = maxf(0.0,_flash-delta)
 	for index in 4:
@@ -41,12 +43,14 @@ func _process(delta: float) -> void:
 func snapshot() -> Dictionary:
 	return _state.duplicate(true)
 func armor_material_region() -> Rect2:
-	# 与普通重型共用中性装甲；裁切按实际导入尺寸换算，不依赖源PNG缓存。
-	var ratio: Vector2=ARMOR_ART.get_size()/Vector2(1254,1254)
-	return Rect2(Vector2(36,56)*ratio,Vector2(1175,1172)*ratio)
+	return DemoBallArt.region_for(ARMOR_ART)
 func _armor(point: Vector2,diameter: float,tint: Color) -> void:
-	var value:=Color(tint.r*armor_value_gain,tint.g*armor_value_gain,tint.b*armor_value_gain,tint.a)
-	draw_texture_rect_region(ARMOR_ART,Rect2(point-Vector2.ONE*diameter*0.5,Vector2.ONE*diameter),armor_material_region(),value)
+	var texture: Texture2D = ARMOR_ART if point.is_zero_approx() else DemoBallArt.texture_for("virus_mid")
+	if _flash>0.0 and point.is_zero_approx(): texture = DemoBallArt.animation_frame("virus_high",0)
+	for i in 4:
+		if not point.is_zero_approx() and module_flash_left[i]>0.0 and point.is_equal_approx(_state.modules[i].point): texture = DemoBallArt.animation_frame("virus_mid",0)
+	var value := Color(1.15,1.15,1.15,tint.a) if tint.r > 0.8 else Color.WHITE
+	draw_texture_rect_region(texture,DemoBallArt.rect_for(texture,diameter,point),DemoBallArt.region_for(texture),value)
 func _draw() -> void:
 	if _state.is_empty() or bool(_state.dead): return
 	var phase: int = _state.phase

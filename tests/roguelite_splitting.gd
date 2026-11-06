@@ -28,15 +28,16 @@ func run() -> void:
 	check(d.split_enabled, "Player checkbox actually enables split rules")
 	option.button_pressed = false
 	check(not d.split_enabled, "Player checkbox actually disables split rules")
+	# 图一改为中央出生后，旧(800,350)落入防贴脸半径；夹具须远离玩家与固定斜板。
 	d.pending.clear()
-	d.spawn_enemy(1, Vector2(800, 350), 6)
+	d.spawn_enemy(1, Vector2(850, 540), 6)
 	var root_enemy = d.enemies.get_child(0)
 	root_enemy.hurt(99)
 	check(d.pending.is_empty() and d.kills == 1, "Off setting keeps one death with no split")
 	d.restart()
 	d.pending.clear()
 	d.set_split_enabled(true)
-	d.spawn_enemy(1, Vector2(800, 350), 6)
+	d.spawn_enemy(1, Vector2(850, 540), 6)
 	var parent = d.enemies.get_child(0)
 	parent.hurt(99)
 	check(d.kills == 1 and d.wallet.balance == 1 and d.pending.size() == 2, "Family root grants one reward then two delayed children")
@@ -65,7 +66,7 @@ func run() -> void:
 		child.hurt(99)
 	check(d.pending.is_empty() and d.kills == 1, "One-health children terminate family")
 	await process_frame
-	d.spawn_enemy(1, Vector2(800, 350), 6)
+	d.spawn_enemy(1, Vector2(850, 540), 6)
 	d.enemies.get_child(0).hurt(99)
 	d.set_split_enabled(false)
 	check(d.pending.size() == 2, "Disabling preserves existing child warnings")
@@ -78,7 +79,7 @@ func run() -> void:
 	check(d.split_enabled and d.pending.size() == 2 and d.kills == 0, "Restart preserves preference and clears old family economy")
 	d.pending.clear()
 	d.enemy_limit = 1
-	d.spawn_enemy(1, Vector2(800, 350), 6)
+	d.spawn_enemy(1, Vector2(850, 540), 6)
 	d.enemies.get_child(0).hurt(99)
 	check(d.pending.size() == 1, "Splitting shares live-plus-warning budget")
 	d.wave_elapsed = d.spawn_duration + 1.0
@@ -87,7 +88,7 @@ func run() -> void:
 	d.pending[0].point = d.player.position
 	d.advance(0.81)
 	check(d.alive_count() == 0 and d.pending.size() == 1, "Unsafe nearby split point repeats warning without face spawn")
-	check(d.pending[0].origin.distance_to(Vector2(800, 350)) < 0.1, "Safety rewarning retains local family origin")
+	check(d.pending[0].origin.distance_to(Vector2(850, 540)) < 0.1, "Safety rewarning retains local family origin")
 	for retry in 8:
 		if d.pending.is_empty():
 			break
@@ -113,7 +114,7 @@ func run() -> void:
 	d.restart()
 	check(d.pending.all(func(item): return item.get("family_reward", true)), "Restart leaves only fresh original warnings")
 	d.pending.clear()
-	d.spawn_enemy(1, Vector2(800, 350), 6)
+	d.spawn_enemy(1, Vector2(850, 540), 6)
 	var stale_enemy = d.enemies.get_child(0)
 	d.enemies.remove_child(stale_enemy)
 	d.restart()

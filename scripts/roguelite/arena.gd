@@ -6,12 +6,29 @@ extends Node2D
 @onready var status: Label = $HUD/Status
 @onready var menu: PanelContainer = $HUD/Menu
 @onready var feedback: Node2D = $ImpactFeedback
+var aim_indicator: Node2D
+var _aim_phase: float = 0.0
+var _aim_recoil: float = 0.0
+var _last_aim_drag: Vector2
 var companion_count: int = 1
 var paused: bool = false
 var map_provider: Node
 
 func _ready() -> void:
 	launcher.player = player
+	aim_indicator = Node2D.new()
+	aim_indicator.name = "AimIndicator"
+	aim_indicator.set_script(load("res://scripts/roguelite/presentation/aim_indicator.gd"))
+	add_child(aim_indicator)
+	launcher.aim_cancelled.connect(_clear_aim_feedback)
+	player.visual_event.connect(func(event: StringName, _payload: Dictionary):
+		if event == &"reset":
+			_clear_aim_feedback()
+	)
+	launcher.fired.connect(func(_chain: int):
+		_last_aim_drag = launcher.last_fired_drag
+		_aim_recoil = 0.22
+	)
 	# 回能只发布表现事件，不能复用撞击粒子或改变真实弹槽/冷却。
 	launcher.recharged.connect(func(): player.visual_event.emit(&"charge_restored",{"charges":launcher.charges,"capacity":launcher.capacity}))
 	companions.player = player
@@ -64,6 +81,8 @@ func over_controls(point: Vector2) -> bool:
 	return menu.visible and menu.get_global_rect().has_point(point)
 
 func _process(_delta: float) -> void:
+	_aim_phase = fmod(_aim_phase + _delta * 1.8, 1.0)
+	_aim_recoil = maxf(0.0, _aim_recoil - _delta)
 	var destroyed: int = 0
 	for target: DemoTarget in $Targets.get_children():
 		if target.dead:
@@ -118,15 +137,19 @@ func _draw() -> void:
 		draw_line(Vector2(x, 125), Vector2(x, 680), Color(0.12, 0.24, 0.30, 0.35))
 	for y in range(160, 681, 40):
 		draw_line(Vector2(40, y), Vector2(1240, y), Color(0.12, 0.24, 0.30, 0.35))
+	_draw_aim_feedback()
+
+func _clear_aim_feedback() -> void:
+	_aim_recoil = 0.0
+	_last_aim_drag = Vector2.ZERO
+	if is_instance_valid(aim_indicator):
+		aim_indicator.hide()
+
+func _draw_aim_feedback() -> void:
 	if is_instance_valid(launcher) and launcher.aiming:
-		var drag: Vector2 = (launcher.anchor - launcher.pointer).limit_length(player.max_drag)
-		# 屏幕手势方向映射到世界，仅用于画箭头，物理仍在松手时注入冲量。
-		var world_drag: Vector2 = get_global_transform_with_canvas().affine_inverse().basis_xform(drag)
-		var end: Vector2 = player.position + world_drag
-		draw_line(player.position, end, Color("fff1ad"), 4, true)
-		if drag.length() >= 8.0:
-			draw_line(end, end - drag.normalized().rotated(0.5) * 18, Color("fff1ad"), 4, true)
-			draw_line(end, end - drag.normalized().rotated(-0.5) * 18, Color("fff1ad"), 4, true)
+		_last_aim_drag = (launcher.anchor - launcher.pointer).limit_length(player.max_drag)
+	if is_instance_valid(aim_indicator):
+		aim_indicator.update_indicator()
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_WM_WINDOW_FOCUS_OUT and is_instance_valid(launcher):

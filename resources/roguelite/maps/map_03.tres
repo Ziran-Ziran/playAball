@@ -4,6 +4,6 @@
 script = ExtResource("1")
 map_id = "map_03"
 display_name = "旋转环与传送"
-player_spawn = Vector2(640, 620)
+player_spawn = Vector2(640, 400)
 boss_spawn = Vector2(640, 240)
-safe_regions = Array[Rect2]([Rect2(610,600,60,45)])
+safe_regions = Array[Rect2]([Rect2(620,380,40,40)])

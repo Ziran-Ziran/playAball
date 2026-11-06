@@ -8,10 +8,103 @@
 playAball/
 ├── .github/  # GitHub 协作模板与自动检查
 │   ├── workflows/  # 提交/PR 触发的持续集成
-│   │   └── godot.yml  # Linux固定引擎导入、目录与36套行为回归配置
+│   │   └── godot.yml  # Linux固定引擎导入、目录、物理/UI行为回归与可选菜单回退配置
 │   └── pull_request_template.md  # PR 的改动、测试、Review、教程和目录核对模板。
 ├── assets/  # 运行素材
+│   ├── cards/  # 正式HUD与独立图鉴使用的成长插画候选/历史母版，审美状态与技术接线分开
+│   │   ├── bowling_lv1.png  # 内置image_gen成长插画：bowling，第1级；正式HUD显示下一等级，审美待用户验收
+│   │   ├── bowling_lv1.png.import  # 同名卡面Godot纹理导入配置，mipmap开启、512尺寸限制，原始1536×1024源图保留
+│   │   ├── choices_lv1.png  # 内置image_gen成长插画：choices，第1级；正式HUD显示下一等级，审美待用户验收
+│   │   ├── choices_lv1.png.import  # 同名卡面Godot纹理导入配置，mipmap开启、512尺寸限制，原始1536×1024源图保留
+│   │   ├── companion_lv1.png  # 内置image_gen成长插画：companion，第1级；正式HUD显示下一等级，审美待用户验收
+│   │   ├── companion_lv1.png.import  # 同名卡面Godot纹理导入配置，mipmap开启、512尺寸限制，原始1536×1024源图保留
+│   │   ├── companion_lv2.png  # 内置image_gen成长插画：companion，第2级；正式HUD显示下一等级，审美待用户验收
+│   │   ├── companion_lv2.png.import  # 同名卡面Godot纹理导入配置，mipmap开启、512尺寸限制，原始1536×1024源图保留
+│   │   ├── companion_lv3.png  # 内置image_gen成长插画：companion，第3级；正式HUD显示下一等级，审美待用户验收
+│   │   ├── companion_lv3.png.import  # 同名卡面Godot纹理导入配置，mipmap开启、512尺寸限制，原始1536×1024源图保留
+│   │   ├── cooldown_lv1.png  # 内置image_gen成长插画：cooldown，第1级；正式HUD显示下一等级，审美待用户验收
+│   │   ├── cooldown_lv1.png.import  # 同名卡面Godot纹理导入配置，mipmap开启、512尺寸限制，原始1536×1024源图保留
+│   │   ├── cooldown_lv2.png  # 内置image_gen成长插画：cooldown，第2级；正式HUD显示下一等级，审美待用户验收
+│   │   ├── cooldown_lv2.png.import  # 同名卡面Godot纹理导入配置，mipmap开启、512尺寸限制，原始1536×1024源图保留
+│   │   ├── cooldown_lv3.png  # 内置image_gen成长插画：cooldown，第3级；正式HUD显示下一等级，审美待用户验收
+│   │   ├── cooldown_lv3.png.import  # 同名卡面Godot纹理导入配置，mipmap开启、512尺寸限制，原始1536×1024源图保留
+│   │   ├── cooldown_lv4.png  # 内置image_gen成长插画：cooldown，第4级；正式HUD显示下一等级，审美待用户验收
+│   │   ├── cooldown_lv4.png.import  # 同名卡面Godot纹理导入配置，mipmap开启、512尺寸限制，原始1536×1024源图保留
+│   │   ├── double_launch_lv1.png  # 内置image_gen成长插画：double_launch，第1级；正式HUD显示下一等级，审美待用户验收
+│   │   ├── double_launch_lv1.png.import  # 同名卡面Godot纹理导入配置，mipmap开启、512尺寸限制，原始1536×1024源图保留
+│   │   ├── echo_lv1.png  # 内置image_gen成长插画：echo，第1级；正式HUD显示下一等级，审美待用户验收
+│   │   ├── echo_lv1.png.import  # 同名卡面Godot纹理导入配置，mipmap开启、512尺寸限制，原始1536×1024源图保留
+│   │   ├── explosion_lv1.png  # 内置image_gen成长插画：explosion，第1级；正式HUD显示下一等级，审美待用户验收
+│   │   ├── explosion_lv1.png.import  # 同名卡面Godot纹理导入配置，mipmap开启、512尺寸限制，原始1536×1024源图保留
+│   │   ├── follow_lv1.png  # 内置image_gen成长插画：follow，第1级；正式HUD显示下一等级，审美待用户验收
+│   │   ├── follow_lv1.png.import  # 同名卡面Godot纹理导入配置，mipmap开启、512尺寸限制，原始1536×1024源图保留
+│   │   ├── glide_lv1.png  # 内置image_gen成长插画：glide，第1级；正式HUD显示下一等级，审美待用户验收
+│   │   ├── glide_lv1.png.import  # 同名卡面Godot纹理导入配置，mipmap开启、512尺寸限制，原始1536×1024源图保留
+│   │   ├── glide_lv2.png  # 内置image_gen成长插画：glide，第2级；正式HUD显示下一等级，审美待用户验收
+│   │   ├── glide_lv2.png.import  # 同名卡面Godot纹理导入配置，mipmap开启、512尺寸限制，原始1536×1024源图保留
+│   │   ├── glide_lv3.png  # 内置image_gen成长插画：glide，第3级；正式HUD显示下一等级，审美待用户验收
+│   │   ├── glide_lv3.png.import  # 同名卡面Godot纹理导入配置，mipmap开启、512尺寸限制，原始1536×1024源图保留
+│   │   ├── heal_repeat.png  # 内置image_gen成长插画：heal，重复共用；正式HUD显示下一等级，审美待用户验收
+│   │   ├── heal_repeat.png.import  # 同名卡面Godot纹理导入配置，mipmap开启、512尺寸限制，原始1536×1024源图保留
+│   │   ├── heavy_lv1.png  # 内置image_gen成长插画：heavy，第1级；正式HUD显示下一等级，审美待用户验收
+│   │   ├── heavy_lv1.png.import  # 同名卡面Godot纹理导入配置，mipmap开启、512尺寸限制，原始1536×1024源图保留
+│   │   ├── heavy_lv2.png  # 内置image_gen成长插画：heavy，第2级；正式HUD显示下一等级，审美待用户验收
+│   │   ├── heavy_lv2.png.import  # 同名卡面Godot纹理导入配置，mipmap开启、512尺寸限制，原始1536×1024源图保留
+│   │   ├── heavy_lv3.png  # 内置image_gen成长插画：heavy，第3级；正式HUD显示下一等级，审美待用户验收
+│   │   ├── heavy_lv3.png.import  # 同名卡面Godot纹理导入配置，mipmap开启、512尺寸限制，原始1536×1024源图保留
+│   │   ├── launch_power_lv1.png  # 内置image_gen成长插画：launch_power，第1级；正式HUD显示下一等级，审美待用户验收
+│   │   ├── launch_power_lv1.png.import  # 同名卡面Godot纹理导入配置，mipmap开启、512尺寸限制，原始1536×1024源图保留
+│   │   ├── launch_power_lv2.png  # 内置image_gen成长插画：launch_power，第2级；正式HUD显示下一等级，审美待用户验收
+│   │   ├── launch_power_lv2.png.import  # 同名卡面Godot纹理导入配置，mipmap开启、512尺寸限制，原始1536×1024源图保留
+│   │   ├── launch_power_lv3.png  # 内置image_gen成长插画：launch_power，第3级；正式HUD显示下一等级，审美待用户验收
+│   │   ├── launch_power_lv3.png.import  # 同名卡面Godot纹理导入配置，mipmap开启、512尺寸限制，原始1536×1024源图保留
+│   │   ├── pulse_lv1.png  # 内置image_gen成长插画：pulse，第1级；正式HUD显示下一等级，审美待用户验收
+│   │   ├── pulse_lv1.png.import  # 同名卡面Godot纹理导入配置，mipmap开启、512尺寸限制，原始1536×1024源图保留
+│   │   ├── relay_lv1.png  # 内置image_gen成长插画：relay，第1级；正式HUD显示下一等级，审美待用户验收
+│   │   ├── relay_lv1.png.import  # 同名卡面Godot纹理导入配置，mipmap开启、512尺寸限制，原始1536×1024源图保留
+│   │   ├── shrink_lv1.png  # 内置image_gen成长插画：shrink，第1级；正式HUD显示下一等级，审美待用户验收
+│   │   ├── shrink_lv1.png.import  # 同名卡面Godot纹理导入配置，mipmap开启、512尺寸限制，原始1536×1024源图保留
+│   │   ├── shrink_lv2.png  # 内置image_gen成长插画：shrink，第2级；正式HUD显示下一等级，审美待用户验收
+│   │   ├── shrink_lv2.png.import  # 同名卡面Godot纹理导入配置，mipmap开启、512尺寸限制，原始1536×1024源图保留
+│   │   ├── vigor_repeat.png  # 内置image_gen成长插画：vigor，重复共用；正式HUD显示下一等级，审美待用户验收
+│   │   └── vigor_repeat.png.import  # 同名卡面Godot纹理导入配置，mipmap开启、512尺寸限制，原始1536×1024源图保留
+│   ├── fonts/  # 随工程分发的字体及来源许可
+│   │   └── zcool_kuaile/  # 官方OFL站酷快乐体，用于动态中文卡片艺术标题
+│   │       ├── OFL.txt  # 站酷快乐体原始SIL Open Font License，随字体分发保留
+│   │       ├── SOURCE.txt  # 字体官方来源与下载记录
+│   │       ├── ZCOOLKuaiLe-Regular.ttf  # Google Fonts官方站酷快乐体，用于真实动态中文艺术标题
+│   │       └── ZCOOLKuaiLe-Regular.ttf.import  # 同名素材的 Godot 导入配置，应随素材一起维护。
+│   ├── music/  # 用户提供的背景音乐原音频及来源说明
+│   │   ├── SOURCE.md  # 用户提供音频的原文件名、歌曲来源、SHA256与使用边界记录
+│   │   ├── let_me_go.mp3  # 用户提供的Let Me Go共创版原MP3，字节不变，用作本机体验背景音乐
+│   │   └── let_me_go.mp3.import  # 同名素材的 Godot 导入配置，应随素材一起维护。
 │   ├── roguelite/  # 正式游戏实体独立美术资源
+│   │   ├── ball_animation_r5/  # 项目子目录
+│   │   │   ├── generation.json  # 四张内置生成图集的提示词、引用与透明规格
+│   │   │   ├── hashes.json  # 四张生成动画图集的SHA256完整性记录
+│   │   │   ├── hero_sheet.png  # 内置生图主角四格透明姿势：长圆、扁圆、碰撞与痛脸
+│   │   │   ├── hero_sheet.png.import  # 同名素材的 Godot 导入配置，应随素材一起维护。
+│   │   │   ├── virus_high_sheet.png  # 内置生图高级病毒受击、反弹、裂壳与碎片四格
+│   │   │   ├── virus_high_sheet.png.import  # 同名素材的 Godot 导入配置，应随素材一起维护。
+│   │   │   ├── virus_low_sheet.png  # 内置生图低级病毒受击、反弹、裂壳与碎片四格
+│   │   │   ├── virus_low_sheet.png.import  # 同名素材的 Godot 导入配置，应随素材一起维护。
+│   │   │   ├── virus_mid_sheet.png  # 内置生图中级病毒受击、反弹、裂壳与碎片四格
+│   │   │   └── virus_mid_sheet.png.import  # 同名素材的 Godot 导入配置，应随素材一起维护。
+│   │   ├── ball_art_r4/  # 内置生图的鲸鱼娘与AI人物团子、分级病毒透明素材
+│   │   │   ├── claude.png  # 内置imagegen透明素材：杏色卷发Claude人物团子与小Clawd发饰，审美以用户反馈为准
+│   │   │   ├── claude.png.import  # 同名素材的 Godot 导入配置，应随素材一起维护。
+│   │   │   ├── gpt.png  # 内置imagegen透明素材：白发薄荷斗篷GPT人物团子，审美以用户反馈为准
+│   │   │   ├── gpt.png.import  # 同名素材的 Godot 导入配置，应随素材一起维护。
+│   │   │   ├── hero.png  # 内置imagegen透明素材：蓝发鲸鱼娘主角团子，审美以用户反馈为准
+│   │   │   ├── hero.png.import  # 同名素材的 Godot 导入配置，应随素材一起维护。
+│   │   │   ├── qwen.png  # 内置imagegen透明素材：紫发云纹千问人物团子与小几何发饰，审美以用户反馈为准
+│   │   │   ├── qwen.png.import  # 同名素材的 Godot 导入配置，应随素材一起维护。
+│   │   │   ├── virus_high.png  # 内置imagegen透明素材：数字冠与分节外壳高级病毒，审美以用户反馈为准
+│   │   │   ├── virus_high.png.import  # 同名素材的 Godot 导入配置，应随素材一起维护。
+│   │   │   ├── virus_low.png  # 内置imagegen透明素材：光滑短触角低级病毒，审美以用户反馈为准
+│   │   │   ├── virus_low.png.import  # 同名素材的 Godot 导入配置，应随素材一起维护。
+│   │   │   ├── virus_mid.png  # 内置imagegen透明素材：四短刺装甲中级病毒，审美以用户反馈为准
+│   │   │   └── virus_mid.png.import  # 同名素材的 Godot 导入配置，应随素材一起维护。
 │   │   └── presentation/  # 生图透明实体素材与生成来源，不改变碰撞形状
 │   │       ├── fat_fish_ball_v1.png  # 内置生图制作的透明肥鱼主球，真实Sprite接入
 │   │       ├── fat_fish_ball_v1.png.import  # 同名素材的 Godot 导入配置，应随素材一起维护。
@@ -23,6 +116,23 @@ playAball/
 │   │       ├── turret_base_v1.png  # 内置生图的三角炮台透明底座，炮管仍按真实方向独立绘制
 │   │       └── turret_base_v1.png.import  # 同名素材的 Godot 导入配置，应随素材一起维护。
 │   └── ui/  # 用户认可的第一批UI素材；从文档样板复制用于运行
+│       ├── aim_kenney/  # 按用户最新反馈选用的Kenney CC0单体指向/尾流素材及来源记录
+│       │   ├── KENNEY_PARTICLE_LICENSE.txt  # 粒子包自带的原始Kenney CC0许可与作者信息
+│       │   ├── SOURCE.md  # Kenney箭头/粒子许可页面核查、来源和本轮取舍说明
+│       │   ├── light_03.png  # Kenney Particle Pack CC0能量环原始PNG，用于轻微滑动亮点
+│       │   ├── light_03.png.import  # 同名素材的 Godot 导入配置，应随素材一起维护。
+│       │   ├── navigation_e.png  # Kenney Cursor Pack CC0导航单体箭头原始PNG，用于风格对照
+│       │   ├── navigation_e.png.import  # 同名素材的 Godot 导入配置，应随素材一起维护。
+│       │   ├── pointer_toon_a.png  # Kenney Cursor Pack CC0圆角单体箭头原始PNG，默认瞄准头
+│       │   ├── pointer_toon_a.png.import  # 同名素材的 Godot 导入配置，应随素材一起维护。
+│       │   ├── sources.json  # 两套素材的官方页面、固定镜像版本、逐文件原始URL与SHA256
+│       │   ├── trace_06.png  # Kenney Particle Pack CC0柔和光带原始PNG，用于低透明尾流
+│       │   └── trace_06.png.import  # 同名素材的 Godot 导入配置，应随素材一起维护。
+│       ├── app_icon/  # 项目子目录
+│       │   ├── SOURCE.md  # 应用图标来源、生成方式和ICO更新说明
+│       │   ├── playaball.ico  # 由原画生成的16至256像素七尺寸Windows导出图标
+│       │   ├── playaball.png  # 内置生图独立肥鱼应用图标原画，项目与窗口使用
+│       │   └── playaball.png.import  # 同名素材的 Godot 导入配置，应随素材一起维护。
 │       ├── arena_skin.png  # 用户认可的暗绿薄墙全景生图；正式运行仅裁取无字地面和四边墙纹理。
 │       ├── arena_skin.png.import  # UI贴图导入配置，由Godot维护。
 │       ├── fat_fish_exit_button_full.png  # 第一批生图UI运行贴图。
@@ -45,6 +155,8 @@ playAball/
 │       └── upgrade_card_frame_v2.png.import  # UI贴图导入配置，由Godot维护。
 ├── docs/  # 项目现状、设计、教程与协作说明
 │   ├── art/  # 视觉方向样板与用户反馈记录，未获认可的样板不用于全面替换
+│   │   ├── ball_art_r4.json  # 七张内置生图透明角色的完整提示词、路径、来源输出与SHA256
+│   │   ├── card_briefs_r3.md  # 用户同质化反馈后的28张逐卡叙事/机位/受力/规则约束与先描述后生成规范
 │   │   ├── fat_fish_exit_button_full.png  # 与开始同风格的完整退出按钮，门箭头和中文字整体生图，待评价。
 │   │   ├── fat_fish_menu.html  # 角色/标题/背景/按钮分层组合的菜单小样，点击仅回显预览信息。
 │   │   ├── fat_fish_menu_background.png  # 独立生图的菜单球类训练场景插画，不是正式战斗地图。
@@ -58,8 +170,12 @@ playAball/
 │   │   ├── hud_health_flow.gif  # 用户已认可力度的红色血条逐格流光两秒循环参考；正式版本见health_skin.gd。
 │   │   ├── hud_health_flow.html  # 用生成贴图演示红色有血格的逐格流光，不改变或接线玩法状态。
 │   │   ├── hud_red_sample.png  # 内置生图的透明红色血条HUD概念图；文字数字为示例，未接正式游戏。
+│   │   ├── live2d_model_research.md  # 菜单鲸鱼娘Live2D与公开3D候选的来源/外观/格式/授权核验及实际验证边界；追加双线现成动作/VRM物理对照和真实未通过项
+│   │   ├── mascot_references_r4.md  # AI视觉锚点的公开参考、机器人候选被否定后的最终人物风格取舍
 │   │   ├── menu_preview.html  # 生图按钮和面板的独立菜单/四态演示，点击仅显示预览反馈。
 │   │   ├── menu_preview.png  # 1280×720开始/设置/退出菜单的美术组合截图，未接游戏功能。
+│   │   ├── production_r2.json  # R2视听素材完整提示词、被否定候选、16种28图映射、六音频返回与分离验收状态
+│   │   ├── production_r2.md  # 视听任务恢复清点、首轮剩余数量、拟人主体纠正、真实事件缺口与整文件职责
 │   │   ├── ui_button_base.png  # 内置生图的透明无字通用按钮底图，沿用已认可细边科幻卡框风格。
 │   │   ├── ui_panel_base.png  # 内置生图的透明无字横向菜单面板底板，不含控件和具体流程。
 │   │   ├── ui_sample.svg  # 已向用户展示且被否定的暖色UI布局样板，保留反馈上下文，不作为实施风格。
@@ -69,6 +185,8 @@ playAball/
 │   │   ├── upgrade_cards_entrance.gif  # 首版三张成长卡轻弹入场的历史预览，后续改为平滑流动风格。
 │   │   ├── upgrade_cards_entrance.html  # v2细边卡框三/四张平滑入场及沿边流光独立演示，不接奖励状态。
 │   │   └── upgrade_cards_entrance_v2.gif  # 用户已认可的v2三卡平滑滑入及沿边流光预览，正式游戏未接入。
+│   ├── history/  # 整理前开发文档的单次历史快照，当前事实以README/PROJECT/STATUS为准
+│   │   └── development_before_20261106.md  # 文件整理前README/PROJECT/STATUS完整原文快照，仅作历史追溯
 │   ├── ideas/  # 设计方案与创意草案，各文件注明采纳状态
 │   │   ├── COLLISION_ROGUELITE_DEMO.md  # 已确认的俯视零重力肉鸽方案、P0～P5 验收与分阶段建设边界。
 │   │   └── ROADMAP_DRAFT.md  # 未采纳的开发里程碑、玩法脑洞与可转为 GitHub Issue 的草案。
@@ -78,7 +196,8 @@ playAball/
 │   │   │   └── workflow.svg  # 开发者从提出功能到 Review、授权提交和 PR 合并的流程图。
 │   │   ├── AI_SETUP.md  # 另一电脑 AI 的环境调查、工具补齐、可选 MCP 和验证步骤。
 │   │   ├── DEVELOPER.md  # 新开发者如何用 Agent、Git、GitHub、Godot 完成一次协作。
-│   │   └── NEXT_SESSION.md  # 下一对话可复制提示词：现状、最新体验问题、实施顺序与环境/Git授权边界。
+│   │   ├── NEXT_SESSION.md  # 下一对话可复制提示词：现状、最新体验问题、实施顺序与环境/Git授权边界。
+│   │   └── live2d_handoff_prompt.md  # 交给另一对话的Live2D只读讲解提示词，明确现状/技术栈与暂不开工、卡片独占边界
 │   ├── plans/  # 具体工作的范围与执行清单
 │   │   ├── 001-bootstrap.md  # 首次建仓、原型实现和交接的已执行计划。
 │   │   ├── 002-workflow.md  # 本轮目录维护、Review、交接配图与路线草案的执行清单。
@@ -89,7 +208,15 @@ playAball/
 │   │   ├── 007-ui-art-direction.md  # UI美术方向与样板反馈；用户否定样板后暂停全面替换。
 │   │   ├── 008-parallel-development.md  # A表现/B玩法实验室、用户owner合并权、整文件边界、S0～S4计划与当前最小接口/实验室实施进度。
 │   │   ├── 009-ui-game-integration.md  # 本轮集成范围、所有权、验证与Git授权边界。
-│   │   └── 010-full-game-and-overnight-iteration.md  # 根据附件和代码整理的四地图/Buff/操作、有限自动调参与表现迭代计划；含范围、门槛、整夜预算和授权边界，尚未执行。
+│   │   ├── 010-full-game-and-overnight-iteration.md  # 根据附件和代码整理的四地图/Buff/操作、有限自动调参与表现迭代计划；含范围、门槛、整夜预算和授权边界，尚未执行。
+│   │   ├── 011-art-audio-interactive-menu.md  # 手绘碰撞风格的28张卡面与视听生产计划R2；含Live2D兼容验证、绑定/互动、原执行进度保留及接续提示词
+│   │   ├── 012-card-art-integration.md  # 用户授权卡面/文字做到正式实装的执行范围、整文件接管、步骤与验证入口
+│   │   ├── 013-interactive-menu-character.md  # 以米塔/精细Live2D观感为目标的菜单角色执行范围、原生3D试验结果与未达标项；双线继续及耳骨/布料碰撞验收边界
+│   │   ├── 014-map-blueprint-correction.md  # 本轮四图修正的用户确认、几何设计、验收条件与本地执行计划
+│   │   ├── 015-ball-art-effects-and-tactical-aim.md  # 本轮美术/特效/字体/瞄准静止的完整需求、子Agent分工与验收计划
+│   │   ├── 016-ui-animation-icon-and-platform.md  # 六项UI、球体动画、菜单表情、独立图标及Windows安卓评估的分工与验收
+│   │   ├── 017-smooth-animation-card-flow-menu-actions.md  # 用户复验后的连续动画、真实卡片内容流及可发现Live2D动作分工/验收
+│   │   └── 018-let-me-go-background-music.md  # 用户提供Let Me Go音频后的持续BGM、音量/静音与实际包验证分工
 │   ├── playtest/  # 面向策划/试玩者的启动操作、反馈与已知限制说明
 │   │   ├── OVERNIGHT_DELIVERY.md  # 整夜阶段交付：普通包、实际采用差异、前后证据和真人/原生窗口未验项
 │   │   ├── OVERNIGHT_FEEDBACK.txt  # 普通包真人手感、美术、音频与成长反馈模板，无调参快捷键误导
@@ -103,7 +230,12 @@ playAball/
 │   │   ├── 2026-11-01-gameplay-lab.md  # 本批S1表现接口和B线玩法实验室的最终Review范围、独立审查、问题处理、验证证据、未测项与授权边界。
 │   │   ├── 2026-11-02-ui-integration.md  # A/B快照集成与UI接线的验证/独立审查证据及未测项。
 │   │   ├── 2026-11-03-function-verification.md  # 本轮完整功能实测清单、翻板数值对照、独立审查与Git边界证据
+│   │   ├── 2026-11-05-ball-art-and-tactical-aim.md  # 本轮人物团子/字体/决策静止/单体素材箭头的独立技术验收、修复证据和授权边界
 │   │   ├── 2026-11-05-live2d-start-menu.md  # 正式菜单最终自查、独立Review、问题修复与测试/发布边界记录
+│   │   ├── 2026-11-06-final-integration.md  # 整批文件整理、独立最终审查、测试与Git交付边界记录
+│   │   ├── 2026-11-06-let-me-go-music.md  # 原曲BGM独立复核、52套及退出修正复测、新包原曲与用户静音偏好交接
+│   │   ├── 2026-11-06-smooth-card-menu-actions.md  # 用户复验后的动画/卡牌/菜单独立审查、51套回归、新包与实际窗口未测边界
+│   │   ├── 2026-11-06-ui-animation-icon.md  # 本轮UI/动画/表情/图标独立验收、红绿修复、实际导出与安卓未测边界
 │   │   └── collision-demo-final.md  # 当前Demo最终独立Review、首领真实接触修复、验证与人工未测证据。
 │   ├── tutorials/  # 每个功能的实现原理和手动修改教程
 │   │   ├── 001-prototype.md  # 球发射、碰撞表现、机关、目标和手动调参的初始教程。
@@ -142,7 +274,25 @@ playAball/
 │   │   ├── 031-fish-art-feedback.md  # 位图接入、UV修复、事件反馈、四卡排版与实录边界教程
 │   │   ├── 032-ordinary-export-validation.md  # 普通包过滤、内嵌资源探针、标准发布模板限制与原生验证边界教程
 │   │   ├── 033-paddle-response-and-feature-checks.md  # 翻板限速限位原理、检查器调参与逐项功能验证教程
-│   │   └── 040-live2d-start-menu.md  # F5菜单角色节点/输入/私有资源加载、检查器调参、回归证据与发布边界教程
+│   │   ├── 034-live2d-l0-and-audio-samples.md  # Live2D许可与构建前置、隔离引擎基线复现、待测模型项目、绑定交付要求及六音频试听方法
+│   │   ├── 035-live2d-architecture.md  # Live2D制作/运行两阶段、Editor与SDK/Core/Framework/桥接分工、模型文件与交互流程入门
+│   │   ├── 036-card-art-catalog-and-gallery.md  # 28张卡面映射、圆眼母版与生成修正、导入参数、图鉴操作和跨机验证教程
+│   │   ├── 037-integrated-upgrade-cards.md  # 正式卡片贴图/文案/下一等级收益接线、节点/检查器调整、导出与验证教程
+│   │   ├── 038-deepseek-live2d-menu-sample.md  # 成年精细Live2D样板的来源、近景/身体输入、原跟随修复、真实验证及内存/授权限制；原动作曲线复用、作者手势与独立对照操作
+│   │   ├── 039-whale-menu-3d.md  # 成年鲸鱼娘原生3D样板的准备、四骨微动、注视、材质、真实验证及专业绑定缺口；现成VRM2.6.1弹簧/碰撞对照及复现限制
+│   │   ├── 040-live2d-start-menu.md  # F5菜单角色节点/输入/私有资源加载、检查器调参、回归证据与发布边界教程
+│   │   ├── 041-map-blueprint-correction.md  # 四张示意图到实际场景/出生/运动/门配对的修正原理、调参与验证
+│   │   ├── 042-ball-art-and-effects.md  # 人物与分级病毒接线、只读映射、透明裁切与真实事件特效的调参与验证
+│   │   ├── 043-tactical-aim.md  # 瞄准决策静止、暂停所有权、正式Game共享箭头动画及边界验证
+│   │   ├── 044-card-typography.md  # 中文动态艺术标题、可再分发字体、规则文案与小窗口全卡验收
+│   │   ├── 045-sea-ui-hierarchy.md  # 卡片收益与规则层级、商店结算暂停主题及真实布局验证教程
+│   │   ├── 046-menu-safe-expressions.md  # 黑脸参数根因、温和互动表情与恢复阻断的开发教程
+│   │   ├── 047-ball-animation.md  # 内置生成姿势图集、真实事件驱动与表现层动画调参教程
+│   │   ├── 048-icon-and-windows-android.md  # PNG多尺寸ICO生成、Windows实际导出图标与安卓适配评估边界
+│   │   ├── 049-card-content-flow.md  # 取代百分比定位和固定分隔的卡牌内容流、全规则测量与实际路径验证教程
+│   │   ├── 050-smooth-hero-animation.md  # 固定待机底图与连续阻尼回弹、生成表情构图校准及多帧率验证教程
+│   │   ├── 051-menu-visible-actions.md  # Live2D固定部位到可见头身动作、命中/打断/减少动态提示及网格证据教程
+│   │   └── 052-persistent-music.md  # 持续背景音乐、音源替换、音量与静音接线及导出排错开发教程
 │   ├── .gdignore  # 让 Godot 跳过文档目录的资源导入，避免把交接图当作游戏素材。
 │   ├── FILE_MAP.md  # 自动生成的项目文件树、每个文件的用途及主要调用关系。
 │   ├── PROJECT.md  # 已采纳的游戏目标、技术选择、原型范围与模块边界。
@@ -172,59 +322,65 @@ playAball/
 │       │   ├── transfer_rules_v1.json  # 首轮搜索前锁定的伙伴实际HP速率、清敌与安全门槛
 │       │   └── transfer_rules_v2_fan.json  # 保留原门槛并加入可观测侧向伙伴场景的第二轮固定规则
 │       ├── maps/  # 地图边界、出生点及入口资源
-│       │   ├── boss_map.tres  # 首领内外旋转场、四入口与内圈尖刺的边界和安全出生数据
+│       │   ├── boss_map.tres  # 首领场肥鱼左下与完整Boss右上独立出生及边界数据
 │       │   ├── legacy.tres  # 旧原型围场的默认地图数据
-│       │   ├── map_01.tres  # 翻转挡板与偏心轴的边界和安全出生数据
-│       │   ├── map_02.tres  # 十字轴、移动斜板及四边局部尖刺的边界和安全出生数据
-│       │   └── map_03.tres  # 旋转双圆弧、对角移动尖刺板及成对门的边界和安全出生数据
+│       │   ├── map_01.tres  # 第一图中央出生区及边界数据
+│       │   ├── map_02.tres  # 第二图X上方出生区及边界数据
+│       │   └── map_03.tres  # 第三图环心出生区及边界数据
 │       ├── stages/  # 波次范围与阶段休息配置
 │       │   ├── stage_1.tres  # 第一阶段波1～2及波末商店配置。
 │       │   ├── stage_2.tres  # 第二阶段波3～4及波末补给事件配置。
 │       │   └── stage_3.tres  # 第三阶段波5及首领、结束无额外休息配置。
 │       ├── themes/  # 只影响绘图配色的角色主题资源
 │       │   └── fat_fish.tres  # 肥鱼主球、小鱼、能量与饱饭符号的默认配色。
-│       └── upgrades/  # 十五项普通奖励和独立强身兜底的说明、分类、权重与等级上限
-│           ├── bowling.tres  # 升级 bowling 的标题、效果说明与等级上限。
-│           ├── choices.tres  # 三选变四选的说明、类别与一级上限。
-│           ├── companion.tres  # 升级 companion 的标题、效果说明与等级上限。
-│           ├── cooldown.tres  # 升级 cooldown 的标题、效果说明与等级上限。
-│           ├── double_launch.tres  # 双发容量的说明、类别与一级上限。
-│           ├── echo.tres  # 有限二次撞击的说明、类别与一级上限。
-│           ├── explosion.tres  # 升级 explosion 的标题、效果说明与等级上限。
-│           ├── follow.tres  # 升级 follow 的标题、效果说明与等级上限。
-│           ├── glide.tres  # 滑行的自身阻尼/摩擦增益、类别和三级上限。
-│           ├── heal.tres  # 升级 heal 的标题、效果说明与等级上限。
-│           ├── heavy.tres  # 升级 heavy 的标题、效果说明与等级上限。
-│           ├── launch_power.tres  # 强力发射的冲量增益、类别、权重与三级上限。
-│           ├── pulse.tres  # 无伤护身震退的说明、类别和一级上限。
-│           ├── relay.tres  # 升级 relay 的标题、效果说明与等级上限。
-│           ├── shrink.tres  # 敌人脉冲/首领震波缩范围的说明与两级上限。
-│           └── vigor.tres  # 普通池耗尽时本局生命上限+1的独立可重复兜底。
+│       ├── upgrades/  # 十五项普通奖励和独立强身兜底的说明、分类、权重与等级上限
+│       │   ├── bowling.tres  # 升级 bowling 的标题、效果说明与等级上限。
+│       │   ├── choices.tres  # 三选变四选的说明、类别与一级上限。
+│       │   ├── companion.tres  # 升级 companion 的标题、效果说明与等级上限。
+│       │   ├── cooldown.tres  # 升级 cooldown 的标题、效果说明与等级上限。
+│       │   ├── double_launch.tres  # 双发容量的说明、类别与一级上限。
+│       │   ├── echo.tres  # 有限二次撞击的说明、类别与一级上限。
+│       │   ├── explosion.tres  # 升级 explosion 的标题、效果说明与等级上限。
+│       │   ├── follow.tres  # 升级 follow 的标题、效果说明与等级上限。
+│       │   ├── glide.tres  # 滑行的自身阻尼/摩擦增益、类别和三级上限。
+│       │   ├── heal.tres  # 升级 heal 的标题、效果说明与等级上限。
+│       │   ├── heavy.tres  # 升级 heavy 的标题、效果说明与等级上限。
+│       │   ├── launch_power.tres  # 强力发射的冲量增益、类别、权重与三级上限。
+│       │   ├── pulse.tres  # 无伤护身震退的说明、类别和一级上限。
+│       │   ├── relay.tres  # 升级 relay 的标题、效果说明与等级上限。
+│       │   ├── shrink.tres  # 敌人脉冲/首领震波缩范围的说明与两级上限。
+│       │   └── vigor.tres  # 普通池耗尽时本局生命上限+1的独立可重复兜底。
+│       ├── card_art_catalog.json  # 正式HUD与独立图鉴共享的28张下一等级插画只读映射及分离审美状态，不决定奖励
+│       └── upgrade_card_copy.json  # 16项成长的玩家规则说明和趣味短句；纯显示，不决定玩法或数值
 ├── scenes/  # Godot 可编辑场景与节点结构
 │   ├── roguelite/  # 俯视零重力三靶场、正式整局与B线独立玩法夹具场景
 │   │   ├── maps/  # 三张普通地图与首领地图的可编辑布局
-│   │   │   ├── boss_map.tscn  # 首领内外旋转场、四入口与内圈尖刺的实际布局场景
-│   │   │   ├── map_01.tscn  # 翻转挡板与偏心轴的实际布局场景
-│   │   │   ├── map_02.tscn  # 十字轴、移动斜板及四边局部尖刺的实际布局场景
-│   │   │   └── map_03.tscn  # 旋转双圆弧、对角移动尖刺板及成对门的实际布局场景
+│   │   │   ├── boss_map.tscn  # 封闭内圈四刺、四开口外圈、四向翻板及绿黄两组传送门
+│   │   │   ├── map_01.tscn  # 固定左右斜板、上横下竖中心轴翻板的实际布局
+│   │   │   ├── map_02.tscn  # X形共轴翻板、世界上下移动斜板与左右分散短浅刺
+│   │   │   └── map_03.tscn  # 环心出生、水平移动刺板与左右保速门的实际布局
 │   │   ├── mechanisms/  # 可编辑的刚体挡板、移动板、圆弧、尖刺与成对门场景
-│   │   │   ├── boss_inner_ring.tscn  # 首领内圈双弧的可编辑分段碰撞场景
-│   │   │   ├── boss_outer_ring.tscn  # 首领外圈四入口的可编辑分段碰撞场景
+│   │   │   ├── boss_inner_ring.tscn  # 首领完整内圆周的可编辑分段实体碰撞与视觉
+│   │   │   ├── boss_outer_ring.tscn  # 首领四处30度开口外圆周的可编辑碰撞与视觉
+│   │   │   ├── fixed_barrier.tscn  # 第一图左右固定斜板，使用静态实体碰撞与可编辑视觉
 │   │   │   ├── moving_barrier.tscn  # 物理帧驱动的往返AnimatableBody2D挡板的可编辑场景
 │   │   │   ├── pivot_paddle.tscn  # 真实关节翻转挡板的配置、暂停与复位的可编辑场景
 │   │   │   ├── portal_pair.tscn  # 传送入口检测、出口占用复核、同帧预约与离门冷却锁的可编辑场景
 │   │   │   ├── rotating_arc.tscn  # 带缺口分段圆弧的物理帧旋转的可编辑场景
 │   │   │   ├── spike_strip.tscn  # 主球尖刺接触与统一生命伤害请求的可编辑场景
 │   │   │   └── twin_arcs.tscn  # 地图三两段带缺口圆弧的可编辑分段碰撞场景
-│   │   ├── presentation/  # A可独立替换的敌人与生命面板表现场景
+│   │   ├── presentation/  # 可独立替换的角色/敌人/生命表现与只读卡面样板场景
 │   │   │   ├── boss_view.tscn  # 可编辑首领表现与不会遮住危险的顶栏状态
+│   │   │   ├── card_art_card.tscn  # 图鉴单卡表现样板，插画/等级/真实收益/说明分区及缩图mipmap采样
 │   │   │   ├── companion_view.tscn  # 可编辑伙伴Sprite视觉子场景
 │   │   │   ├── enemy_view.tscn  # 三种敌人共用独立视图，线性mipmap与生图材质接入
 │   │   │   ├── fish_ball_view.tscn  # 可编辑主球视觉子场景，Sprite及导入位图
-│   │   │   └── health_view.tscn  # 正式可替换生命面板场景，只读取DemoHealth数据。
+│   │   │   ├── health_view.tscn  # 正式可替换生命面板场景，只读取DemoHealth数据。
+│   │   │   └── upgrade_card.tscn  # 正式选卡Button的可编辑插画/等级/收益/规则/趣味短句节点与手绘卡框
 │   │   ├── arena.tscn  # 可编辑俯视三靶场、四边围墙、斜切角、平面挡板与 HUD。
 │   │   ├── audio_preview.tscn  # F6独立音效试听场景，不改变游戏进度。
 │   │   ├── boss.tscn  # 同一刚体上的核心和四个可拆模块碰撞形状。
+│   │   ├── card_art_gallery.tscn  # 独立可编辑成长图鉴，三/四卡、分页和系列筛选；不替换正式HUD或菜单
 │   │   ├── companion_ball.tscn  # 零重力小兵、接力传感器及围墙/挡板/箱体实体碰撞配置。
 │   │   ├── destructible.tscn  # 可复用的固定碰撞靶形状与受击脚本入口。
 │   │   ├── enemy.tscn  # 三敌人共用刚体/碰撞形状和低弹性材质，并实例可替换表现组件。
@@ -235,7 +391,7 @@ playAball/
 │   │   ├── rest_panel.tscn  # 商店、补给事件和3秒准备共用的可编辑功能面板。
 │   │   ├── rice_lure.tscn  # 白饭Area2D与玩家拾取形状，不改变刚体碰撞。
 │   │   ├── run.tscn  # 独立三阶段战斗入口，接合音频、商店/事件与首领，保留F5旧入口。
-│   │   ├── run_hud.tscn  # 三/四选一、结算和重开面板，并实例独立可替换生命面板。
+│   │   ├── run_hud.tscn  # 正式生命/奖励/结算HUD布局，奖励行容纳三/四张带图卡片
 │   │   ├── tuning_panel.tscn  # 完整引擎/快捷模式的可编辑面板壳，暂停、分页区域与对照/存取容器。
 │   │   └── tuning_run.tscn  # 策划完整属性调参入口，继承正式整局，含全量目录与原快捷面板。
 │   ├── ui/  # 正式主菜单与完整战斗入口
@@ -295,21 +451,35 @@ playAball/
 │   │   │   ├── rotating_arc.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
 │   │   │   ├── spike_strip.gd  # 主球尖刺接触与统一生命伤害请求
 │   │   │   └── spike_strip.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
-│   │   ├── presentation/  # 只读玩法状态并消费表现事件的可替换绘制组件
-│   │   │   ├── boss_view.gd  # 首领生图装甲/实际裁切，阶段真实剩余时间/生命顶栏，核心与模块独立受击/破坏反馈
+│   │   ├── presentation/  # 只读玩法快照/事件的绘制组件与独立卡面图鉴控制
+│   │   │   ├── aim_indicator.gd  # 正式Game与实验场共用的单头素材箭头、柔和尾流、呼吸和释放缩回，只读手势
+│   │   │   ├── aim_indicator.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
+│   │   │   ├── ball_art.gd  # 稳定角色身份纹理、实际透明裁切与生成四格AtlasTexture缓存/防串采
+│   │   │   ├── ball_art.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
+│   │   │   ├── boss_view.gd  # 病毒首领核心/四模块与原阶段/破防/冲撞/震波的只读表现
 │   │   │   ├── boss_view.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
-│   │   │   ├── combat_float.gd  # 有效HP损失浮字与死亡短碎光，受预算和生命周期约束
+│   │   │   ├── card_art_gallery.gd  # 只读图鉴控制与真实收益复用、素材加载、分页筛选及可选渲染证据输出
+│   │   │   ├── card_art_gallery.gd.uid  # 独立成长图鉴脚本UID
+│   │   │   ├── card_art_library.gd  # 只读卡面/文案JSON，按下一等级解析纹理并缓存，重复项共用图
+│   │   │   ├── card_art_library.gd.uid  # 同名GDScript的稳定资源UID，随脚本提交
+│   │   │   ├── combat_float.gd  # 已结算伤害/击破浮字，与战场显式共同暂停和自动清理
 │   │   │   ├── combat_float.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
-│   │   │   ├── companion_view.gd  # 复用肥鱼位图、只读伙伴模式/剩余时间的独立表现
+│   │   │   ├── companion_view.gd  # 读取只读slot选择GPT/Claude/千问人物团子，保留攻击资格与归队环
 │   │   │   ├── companion_view.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
-│   │   │   ├── enemy_view.gd  # 三类敌人生图材质、实际导入裁切、HP色阶/浮字与读取真实warning_fraction的细倒计时环
+│   │   │   ├── enemy_view.gd  # 出生等级病毒皮肤与真实剩余HP/预警/角色朝向，只消费玩法事件
 │   │   │   ├── enemy_view.gd.uid  # 关联GDScript稳定资源标识。
-│   │   │   ├── fish_ball_view.gd  # 读取主球快照/真实事件的形变、有效命中短亮、回能双短弧；物理复位清理旧表现
+│   │   │   ├── fish_ball_view.gd  # 鲸鱼娘生成姿势idle/碰撞/痛脸、真实发射击杀回弹与回能反馈，只改Sprite不改物理
 │   │   │   ├── fish_ball_view.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
 │   │   │   ├── health_view.gd  # 只读生命条/数字/状态表现组件及热绑定入口。
 │   │   │   ├── health_view.gd.uid  # 关联GDScript稳定资源标识。
 │   │   │   ├── portal_view.gd  # 细弧/出口箭头与物理成功后过门短环，不播放假成功
-│   │   │   └── portal_view.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
+│   │   │   ├── portal_view.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
+│   │   │   ├── sea_ui_theme.gd  # 商店补给、结算与暂停共享的深海面板和按钮交互主题
+│   │   │   ├── sea_ui_theme.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
+│   │   │   ├── upgrade_card.gd  # 按实际字高顺排的卡牌内容流/安全边距、插画与真实收益显示和鼠标表现，不结算升级
+│   │   │   ├── upgrade_card.gd.uid  # 同名GDScript的稳定资源UID，随脚本提交
+│   │   │   ├── virus_burst.gd  # 真实病毒死亡的生成裂壳/散片帧、短时有界且随战场暂停
+│   │   │   └── virus_burst.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
 │   │   ├── arena.gd  # 全屏拖动与按钮隔离、HUD就绪、真实回能表现事件转发、暂停/重置与越界回收。
 │   │   ├── arena.gd.uid  # 关联GDScript稳定资源标识。
 │   │   ├── assist_effects.gd  # 可暂停的无伤护身震退、有限冲量与表现事件。
@@ -346,9 +516,9 @@ playAball/
 │   │   ├── live_tuning.gd.uid  # 关联GDScript稳定资源标识。
 │   │   ├── player_ball.gd  # 主球冲量/短时有限撞敌续力、升级物理参数、续力只读读数、能量环与肥鱼绘图。
 │   │   ├── player_ball.gd.uid  # 关联GDScript稳定资源标识。
-│   │   ├── player_health.gd  # 五格生命、统一受伤无敌、一次死亡、拒伤原因事件与整局重置。
+│   │   ├── player_health.gd  # 五格生命、受伤无敌/拒伤、一次死亡、真实扣血damaged事件与整局重置
 │   │   ├── player_health.gd.uid  # 关联GDScript稳定资源标识。
-│   │   ├── rest_panel.gd  # 可编辑休息面板的报价按钮、版本和倒计时显示。
+│   │   ├── rest_panel.gd  # 休息商店报价/版本请求、统一主题与首显居中、按钮状态和焦点
 │   │   ├── rest_panel.gd.uid  # 关联GDScript稳定资源标识。
 │   │   ├── rice_lure.gd  # 白饭拾取区域、有限平面吸力、寿命/闪烁及物理锁外清理。
 │   │   ├── rice_lure.gd.uid  # 关联GDScript稳定资源标识。
@@ -358,10 +528,10 @@ playAball/
 │   │   ├── run_arena.gd.uid  # 关联GDScript稳定资源标识。
 │   │   ├── run_build.gd  # 十五项候选的类别/权重/资格、等级与全部派生数值及强身兜底。
 │   │   ├── run_build.gd.uid  # 关联GDScript稳定资源标识。
-│   │   ├── run_director.gd  # 逐波预算/强敌配额、可选两代分裂/整族经济、阶段奖励与整局清理。
+│   │   ├── run_director.gd  # 逐波预算/强敌配额、两代分裂/整族经济、阶段奖励/清理及真实伤害与去重击杀视觉转发
 │   │   ├── run_director.gd.uid  # 关联GDScript稳定资源标识。
-│   │   ├── run_hud.gd  # 委托独立生命视图，管理三四卡版本、结算和经玩法校验的重开请求。
-│   │   ├── run_hud.gd.uid  # 关联GDScript稳定资源标识。
+│   │   ├── run_hud.gd  # 正式奖励/结算卡图文字层级、响应式决策面板与暂停遮挡协调，保留原请求/生命接口
+│   │   ├── run_hud.gd.uid  # 同名GDScript的稳定资源UID，随脚本提交
 │   │   ├── run_wallet.gd  # 唯一死亡入账、余额校验扣款与整局钱包复位。
 │   │   ├── run_wallet.gd.uid  # 关联GDScript稳定资源标识。
 │   │   ├── stage_definition.gd  # 阶段波范围、休息类型与名称数据资源。
@@ -385,12 +555,14 @@ playAball/
 │   │   ├── health_cell.gdshader.uid  # 关联表现资源的稳定标识。
 │   │   ├── health_skin.gd  # 消费DemoHealthView真实状态，动态分格生命与逐格提亮，保留准确数字。
 │   │   ├── health_skin.gd.uid  # 关联表现资源的稳定标识。
-│   │   ├── main_menu.gd  # 正式开始/设置/退出导航，挂接Live2D菜单角色与设置遮挡、减少动态选项；不改变玩法
+│   │   ├── main_menu.gd  # 正式菜单导航、Live2D互动指南及主音量/音乐/全部静音与减少动态设置，不改玩法
 │   │   ├── main_menu.gd.uid  # 关联GDScript稳定资源标识。
-│   │   ├── menu_character.gd  # 本机Native角色按需加载、私有Shader/纹理缓存别名、头眼/身体输入、眨眼与短回应；不读写玩法
+│   │   ├── menu_character.gd  # Native角色头眼跟随、固定头身短动作和安全表情、短冷却打断/黑脸禁止/阻断恢复，不读写玩法
 │   │   ├── menu_character.gd.uid  # 同名GDScript的稳定资源UID，随脚本保留
 │   │   ├── menu_character_view.gd  # 菜单与逻辑画布坐标换算、真实alpha点击/抚摸分类、GUI及窗口焦点阻断
-│   │   └── menu_character_view.gd.uid  # 同名GDScript的稳定资源UID，随脚本保留
+│   │   ├── menu_character_view.gd.uid  # 同名GDScript的稳定资源UID，随脚本保留
+│   │   ├── music_manager.gd  # 全局单播放器、Music总线、原曲循环/跨场景播放与音乐音量/全部静音持久化
+│   │   └── music_manager.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
 │   ├── ball.gd  # 控制球的停稳、冲量发射、刚体复位与真实接触事件。
 │   ├── ball.gd.uid  # 关联GDScript稳定资源标识。
 │   ├── impact_feedback.gd  # 共用亮环/震动/粒子；run音频路由独立调度，旧场景保留原声音接口。
@@ -400,18 +572,34 @@ playAball/
 │   ├── mechanism.gd  # 管理区域内的加速、粘滞或反向重力及离开后的恢复。
 │   └── mechanism.gd.uid  # 关联GDScript稳定资源标识。
 ├── tests/  # 无需测试插件的游戏行为检查
+│   ├── menu_character_actions.gd  # 原生GUI部位点击到Live2D头身动作、打断与安全阻断和提示布局验证
+│   ├── menu_character_actions.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
+│   ├── menu_character_expressions.gd  # 原生Live2D五组安全表情、黑脸禁止与恢复专项；headless只验回退
+│   ├── menu_character_expressions.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
 │   ├── menu_character_integration.gd  # 正式菜单真实引擎输入、头眼/点击/遮挡/焦点/释放与游戏返回、缩放和回退检查
 │   ├── menu_character_integration.gd.uid  # 同名GDScript的稳定资源UID，随脚本保留
+│   ├── music_manager.gd  # 真实MP3及短循环夹具、场景连续播放、音乐UI与静音/配置保留回归
+│   ├── music_manager.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
 │   ├── roguelite_actor_views.gd  # 伙伴/首领物理不受表现影响、真实事件与快照隔离回归
 │   ├── roguelite_actor_views.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
 │   ├── roguelite_audio.gd  # 音组变体、PCM余量、优先级预算、混音与生命周期调度回归。
 │   ├── roguelite_audio.gd.uid  # 关联GDScript稳定资源标识。
 │   ├── roguelite_balance_metrics.gd  # 真实伤害/伙伴归因/冲量、夹具升级/冷却/种子复现及实际首领代理类型边界验证
 │   ├── roguelite_balance_metrics.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
+│   ├── roguelite_ball_animation.gd  # 真实Game生命与去重击杀驱动、碰撞姿势、物理不变、暂停和碎帧清理验证
+│   ├── roguelite_ball_animation.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
+│   ├── roguelite_ball_art.gd  # 透明/裁切/稳定AI与病毒身份/物理不变及ALWAYS父节点下特效暂停回归
+│   ├── roguelite_ball_art.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
 │   ├── roguelite_boss.gd  # 首领真实撞墙/模块接触、弱点时序、护甲、缺口与死亡回归。
 │   ├── roguelite_boss.gd.uid  # 关联GDScript稳定资源标识。
 │   ├── roguelite_build.gd  # 十五项池资格/权重/上限、派生参数与碰撞升级预算边界回归。
 │   ├── roguelite_build.gd.uid  # 关联GDScript稳定资源标识。
+│   ├── roguelite_card_art.gd  # 真实HUD的28级贴图映射、标题/收益/规则、重复项及近满血恢复检查
+│   ├── roguelite_card_art.gd.uid  # 同名GDScript的稳定资源UID，随脚本提交
+│   ├── roguelite_card_content_flow.gd  # 全16卡290×480含hover/流光的安全内边距及纵向顺序回归
+│   ├── roguelite_card_content_flow.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
+│   ├── roguelite_card_typography.gd  # 两种分辨率三四卡及最窄全16张的字体/完整文案/数字/控件边界回归
+│   ├── roguelite_card_typography.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
 │   ├── roguelite_crowd.gd  # 真实三重敌推进/后排受推/实体碰撞与续力限次/到期/重开预算回归。
 │   ├── roguelite_crowd.gd.uid  # 关联GDScript稳定资源标识。
 │   ├── roguelite_damage_contacts.gd  # 四方向/四距离/两节点顺序真实击破及低速/被动无伤回归。
@@ -432,6 +620,10 @@ playAball/
 │   ├── roguelite_full_tuning.gd.uid  # 关联GDScript稳定资源标识。
 │   ├── roguelite_gameplay_lab.gd  # 八夹具真实发射/构筑与覆盖、阵型拒绝、分裂两代AI/经济、预设迁移/失败与输入隔离回归。
 │   ├── roguelite_gameplay_lab.gd.uid  # 关联GDScript稳定资源标识。
+│   ├── roguelite_hero_smooth.gd  # 30/60/120/144Hz连续呼吸/事件运动边界及原点/纹理稳定回归
+│   ├── roguelite_hero_smooth.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
+│   ├── roguelite_hero_smooth_capture.gd  # 原生渲染待机与事件的原尺寸/放大连续帧采集，headless明确跳过捕获
+│   ├── roguelite_hero_smooth_capture.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
 │   ├── roguelite_hud.gd  # 真实生命受伤/恢复/上限/无敌/死亡/复位与鼠标穿透回归。
 │   ├── roguelite_hud.gd.uid  # 关联GDScript稳定资源标识。
 │   ├── roguelite_input_feedback.gd  # 全屏真实鼠标事件、冷却临界帧、正常速度、接触反馈位置与复位清理回归。
@@ -444,11 +636,13 @@ playAball/
 │   ├── roguelite_launch_rewards.gd.uid  # 关联GDScript稳定资源标识。
 │   ├── roguelite_live_tuning.gd  # 实时滑杆/数字接线、真实冲量、成长/重开、已有/新敌人、暂停所有权与存取隔离回归。
 │   ├── roguelite_live_tuning.gd.uid  # 关联GDScript稳定资源标识。
+│   ├── roguelite_map_blueprints.gd  # 图纸布局、真实轨迹、尖刺尺寸、翻板扫掠和Boss双组门三类身体双向保速回归
+│   ├── roguelite_map_blueprints.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
 │   ├── roguelite_map_flow.gd  # 正式菜单到四图、成长商店事件、胜负重开及地图释放的流程夹具与首领撞刚体挡板回归
 │   ├── roguelite_map_flow.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
 │   ├── roguelite_map_mechanisms.gd  # 真实刚体翻转、物理运动机关、暂停复位及尖刺伤害回归
 │   ├── roguelite_map_mechanisms.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
-│   ├── roguelite_map_navigation.gd  # 真实碰撞空间8像素寻路网格下的旋转通道和完整首领出生净空采样回归
+│   ├── roguelite_map_navigation.gd  # 真实空间旋转快照下环内外通行、封闭内圈及完整Boss出生/圈外路线回归
 │   ├── roguelite_map_navigation.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
 │   ├── roguelite_maps.gd  # 旧场地地图接口、真实障碍与安全出生查询回归
 │   ├── roguelite_maps.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
@@ -464,6 +658,14 @@ playAball/
 │   ├── roguelite_rice.gd.uid  # 关联GDScript稳定资源标识。
 │   ├── roguelite_run.gd  # 整局清残敌、击杀升级/暂停优先级、五次清波到首领、胜负与十次重开检查。
 │   ├── roguelite_run.gd.uid  # 关联GDScript稳定资源标识。
+│   ├── roguelite_sea_ui.gd  # 两种窗口的商店按钮状态、结算位置与焦点夹具验证
+│   ├── roguelite_sea_ui.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
+│   ├── roguelite_sea_ui_formal_game.gd  # 正式Game最窄四卡的全16种完整规则/趣味句边界与HUD遮挡回归
+│   ├── roguelite_sea_ui_formal_game.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
+│   ├── roguelite_sea_ui_integration.gd  # 正式Game两窗口三四卡真实卡片、商店经济状态、暂停与恢复集成验证
+│   ├── roguelite_sea_ui_integration.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
+│   ├── roguelite_sea_ui_mouse.gd  # 正式Game真实鼠标购买/重复禁用、暂停恢复和结算重开集成验证
+│   ├── roguelite_sea_ui_mouse.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
 │   ├── roguelite_shop_events.gd  # 钱包死亡去重、余额限购、旧报价、商店独立成长与重开回归。
 │   ├── roguelite_shop_events.gd.uid  # 关联GDScript稳定资源标识。
 │   ├── roguelite_smoke.gd  # 俯视发射/接力、默认不跟随、三态障碍反弹、可选引导与回收检查。
@@ -472,39 +674,86 @@ playAball/
 │   ├── roguelite_splitting.gd.uid  # 关联GDScript稳定资源标识。
 │   ├── roguelite_stage_flow.gd  # 清场阶段边界、危险清理、冷却暂停、准备、免费成长来源与旧点击回归。
 │   ├── roguelite_stage_flow.gd.uid  # 关联GDScript稳定资源标识。
+│   ├── roguelite_tactical_aim.gd  # 正式Game瞄准冻结/动量/冷却等待/暂停接管/失焦/重开及箭头动画回归
+│   ├── roguelite_tactical_aim.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
 │   ├── roguelite_theme.gd  # 主题替换/饱饭绘图不改变刚体签名或同伴状态的检查。
 │   ├── roguelite_theme.gd.uid  # 关联GDScript稳定资源标识。
 │   ├── smoke.gd  # 旧原型停稳、发射、真实接触点、机关、复位、鼠标与进球回归。
 │   ├── smoke.gd.uid  # 关联GDScript稳定资源标识。
 │   ├── test_prepare_menu_live2d.py  # 本机菜单资源准备的幂等、内容保护、缺来源/复制失败及路径越界回归；不执行模型或Native库
-│   ├── ui_integration.gd  # 主菜单、开发隔离、真实血量、四卡和暂停重开的接线回归。
-│   └── ui_integration.gd.uid  # 关联GDScript稳定资源标识。
+│   ├── ui_integration.gd  # 正式菜单/输入/暂停/卡图文字排版/结算返回的引擎合成输入集成检查
+│   └── ui_integration.gd.uid  # 同名GDScript的稳定资源UID，随脚本提交
 ├── tools/  # 开发辅助工具，不属于游戏玩法
+│   ├── live2d_menu_sample/  # 另一对话的Live2D独立菜单/参数/生命周期样板源与准备验证工具，不进入正式游戏
+│   │   ├── .gdignore  # 阻止Godot把隔离Live2D样板作为正式工程资源导入
+│   │   ├── character.gd  # 精细成年模型的真实头眼/身体物理输入、作者手势/表情与减少动态仲裁，保留原绑定
+│   │   ├── character.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
+│   │   ├── entry.gd  # 独立Live2D发布入口，选择试玩、旧回归、生命周期或近景/身体视觉复验，不连接正式游戏
+│   │   ├── entry.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
+│   │   ├── entry.tscn  # 隔离Live2D发布样板的可编辑根入口场景
+│   │   ├── lifecycle.gd  # 隔离模型重复创建/渲染/释放的有界观察与证据输出，不证明无泄漏
+│   │   ├── lifecycle.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
+│   │   ├── lifecycle.tscn  # 隔离模型生命周期观察的根场景
+│   │   ├── menu_sample.gd  # 独立Live2D菜单、透明命中/触摸、近景缩放坐标和设置阻断，不读写玩法/正式设置
+│   │   ├── menu_sample.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
+│   │   ├── menu_sample.tscn  # 独立Live2D菜单样板布局与模型SubViewport场景
+│   │   ├── prepare.py  # 使用已有本机资源准备独立Live2D夹具，不下载或修改正式工程
+│   │   ├── verify_sample.gd  # 隔离模型与引擎输入分发/释放检查，记录证据不冒充人类试玩
+│   │   ├── verify_sample.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
+│   │   ├── verify_visual.gd  # 近景真实输入、身体渲染网格/负对照、闭眼/作者手势和全身恢复的窗口复验，不代表审美或完整L0
+│   │   ├── verify_visual.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
+│   │   └── verify_windows.py  # 等待Windows Godot/Release子进程并保留输入或生命周期验证证据
+│   ├── whale_menu_sample/  # 与正式工程隔离的成年鲸鱼娘原生3D菜单实验；源码、准备和真实输入/渲染检查，专业效果未验收
+│   │   ├── .gdignore  # 阻止正式Godot工程扫描独立3D样板，先准备.local夹具再运行
+│   │   ├── additive_motion.gd  # 只转移现成Idle/谈话相对参考帧的四骨旋转微动，保留原始骨架/蒙皮与四肢姿态
+│   │   ├── additive_motion.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
+│   │   ├── character.gd  # 原始成年GLB及现成源动作加载、微动/形态键回应和样板材质调整
+│   │   ├── character.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
+│   │   ├── gaze_motion.gd  # 在身体微动后叠加真实头颈注视、点头和尾巴小幅动态并记录处理后头部姿态
+│   │   ├── gaze_motion.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
+│   │   ├── menu.gd  # 独立菜单输入、按钮、头部命中、设置阻断和近景相机，不连接正式游戏
+│   │   ├── menu.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
+│   │   ├── menu.tscn  # 原生3D菜单实验的透明高分辨率Stage、固定相机和可编辑角色显示结构
+│   │   ├── prepare.py  # 从已取得的模型/动作ZIP创建新隔离工程、许可与哈希清单，拒绝覆盖已有夹具
+│   │   ├── verify_lifecycle.gd  # 20轮headless实例化释放、弱引用与对象回收检查，不证明完整L0或GPU/私有内存无泄漏
+│   │   ├── verify_lifecycle.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
+│   │   ├── verify_sample.gd  # 实际输入分发、处理后骨骼与GPU截图差分、反应/设置/减少动态的独立样板检查
+│   │   └── verify_sample.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
 │   ├── analyze_balance.py  # 按固定分组规则比较相同种子/策略原始结果，不伪造用户认可
 │   ├── analyze_transfer.py  # 比较同源实际传能候选，使用真实伙伴直接HP归因和硬门槛
 │   ├── balance_search.ps1  # 固定源文件指纹并运行串行或逐条隔离进程的数值矩阵
-│   ├── export_windows.ps1  # 固定引擎暂存导出普通/显式调参包，隔离内嵌包探针、指纹与说明zip
-│   ├── package_probe.gd  # 编辑器引擎读取实际EXE内嵌包，验证资源排除与正式菜单/输入/重开流程
-│   ├── package_probe.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
+│   ├── build_icon.gd  # 把生成PNG缩放封装为七尺寸Windows ICO的可复现工具
+│   ├── build_icon.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
+│   ├── export_windows.ps1  # 以隔离暂存输入导出Windows包，指纹包含JSON卡面/文案，检查实际包并保留原工程配置
+│   ├── live2d_l0_model_test.gd  # 隔离Live2D示例模型加载、透明姿态截图、参数与可配置重复释放检查；仅复制到.local运行
+│   ├── live2d_l0_model_test.gd.uid  # Live2D隔离模型验证工具脚本UID
+│   ├── package_probe.gd  # 读取实际导出内嵌包，检查正式地图/输入/流程及28卡图/JSON文案是否完整
+│   ├── package_probe.gd.uid  # 同名GDScript的稳定资源UID，随脚本提交
+│   ├── prepare_live2d_l0.ps1  # 在忽略的.local重建可复现引擎/导出基线；不下载SDK、不接受许可、不冒充模型验证
 │   ├── prepare_menu_live2d.py  # 只从已有本机夹具准备.local私有模型/已适配桥接/Shader和图集缓存，不下载或打发行包
-│   ├── project_map.gd  # 读取 Git 文件列表和用途清单，生成/检查项目文件目录。
+│   ├── project_map.gd  # 从Git可见文件与用途清单生成目录/架构，包括正式卡片与独立图鉴调用关系
 │   ├── project_map.gd.uid  # 关联GDScript稳定资源标识。
 │   ├── validate_natural_runs.ps1  # 逐个引擎进程跑真实卡池与正常AI完整局，记录自然死亡/胜利/截尾并拒绝错误日志
-│   └── verify.ps1  # 本机固定Godot导入、目录与36套回归，拒绝错误日志或缺少完成标记
+│   └── verify.ps1  # 固定引擎导入/目录与行为回归入口，包含卡面/连续动画/持久音乐及菜单回退检查
 ├── .editorconfig  # 统一编码、缩进、换行和文件末尾格式。
 ├── .gitattributes  # 统一 Git 文本换行，标记图片/音频为二进制。
 ├── .gitignore  # 排除引擎缓存、本机临时文件、凭据和导出成品。
 ├── AGENTS.md  # 接手/物理与Git授权规则、最终Review及双线唯一文件负责人和owner边界。
 ├── CONTRIBUTING.md  # Git分支/Review/授权与A/B独立checkout及用户最终审阅合并约定。
 ├── README.md  # 游戏介绍、运行方式和面向开发者的总入口。
-├── export_presets.cfg  # Windows64内嵌资源试玩导出预设，由隔离脚本设置肉鸽入口，原F5保持。
+├── export_presets.cfg  # Windows标准版导出预设，明确包含正式卡面索引与文案JSON
 └── project.godot  # Godot 工程入口：主场景、窗口、渲染、物理和碰撞层设置。
 ```
 
 ## 主要关系
 
 ```text
-project.godot → scenes/main.tscn → scripts/main.gd（组织关卡、输入、HUD）
+project.godot → scenes/ui/main_menu.tscn → scripts/ui/main_menu.gd（正式入口）
+  ├─ MusicManager（跨场景背景音乐）
+  ├─ menu_character（可选Live2D，缺资源静态回退）
+  └─ scenes/ui/game.tscn → game / run_arena / run_director
+
+旧侧视实验：scenes/main.tscn → scripts/main.gd（F6独立运行）
   ├─ scenes/ball.tscn → scripts/ball.gd（刚体与碰撞信号）
   ├─ scenes/mechanism.tscn → scripts/mechanism.gd（区域机关）
   └─ scripts/impact_feedback.gd ← impacted 信号（碰撞表现）
@@ -564,6 +813,21 @@ tests/roguelite_gameplay_lab.gd（固定发射/八类夹具/预设/日志边界�
 ```
 
 图中关系是人工维护的架构摘要，文件树由工具生成；改变模块关系时也要更新生成器中的摘要，并通过 Review。维护方法见 [教程 002](tutorials/002-project-map-and-review.md)。
+## 正式成长卡与独立图鉴
+
+```text
+RunDirector 合法候选/等级/offer_id → RunHUD.show_choices
+  ├─ CardArtLibrary → card_art_catalog.json → assets/cards（16种成长、28张基础图）
+  ├─ upgrade_card_copy.json（玩家说明/趣味短句）
+  ├─ benefit_preview → DemoBuild/实际生命（真实收益）
+  └─ upgrade_card.tscn/.gd（正式Button：图/等级/收益/说明）
+       └─ upgrade_selected(id, offer_id) → 原RunDirector校验/应用/恢复
+
+card_art_gallery.tscn → card_art_gallery.gd（F6独立筛选/分页/三四卡）
+  └─ 同一插画索引 + card_art_card.tscn（不发升级请求）
+```
+
+正式奖励、商店成长与补给成长共用RunHUD；文案与图片不改变Buff或物理规则。技术接线与用户审美验收分开。
 ## 可选Live2D开始界面
 
 ```text

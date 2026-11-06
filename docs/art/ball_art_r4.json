@@ -1,0 +1,82 @@
+{
+  "date": "2026-11-05",
+  "purpose": "Transparent illustrated character-ball assets; robotic companion revision rejected by user; final companions restore original girl-dumpling style with small brand-reference accessories, pending in-game aesthetic acceptance.",
+  "references": [
+    "https://github.com/xiaoweigen/deepseek-dafeiyu-assets",
+    "https://openai.com/brand/",
+    "https://github.com/anthropics/claude-code/issues/42415",
+    "https://github.com/QwenLM/Qwen3"
+  ],
+  "entries": [
+    {
+      "id": "hero",
+      "asset": "assets/roguelite/ball_art_r4/hero.png",
+      "generator": "built-in image_gen",
+      "source_output": "exec-3f138131-b92f-4bdb-8cbf-93350b0c236c.png",
+      "prompt": "Production GAME SPRITE CUTOUT. Use ONLY the blue whale-maid spherical heroine at TOP LEFT of the reference board as the identity/style reference. Produce ONE isolated, centered, large round dumpling-ball heroine, facing forward, on genuine transparent background. Preserve the approved face: expressive big cobalt eyes, blue fringe, white ruffled maid headband, whale ear fins, navy bows, tiny white apron crescent with whale emblem, short curved whale tail and curled ahoge. No rice bowl, no chopsticks, no tiny duplicate character, no scale diagram, no text, no ground shadow, no label, no scenery, no aura, no circle bubble enclosing a person. Her own round compact head-and-body forms the sphere, not an ordinary animal whale. Matte hand-painted anime cel shading, confident dark contours, simple readable facial features designed to remain legible at 58 pixels. Front view, symmetric centered circular body occupying 80% of square canvas, only short fins/tail extend slightly, leave safe transparent margins. No glossy plastic, no 3D render. High-quality square 1024x1024 sprite.",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "a82390e7e5b604cbd1cc011b2d21365eb07340b834a737c29c380a0654e4f0d6"
+    },
+    {
+      "id": "gpt",
+      "asset": "assets/roguelite/ball_art_r4/gpt.png",
+      "generator": "built-in image_gen",
+      "source_output": "exec-8c7022b6-bc18-4954-a639-43ffe813ab3a.png",
+      "prompt": "Use the original TOP-RIGHT HUMAN CHIBI GIRL companion characters in the reference concept sheet as the approved identity and drawing style. The user rejected later robot/logo balls; DO NOT produce a robot or a corporate logo with eyes. Produce ONE isolated transparent-background 2D game sprite: a cute HUMAN-ANIME-GIRL DUMPLING BALL, round cheeks, clear anime eyes and recognizable hair, compact outfit crescent compressed at the bottom; whole silhouette round as in the reference. Her face and hair are the dominant identity, not machinery. Premium matte hand-painted cel illustration with dark clean contours, extremely cute expression, readable at 36 pixels. Centered complete single subject, short ornament protrusions only, safe transparent margins. NO text, name label, extra duplicate, ground shadow, UI, scenery, plastic toy, metallic robot parts, headphones or large forehead emblem. Match the LEFT GPT GIRL in the reference: soft ivory-white bob haircut and one curled ahoge, mint green hood edges framing her round face, bright friendly green anime eyes, little open smiling mouth, mint-and-ivory short cape/bow across the lower crescent. Keep this original human character almost unchanged. Remove its cartoon robot hood ornament. Add only a SMALL recognizably six-loop interwoven knot HAIR CLIP to the side of her mint hood, a tasteful dark-teal accent that occupies less than 8 percent of the face size. This subtle OpenAI-inspired knot is an accessory, NOT the head itself and NOT a big central logo. Face should occupy at least half the round body. Adorable squishy ball girl, no arms or long torso.",
+      "width": 1312,
+      "height": 1199,
+      "sha256": "d018332215bcaff636218bec6e2a9448a49b368e0fc6765242d37e58671350c5"
+    },
+    {
+      "id": "claude",
+      "asset": "assets/roguelite/ball_art_r4/claude.png",
+      "generator": "built-in image_gen",
+      "source_output": "exec-3722a52c-794f-46ce-be4e-406da3a6c5e7.png",
+      "prompt": "Use the original TOP-RIGHT HUMAN CHIBI GIRL companion characters in the reference concept sheet as the approved identity and drawing style. The user rejected later robot/logo balls; DO NOT produce a robot or a corporate logo with eyes. Produce ONE isolated transparent-background 2D game sprite: a cute HUMAN-ANIME-GIRL DUMPLING BALL, round cheeks, clear anime eyes and recognizable hair, compact outfit crescent compressed at the bottom; whole silhouette round as in the reference. Her face and hair are the dominant identity, not machinery. Premium matte hand-painted cel illustration with dark clean contours, extremely cute expression, readable at 36 pixels. Centered complete single subject, short ornament protrusions only, safe transparent margins. NO text, name label, extra duplicate, ground shadow, UI, scenery, plastic toy, metallic robot parts, headphones or large forehead emblem. Match the MIDDLE CLAUDE GIRL in the reference: fluffy peach/apricot hair, curled fringe, tiny tufts like a restrained sunburst, relaxed half-moon anime eyes and a gentle self-satisfied sleepy smile, plump rosy cheeks, terracotta-and-cream outfit crescent. Keep this original human character almost unchanged. Replace the huge flower badge with a simple small cream bow. Add only a TINY burnt-orange PIXEL-CRAB SHAPED HAIR CLIP near one temple, with two miniature black rectangular eyes, as a recognizable Clawd accessory. The clip is under 8 percent of the face size, NOT the character's body. Do not turn her into a crab or a robot. Orange human chibi girl squeezed into a round dumpling body.\nFinal transparent cutout edit: Edit this sprite for production transparency ONLY. Preserve the cute round human girl's face, hairstyle, outfit, colors, expression and small hair clip exactly. Remove ALL colored glow, aura, vignette, haze and shadows OUTSIDE the character silhouette. All exterior pixels must be fully transparent alpha=0, including around the ahoge and between hair curls. Remove detached floating ray shapes above the head if present. Keep clean antialiased character edges, no white or colored fringe. No repaint of the character, no new background, no gray checkerboard drawn into the image, no ground shadow. Center the complete character with a small safe transparent margin on a square canvas. This is a transparent 2D game sprite cutout that will render only36 pixels wide, so no external haze or unneeded empty-space scenery.",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "b9f56fc8a5ea14a13f9650f49ee8acb097a05784c532bf51f816cfa40df30a5c"
+    },
+    {
+      "id": "qwen",
+      "asset": "assets/roguelite/ball_art_r4/qwen.png",
+      "generator": "built-in image_gen",
+      "source_output": "exec-6d31117a-a9a8-465d-b2b1-d073770b165e.png",
+      "prompt": "Use the original TOP-RIGHT HUMAN CHIBI GIRL companion characters in the reference concept sheet as the approved identity and drawing style. The user rejected later robot/logo balls; DO NOT produce a robot or a corporate logo with eyes. Produce ONE isolated transparent-background 2D game sprite: a cute HUMAN-ANIME-GIRL DUMPLING BALL, round cheeks, clear anime eyes and recognizable hair, compact outfit crescent compressed at the bottom; whole silhouette round as in the reference. Her face and hair are the dominant identity, not machinery. Premium matte hand-painted cel illustration with dark clean contours, extremely cute expression, readable at 36 pixels. Centered complete single subject, short ornament protrusions only, safe transparent margins. NO text, name label, extra duplicate, ground shadow, UI, scenery, plastic toy, metallic robot parts, headphones or large forehead emblem. Match the RIGHT QWEN GIRL in the reference: rich violet/lilac fluffy hair, short curled side locks and one curved ahoge, bright violet anime eyes and a playful open smile, lavender-white outfit crescent with two soft decorative cloud curls. Keep the round HUMAN girl's face and hair. Change only the little golden star hair clasp into a SMALL violet/ivory GEOMETRIC THREE-INTERLOCKING-ARROWS star hairpin on the side, suggestive of the Qwen emblem, less than 8 percent of face size. Not a rounded clover, not a large logo stamped on the forehead. No robot shell, no machine parts. Beautiful matte chibi girl dumpling ball, clear facial expression.\nFinal transparent cutout edit: Edit this sprite for production transparency ONLY. Preserve the cute round human girl's face, hairstyle, outfit, colors, expression and small hair clip exactly. Remove ALL colored glow, aura, vignette, haze and shadows OUTSIDE the character silhouette. All exterior pixels must be fully transparent alpha=0, including around the ahoge and between hair curls. Remove detached floating ray shapes above the head if present. Keep clean antialiased character edges, no white or colored fringe. No repaint of the character, no new background, no gray checkerboard drawn into the image, no ground shadow. Center the complete character with a small safe transparent margin on a square canvas. This is a transparent 2D game sprite cutout that will render only36 pixels wide, so no external haze or unneeded empty-space scenery.",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "0f95181ba18a4d9a1f09e82fb22865c8b4d32057a002595b5d41762cb8791424"
+    },
+    {
+      "id": "virus_low",
+      "asset": "assets/roguelite/ball_art_r4/virus_low.png",
+      "generator": "built-in image_gen",
+      "source_output": "exec-52e515b8-0188-4170-b490-11b9c2cdc905.png",
+      "prompt": "Production GAME SPRITE CUTOUT. From the BOTTOM LEFT of the reference board use ONLY the mint-green LOW-TIER round computer-virus monster as identity/style reference. Produce ONE isolated centered very round chibi internet-virus blob on genuine transparent background. A mint green dumpling sphere with two short rounded antenna bumps, a bold angular one-tooth crooked grin, dark expressive eyes and one clean black pixel-corruption notch. Simple silhouette, soft matte cel-painted shading, dark clear edge and pale green small highlight. Match the board's cute-but-hostile attitude and rich readable hand-painted game look. Front view, 80% canvas footprint, very short protrusions, designed to read at 40 pixels. Do not include labels, digits, cards, panels, tiny squares floating away, frame, shadow, backdrop or extra characters. No realistic biological virus, no glass marble, no 3D plastic. Square 1024x1024 sprite.",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "c09cc29e508f32724426177823a12c6bbb47a2722f84738efe6a916f2be96920"
+    },
+    {
+      "id": "virus_mid",
+      "asset": "assets/roguelite/ball_art_r4/virus_mid.png",
+      "generator": "built-in image_gen",
+      "source_output": "exec-2266a891-bbca-4d01-b0da-e7a5eb17e9e1.png",
+      "prompt": "ONE production transparent game sprite, isolated round AMBER MID-TIER internet-virus monster, closely match the amber round monster at bottom left of the reference concept board. Single spherical chibi dumpling body, four SHORT geometric squared antenna/spike knobs, stern mischievous cream eyes under dark angular eyebrows, one pixel-corruption scar across forehead, dark slate segmented lower armor crescent enclosing the lower third. Cute but hostile, matte illustrated cel shading with painted texture and bold deep brown contour, no 3D toy appearance, no glass, no shiny plastic. Front view, compact circular footprint and face designed to read at 46-62 pixels; 80% centered square canvas occupancy with transparent margin around all protrusions. NO label, no numbers, no typography, no separate flying pixel particles, no scenery, no grounding shadow, no badge, no frame, no other sprite. Genuine alpha background, square game sprite.",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "43d39506e55cdd0ff4cb13de8c57569fcb52d516abd8f6514b68208158357a31"
+    },
+    {
+      "id": "virus_high",
+      "asset": "assets/roguelite/ball_art_r4/virus_high.png",
+      "generator": "built-in image_gen",
+      "source_output": "exec-cbee352c-365a-4b7c-8158-c293e19eddda.png",
+      "prompt": "ONE production transparent game sprite, isolated round VIOLET-MAGENTA ELITE internet-virus monster, match the violet elite monster at bottom left of the reference concept board. Single sphere/dumpling compact body, a crown of SIX SHORT squared digital-virus spike knobs around the upper/lateral contour, two bold sharp pale ivory eyes inside an angular dark violet eye mask, corrupted-pixel scar, separated slate/dark-purple shell plates across the bottom arc. Clear silhouette distinction from the smooth green low-tier and four-spike amber mid-tier. Matte hand-painted 2D cel shading, dark confident outlines, no glossy plastic, no glass, no 3D. Front view, centered 80% square canvas footprint, short protrusions only; highly readable at 62 pixels. NO labels, numbers, text, watermark, background, badge, frame, floating particles, grounding shadow or extra characters. Genuine transparent alpha game sprite.",
+      "width": 1254,
+      "height": 1254,
+      "sha256": "1fb1f173481fd48660a257b859b610206549f47de9b084051e9f7bdf90da74b3"
+    }
+  ]
+}

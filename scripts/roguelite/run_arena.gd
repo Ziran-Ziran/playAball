@@ -22,7 +22,13 @@ func _ready() -> void:
 	$HUD/Hint.add_theme_font_size_override("font_size", 14)
 	$HUD/Controls.position = Vector2(320, 90)
 	feedback.audio_director = audio
-	$HUD/Controls/Mute.toggled.connect(func(_value: bool): sync_audio_mix())
+	$HUD/Controls/Mute.text = "全部静音"
+	$HUD/Controls/Mute.toggled.connect(func(value: bool):
+		MusicManager.set_muted(value)
+		sync_audio_mix()
+	)
+	MusicManager.mix_changed.connect(_sync_music_mute)
+	_sync_music_mute()
 	add_volume_control("音效", false)
 	add_volume_control("提示", true)
 	sync_audio_mix()
@@ -57,7 +63,8 @@ func _process(delta: float) -> void:
 			status.text += " · 饱饭"
 		audio.set_audio_paused(get_tree().paused)
 		sync_audio_mix()
-		_hurt_flash = maxf(0.0, _hurt_flash - delta)
+		if not get_tree().paused:
+			_hurt_flash = maxf(0.0, _hurt_flash - delta)
 		player.modulate = Color.WHITE.lerp(Color("ff776b"), _hurt_flash / 0.3)
 		player.well_fed = director.rice.stored_bonus
 		player.queue_redraw()
@@ -99,6 +106,11 @@ func add_volume_control(label_text: String, is_ui: bool) -> void:
 		sync_audio_mix()
 	)
 	$HUD/Controls.add_child(slider)
+
+func _sync_music_mute() -> void:
+	$HUD/Controls/Mute.set_pressed_no_signal(MusicManager.muted)
+	feedback.sound_enabled = not MusicManager.muted
+	sync_audio_mix()
 
 func sync_audio_mix() -> void:
 	audio.set_mix(sfx_volume, ui_volume, not feedback.sound_enabled)

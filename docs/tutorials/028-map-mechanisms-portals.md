@@ -9,7 +9,7 @@
 - `pivot_paddle.tscn`：Anchor静态轴、Paddle刚体、Pin真实关节。碰撞冲量交给物理解算，脚本不按动画强行改动态刚体位置。`pivot_body.gd`在`_integrate_forces`中处理显式复位、转速上限和相对初始角度的限位；参数与回归见[教程033](033-paddle-response-and-feature-checks.md)。
 - `moving_barrier.tscn`：Body是AnimatableBody2D，物理帧按正弦轨迹往返。检查器调`travel`、`period`、`initial_phase`。
 - `rotating_arc.tscn`：16段可编辑凸四边形组成240度圆弧；视觉多边形与碰撞使用相同点，120度缺口是真空缺。检查器调角速度和初始角度；修改厚度或半径必须同时修改每段碰撞和视觉，不能只缩视觉。
-- `spike_strip.tscn`：Area2D检测真实玩家接触，交给同一DemoHealth.hurt处理共享无敌时间。伙伴和敌人不触发玩家远程扣血。检查器的长度/深度目前用于画面和安全区查询，修改时需同步Shape尺寸；后续地图不得只拉长画面。
+- `spike_strip.tscn`：Area2D检测真实玩家接触，交给同一DemoHealth.hurt处理共享无敌时间。伙伴和敌人不触发玩家远程扣血。检查器的长度/深度用于绘制、安全查询和运行时独立Shape；编辑器中也须同步Shape尺寸及偏移，见教程041。
 - `portal_pair.tscn`：A/B是可编辑入口标记，默认相距800。检测玩家、伙伴、普通敌人的真实运动线段，排除首领及弹体。`portal_radius`、出口朝向、间距、安全边界和再入冷却可调。
 
 每个运动机关有`set_active()`和`reset_mechanism()`；暂停使用PAUSABLE，地图状态接口也可以显式停机关。刚体暂停保留动量。视觉形变不得改变碰撞体。
@@ -44,4 +44,4 @@ legacy资源保留旧场地的数据契约；现有MapController已实现四图�
 
 ## 编辑实例子节点后验证导出
 
-地图二十字竖臂、地图三移动刺/传送端点、首领内环六刺都包含实例内部修改；TSCN必须保留对应[editable path]，否则源码可见、重新打包却丢内容。首领还需保留六个短刺Shape覆盖为26×22。maps测试的PackedScene重打包和普通包探针检查共同防回归；具体G7失败→G8修复与实际接触证据见教程032。
+地图二十字竖臂、地图三移动刺/传送端点、首领内环四刺都包含实例内部修改；TSCN必须保留对应[editable path]，否则源码可见、重新打包却丢内容。首领四处短刺Shape为26×19；地图二六处短刺Shape为36×13。maps测试的PackedScene重打包和普通包探针检查共同防回归；具体G7失败→G8修复与实际接触证据见教程032。

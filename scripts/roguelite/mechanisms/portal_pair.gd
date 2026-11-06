@@ -8,6 +8,8 @@ signal traversed(from_point: Vector2, to_point: Vector2)
 @export var exit_clearance: float = 12.0
 @export var a_normal: Vector2 = Vector2.RIGHT
 @export var b_normal: Vector2 = Vector2.LEFT
+@export var a_color: Color = Color("77dfd0")
+@export var b_color: Color = Color("94cee6")
 @export var arena_bounds: Rect2 = Rect2(40, 125, 1200, 553)
 var player_health: DemoHealth
 var active: bool = true
@@ -154,4 +156,4 @@ func _space_clear(body: DemoBody, destination: Vector2, check_reservations: bool
 				return false
 	return true
 func presentation_snapshot() -> Dictionary:
-	return {"points":[$A.position,$B.position],"normals":[a_normal,b_normal],"radius":portal_radius,"active":active}
+	return {"points":[$A.position,$B.position],"normals":[a_normal,b_normal],"colors":[a_color,b_color],"radius":portal_radius,"active":active}

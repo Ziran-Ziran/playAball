@@ -1,28 +1,45 @@
-; 玩个球 — 团队统一 Godot 4.7.1 stable 标准版。
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
 config_version=5
 
 [application]
+
 config/name="玩个球"
 run/main_scene="res://scenes/ui/main_menu.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
+config/icon="res://assets/ui/app_icon/playaball.png"
+config/windows_native_icon="res://assets/ui/app_icon/playaball.ico"
+
+[autoload]
+
+MusicManager="*res://scripts/ui/music_manager.gd"
 
 [display]
+
 window/size/viewport_width=1280
 window/size/viewport_height=720
 window/size/window_width_override=1280
 window/size/window_height_override=720
 window/stretch/mode="canvas_items"
 
-[physics]
-common/physics_ticks_per_second=120
-2d/default_gravity=980.0
-
-[rendering]
-renderer/rendering_method="gl_compatibility"
-renderer/rendering_method.mobile="gl_compatibility"
-environment/defaults/default_clear_color=Color(0.025, 0.04, 0.075, 1)
-
 [layer_names]
+
 2d_physics/layer_1="World"
 2d_physics/layer_2="Ball"
 2d_physics/layer_3="Sensors"
+
+[physics]
+
+common/physics_ticks_per_second=120
+
+[rendering]
+
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
+environment/defaults/default_clear_color=Color(0.025, 0.04, 0.075, 1)

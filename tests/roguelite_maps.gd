@@ -13,9 +13,10 @@ func check(ok: bool, message: String) -> void:
 func run() -> void:
 	# 导出会重新打包实例；未声明可编辑的实例子节点在源码可见，却会被打包丢弃。
 	var nested_paths: Dictionary={
+		"map_01":["LeftPaddle/Shape","UpperPaddle/Paddle/Shape","LowerPaddle/Paddle/Shape"],
 		"map_02":["CrossPivot/Paddle/VerticalShape","CrossPivot/Paddle/VisualVertical"],
 		"map_03":["MovingLeft/Body/MovingLeftSpikes","MovingRight/Body/MovingRightSpikes"],
-		"boss_map":["InnerRing/Body/InnerSpikes0","InnerRing/Body/InnerSpikes1","InnerRing/Body/InnerSpikes2","InnerRing/Body/InnerSpikes3","InnerRing/Body/InnerSpikes4","InnerRing/Body/InnerSpikes5"]}
+		"boss_map":["InnerRing/Body/InnerSpikes0","InnerRing/Body/InnerSpikes1","InnerRing/Body/InnerSpikes2","InnerRing/Body/InnerSpikes3","GreenPortals/A","YellowPortals/B"]}
 	for id: String in nested_paths:
 		var original: Node=load("res://scenes/roguelite/maps/%s.tscn"%id).instantiate()
 		var packed:=PackedScene.new()
@@ -27,6 +28,14 @@ func run() -> void:
 				check(original.get_node(path+"/Shape").shape.size==restored.get_node(path+"/Shape").shape.size,"Repacking retains authored spike collision dimensions: "+path)
 		if id=="map_03":
 			check(restored.get_node("Portals/A").position==Vector2(-500,0) and restored.get_node("Portals/B").position==Vector2(500,0),"Repacking preserves portal endpoint overrides")
+		if id=="boss_map":
+			check(restored.get_node("GreenPortals/A").position==Vector2(0,-115) and restored.get_node("GreenPortals/B").position==Vector2(0,115),"Repacking preserves vertical green portal pairing")
+			check(restored.get_node("YellowPortals/A").position==Vector2(-115,0) and restored.get_node("YellowPortals/B").position==Vector2(115,0),"Repacking preserves horizontal yellow portal pairing")
+			check(restored.get_node("GreenPortals").a_color==restored.get_node("GreenPortals").b_color and restored.get_node("GreenPortals").a_color!=restored.get_node("YellowPortals").a_color,"Repacking preserves same-color pair identification")
+		for spike: Node in original.find_children("*","Area2D",true,false):
+			if spike.has_method("_currently_touching_player"):
+				var restored_spike: Node = restored.get_node(original.get_path_to(spike))
+				check(restored_spike.get_node("Shape").shape.size==Vector2(spike.length,spike.tooth_depth+5.0),"Repacking retains visible spike dimensions: "+str(spike.name))
 		original.free()
 		restored.free()
 	if failures:

@@ -33,16 +33,19 @@ func run() -> void:
 			for name in ["TwinArcs", "InnerRing", "OuterRing"]:
 				var arc = map.current_map.get_node_or_null(name)
 				if arc != null:
-					arc.initial_angle = time * arc.angular_speed
+					arc.initial_angle = (PI / 4.0 if name == "TwinArcs" else 0.0) + time * arc.angular_speed
 					arc.reset_mechanism()
 			for tick in 3:
 				await physics_frame
 			await process_frame
-			var reachable: bool = path_exists(map, map.definition.player_spawn, Vector2(640, 400), excluded)
+			# 图三从环心走到环外；Boss 内圈封闭，目标在环间，不能再把圆心当通道。
+			var goal := Vector2(1050, 400) if wave == 5 else Vector2(640, 280)
+			var reachable: bool = path_exists(map, map.definition.player_spawn, goal, excluded)
 			results.append({"map": map.definition.map_id, "rotation_time": time, "player_path": reachable})
 			check(reachable, "%s rotation %.0fs retains a real 46px-player passage" % [map.definition.map_id, time])
 			if wave == 6:
-				check(map.point_safe(map.definition.boss_spawn, 77.0, excluded), "Whole boss including offset modules remains safe at ring center")
+				check(map.point_safe(map.definition.boss_spawn, 77.0, excluded), "Whole boss including offset modules remains safe at upper-right spawn")
+				check(not path_exists(map, goal, Vector2(640, 400), excluded), "Closed inner ring prevents walking through its center")
 		if wave == 6:
 			for name in ["InnerRing", "OuterRing"]:
 				var arc = map.current_map.get_node(name)
@@ -50,8 +53,8 @@ func run() -> void:
 				arc.reset_mechanism()
 			for tick in 3:
 				await physics_frame
-			check(boss_path_clear(game.director.boss, Vector2(250, 400)), "Complete boss shape plus margin passes initial left entrances")
-			check(boss_path_clear(game.director.boss, Vector2(1030, 400)), "Complete boss shape plus margin passes initial right entrances")
+			check(boss_path_clear(game.director.boss, Vector2(1155, 400)), "Complete boss shape has an unobstructed route outside the ring")
+			check(not boss_path_clear(game.director.boss, Vector2(640, 400)), "Boss cannot pass through closed inner circle")
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path("res://.local"))
 	var evidence := FileAccess.open("res://.local/map_navigation_results.json", FileAccess.WRITE)
 	evidence.store_string(JSON.stringify(results, "\t"))

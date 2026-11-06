@@ -3,6 +3,7 @@ extends Node
 ## 同一玩家共用受伤无敌时间，多个危险来源不会在一帧扣空生命。
 signal changed(hp: int)
 signal died
+signal damaged(effective_damage: int)
 signal damage_rejected(reason: StringName, amount: int)
 @export var max_hp: int = 5
 @export var invulnerability: float = 0.8
@@ -25,9 +26,12 @@ func hurt(amount: int = 1) -> bool:
 	if invulnerability_left > 0.0:
 		damage_rejected.emit(&"invulnerable", amount)
 		return false
+	var previous_hp: int = hp
 	hp = maxi(0, hp - amount)
 	invulnerability_left = invulnerability
 	changed.emit(hp)
+	# 表现只接收实际扣血；无敌拒绝、治疗和重开不会误触发受伤动画。
+	damaged.emit(previous_hp - hp)
 	if hp == 0:
 		died.emit()
 	return true

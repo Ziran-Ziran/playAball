@@ -19,7 +19,7 @@ func mouse(point: Vector2,pressed: bool) -> void:
 	Input.parse_input_event(event)
 func validate_physical_maps() -> void:
 	# 导出重打包曾丢失实例内部添加的节点和端点覆盖，必须检查实际包而非仅资源存在。
-	var counts: Dictionary={"map_01":0,"map_02":4,"map_03":2,"boss_map":6}
+	var counts: Dictionary={"map_01":0,"map_02":6,"map_03":2,"boss_map":4}
 	for id: String in counts:
 		var map: Node=load("res://scenes/roguelite/maps/%s.tscn"%id).instantiate()
 		var spikes: Array[Node]=[]
@@ -27,12 +27,15 @@ func validate_physical_maps() -> void:
 			if node.has_method("_currently_touching_player"):spikes.append(node)
 		check(spikes.size()==counts[id],"Packaged map retains exact spike count: "+id)
 		for spike: Node in spikes:
-			var length: float=26.0 if id=="boss_map" else 180.0
-			check(is_equal_approx(spike.length,length) and spike.get_node("Shape").shape.size==Vector2(length,22) and spike.collision_mask==2,"Packaged authored spike shape/length/mask retained: "+id+"/"+str(spike.name))
+			var length: float=26.0 if id=="boss_map" else (36.0 if id=="map_02" else 180.0)
+			check(is_equal_approx(spike.length,length) and spike.get_node("Shape").shape.size==Vector2(length,spike.tooth_depth+5.0) and spike.collision_mask==2,"Packaged authored spike shape/length/mask retained: "+id+"/"+str(spike.name))
 		if id=="map_02":
 			check(map.has_node("CrossPivot/Paddle/VerticalShape") and map.has_node("CrossPivot/Paddle/VisualVertical"),"Packaged cross paddle retains vertical physical and visual arm")
 		if id=="map_03":
 			check(map.get_node("Portals/A").position==Vector2(-500,0) and map.get_node("Portals/B").position==Vector2(500,0),"Packaged portal endpoints retain authored overrides")
+		if id=="boss_map":
+			check(map.get_node("GreenPortals/A").position==Vector2(0,-115) and map.get_node("GreenPortals/B").position==Vector2(0,115),"Packaged green portals pair vertically")
+			check(map.get_node("YellowPortals/A").position==Vector2(-115,0) and map.get_node("YellowPortals/B").position==Vector2(115,0),"Packaged yellow portals pair horizontally")
 		map.free()
 func run() -> void:
 	walk("res://")
@@ -46,6 +49,17 @@ func run() -> void:
 		if path.begins_with("res://tests/") or path.begins_with("res://docs/") or path.begins_with("res://.local/") or path.contains("handfeel_preset"):
 			check(false,"Unexpected private/developer content: "+path)
 	validate_physical_maps()
+	# 音频在导出后通常只保留导入资源；必须从实际PCK验证音乐，而非检查源码文件。
+	check(ResourceLoader.exists("res://assets/music/let_me_go.mp3"),"Packaged supplied Let Me Go audio resource exists")
+	var music: Node = root.get_node_or_null("MusicManager")
+	check(music != null,"Packaged persistent MusicManager autoload exists")
+	var music_player_id: int = -1
+	if music != null:
+		await create_timer(0.12,true).timeout
+		var music_state: Dictionary = music.call("snapshot")
+		music_player_id = int(music_state.player_id)
+		check(music_state.available and music_state.playing and float(music_state.length)>120.0,"Packaged full supplied track decodes and plays")
+		check(float(music_state.position)>0.0,"Packaged music playback actually advances")
 	var menu=load("res://scenes/ui/main_menu.tscn").instantiate()
 	root.add_child(menu)
 	current_scene=menu
@@ -54,6 +68,8 @@ func run() -> void:
 	await process_frame
 	await process_frame
 	var game=current_scene
+	if music != null:
+		check(int(music.call("snapshot").player_id)==music_player_id,"Packaged menu to Game keeps one music player")
 	check(game.has_node("RunDirector"),"Menu Start enters actual packaged Game")
 	if not game.has_node("RunDirector"):
 		quit(1)
@@ -63,6 +79,16 @@ func run() -> void:
 	check(game.director.wave==1 and game.companions.members.is_empty(),"Formal first map has zero starting companions")
 	check(game.player.get_node("Presentation").recharge_pulse_left==0.0,"Packaged fresh spawn has no false recharge cue")
 	check(game.director.build.definitions.size()==15,"All dynamic upgrade resources exist")
+	# 正式卡面通过FileAccess读JSON；必须检查真实导出包，不能仅验证编辑器文件。
+	check(FileAccess.file_exists("res://resources/roguelite/card_art_catalog.json") and FileAccess.file_exists("res://resources/roguelite/upgrade_card_copy.json"),"Packaged card art index and copy JSON exist")
+	var card_library: DemoCardArtLibrary = DemoCardArtLibrary.new()
+	var card_images: int = 0
+	for definition: DemoUpgrade in game.director.build.definitions + [game.director.build.fallback]:
+		for rank: int in range(1,maxi(1,definition.max_level)+1):
+			card_images += 1
+			check(card_library.texture_for(definition.id,rank)!=null,"Packaged next-rank illustration: %s/%d"%[definition.id,rank])
+	check(card_images==28,"Packaged all 28 level illustrations load")
+	check(card_library.copy_for("bowling").get("rules","").contains("不会继续传代"),"Packaged card copy retains actual bowling boundary")
 	for id in ["map_01","map_02","map_03","boss_map"]:
 		check(ResourceLoader.exists("res://scenes/roguelite/maps/%s.tscn"%id),"Packaged physical map exists: "+id)
 	for path in ["fat_fish_ball_v1.png","fragile_crate_v1.png"]:

@@ -1,89 +1,120 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene load_steps=10 format=3]
 [ext_resource type="Script" path="res://scripts/roguelite/maps/map_layout.gd" id="layout"]
 [ext_resource type="Resource" path="res://resources/roguelite/maps/boss_map.tres" id="data"]
 [ext_resource type="PackedScene" path="res://scenes/roguelite/mechanisms/pivot_paddle.tscn" id="pivot"]
-[ext_resource type="PackedScene" path="res://scenes/roguelite/mechanisms/moving_barrier.tscn" id="moving"]
 [ext_resource type="PackedScene" path="res://scenes/roguelite/mechanisms/spike_strip.tscn" id="spikes"]
 [ext_resource type="PackedScene" path="res://scenes/roguelite/mechanisms/portal_pair.tscn" id="portals"]
 [ext_resource type="PackedScene" path="res://scenes/roguelite/mechanisms/boss_inner_ring.tscn" id="inner"]
 [ext_resource type="PackedScene" path="res://scenes/roguelite/mechanisms/boss_outer_ring.tscn" id="outer"]
-[sub_resource type="RectangleShape2D" id="Spike0"]
-size = Vector2(26,22)
-[sub_resource type="RectangleShape2D" id="Spike1"]
-size = Vector2(26,22)
-[sub_resource type="RectangleShape2D" id="Spike2"]
-size = Vector2(26,22)
-[sub_resource type="RectangleShape2D" id="Spike3"]
-size = Vector2(26,22)
-[sub_resource type="RectangleShape2D" id="Spike4"]
-size = Vector2(26,22)
-[sub_resource type="RectangleShape2D" id="Spike5"]
-size = Vector2(26,22)
+[sub_resource type="RectangleShape2D" id="ShortPaddle"]
+size = Vector2(70,18)
+[sub_resource type="RectangleShape2D" id="ShortSpike"]
+size = Vector2(26,19)
 [node name="BossMap" type="Node2D"]
 process_mode = 1
 script = ExtResource("layout")
 definition = ExtResource("data")
 [node name="InnerRing" parent="." instance=ExtResource("inner")]
-position = Vector2(640, 400)
+position = Vector2(640,400)
 [node name="OuterRing" parent="." instance=ExtResource("outer")]
-position = Vector2(640, 400)
-[node name="UpperLeft" parent="." instance=ExtResource("pivot")]
-position = Vector2(300, 240)
-initial_angle = 0.4
-angle_limit = 0.9
-[node name="UpperRight" parent="." instance=ExtResource("pivot")]
-position = Vector2(980, 240)
-initial_angle = -0.4
-angle_limit = 0.9
-[node name="LowerLeft" parent="." instance=ExtResource("pivot")]
-position = Vector2(300, 570)
-initial_angle = -0.4
-angle_limit = 0.9
-[node name="LowerRight" parent="." instance=ExtResource("pivot")]
-position = Vector2(980, 570)
-initial_angle = 0.4
-angle_limit = 0.9
+position = Vector2(640,400)
+[node name="LeftPaddle" parent="." instance=ExtResource("pivot")]
+position = Vector2(300,400)
+initial_angle = 0
+length = 180.0
+angle_limit = 1.2
+[node name="RightPaddle" parent="." instance=ExtResource("pivot")]
+position = Vector2(980,400)
+initial_angle = 0
+length = 180.0
+angle_limit = 1.2
+[node name="UpperPaddle" parent="." instance=ExtResource("pivot")]
+position = Vector2(640,170)
+initial_angle = 1.5707963267948966
+length = 70.0
+angle_limit = 1.2
+[node name="Shape" parent="UpperPaddle/Paddle" index="0"]
+shape = SubResource("ShortPaddle")
+[node name="Visual" parent="UpperPaddle/Paddle" index="1"]
+polygon = PackedVector2Array(-35,-9,35,-9,35,9,-35,9)
+[node name="LowerPaddle" parent="." instance=ExtResource("pivot")]
+position = Vector2(640,630)
+initial_angle = 1.5707963267948966
+length = 70.0
+angle_limit = 1.2
+[node name="Shape" parent="LowerPaddle/Paddle" index="0"]
+shape = SubResource("ShortPaddle")
+[node name="Visual" parent="LowerPaddle/Paddle" index="1"]
+polygon = PackedVector2Array(-35,-9,35,-9,35,9,-35,9)
 [node name="InnerSpikes0" parent="InnerRing/Body" instance=ExtResource("spikes")]
-position = Vector2(46.9106,100.6002)
-rotation = 2.705260340591211
+position = Vector2(48.79037,48.79037)
+rotation = 2.356194490192345
 length = 26.0
+tooth_depth = 14.0
 [node name="Shape" parent="InnerRing/Body/InnerSpikes0" index="0"]
-shape = SubResource("Spike0")
+shape = SubResource("ShortSpike")
+position = Vector2(0,-4.5)
 [node name="InnerSpikes1" parent="InnerRing/Body" instance=ExtResource("spikes")]
-position = Vector2(0.0000,111.0000)
-rotation = 3.141592653589793
+position = Vector2(-48.79037,48.79037)
+rotation = 3.9269908169872414
 length = 26.0
+tooth_depth = 14.0
 [node name="Shape" parent="InnerRing/Body/InnerSpikes1" index="0"]
-shape = SubResource("Spike1")
+shape = SubResource("ShortSpike")
+position = Vector2(0,-4.5)
 [node name="InnerSpikes2" parent="InnerRing/Body" instance=ExtResource("spikes")]
-position = Vector2(-46.9106,100.6002)
-rotation = 3.5779249665883754
+position = Vector2(-48.79037,-48.79037)
+rotation = 5.497787143782138
 length = 26.0
+tooth_depth = 14.0
 [node name="Shape" parent="InnerRing/Body/InnerSpikes2" index="0"]
-shape = SubResource("Spike2")
+shape = SubResource("ShortSpike")
+position = Vector2(0,-4.5)
 [node name="InnerSpikes3" parent="InnerRing/Body" instance=ExtResource("spikes")]
-position = Vector2(-46.9106,-100.6002)
-rotation = 5.846852994181004
+position = Vector2(48.79037,-48.79037)
+rotation = 7.0685834705770345
 length = 26.0
+tooth_depth = 14.0
 [node name="Shape" parent="InnerRing/Body/InnerSpikes3" index="0"]
-shape = SubResource("Spike3")
-[node name="InnerSpikes4" parent="InnerRing/Body" instance=ExtResource("spikes")]
-position = Vector2(-0.0000,-111.0000)
-rotation = 6.283185307179586
-length = 26.0
-[node name="Shape" parent="InnerRing/Body/InnerSpikes4" index="0"]
-shape = SubResource("Spike4")
-[node name="InnerSpikes5" parent="InnerRing/Body" instance=ExtResource("spikes")]
-position = Vector2(46.9106,-100.6002)
-rotation = 6.719517620178169
-length = 26.0
-[node name="Shape" parent="InnerRing/Body/InnerSpikes5" index="0"]
-shape = SubResource("Spike5")
+shape = SubResource("ShortSpike")
+position = Vector2(0,-4.5)
+[node name="GreenPortals" parent="." instance=ExtResource("portals")]
+position = Vector2(640,400)
+portal_radius = 22.0
+a_color = Color(0.15,0.9,0.36,1)
+b_color = Color(0.15,0.9,0.36,1)
+a_normal = Vector2(1,0)
+b_normal = Vector2(-1,0)
+[node name="A" parent="GreenPortals" index="0"]
+position = Vector2(0,-115)
+[node name="B" parent="GreenPortals" index="1"]
+position = Vector2(0,115)
+[node name="YellowPortals" parent="." instance=ExtResource("portals")]
+position = Vector2(640,400)
+portal_radius = 22.0
+a_color = Color(1,0.86,0.1,1)
+b_color = Color(1,0.86,0.1,1)
+a_normal = Vector2(0,-1)
+b_normal = Vector2(0,1)
+[node name="A" parent="YellowPortals" index="0"]
+position = Vector2(-115,0)
+[node name="B" parent="YellowPortals" index="1"]
+position = Vector2(115,0)
 
 [editable path="InnerRing"]
+
+[editable path="UpperPaddle"]
+
+[editable path="LowerPaddle"]
+
+[editable path="GreenPortals"]
+
+[editable path="YellowPortals"]
+
 [editable path="InnerRing/Body/InnerSpikes0"]
+
 [editable path="InnerRing/Body/InnerSpikes1"]
+
 [editable path="InnerRing/Body/InnerSpikes2"]
+
 [editable path="InnerRing/Body/InnerSpikes3"]
-[editable path="InnerRing/Body/InnerSpikes4"]
-[editable path="InnerRing/Body/InnerSpikes5"]
