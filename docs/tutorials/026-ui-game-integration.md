@@ -1,5 +1,7 @@
 # 026：完整游戏、UI与调试怎样分离
 
+2026-11-10更新：设置、暂停和通用弹窗的当前蓝白DS人物皮肤见[教程054](054-ds-character-ui.md)，商店与结算精修见[教程055](055-light-ui-refinement.md)。下文保留初次接线背景；053是已被用户否定的首轮历史，不作为当前方案。
+
 ## 文件与入口
 
 F5现在进入`scenes/ui/main_menu.tscn`，开始按钮打开`scenes/ui/game.tscn`。后者继承完整`scenes/roguelite/run.tscn`，仍经过五波、击杀成长、商店/事件、首领、胜负和重开。`scripts/ui/game.gd`只包装表现与暂停返回导航，不改物理规则。

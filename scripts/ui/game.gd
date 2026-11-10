@@ -2,6 +2,8 @@ extends "res://scripts/roguelite/run_arena.gd"
 ## 发布用外壳：沿用完整run规则，将开发控件留给原run/实验室/调参入口。
 var _pause_button: BaseButton
 var _reward_progress: TextureProgressBar
+var _wallet_icon: TextureRect
+var _health_skin: Control
 
 func _ready() -> void:
 	super._ready()
@@ -39,6 +41,7 @@ func _ready() -> void:
 	pause_button.pressed.connect(func(): set_paused(true))
 	$HUD.add_child(pause_button)
 	var coin := TextureRect.new()
+	_wallet_icon = coin
 	var coin_art := AtlasTexture.new()
 	coin_art.atlas = hud_art
 	coin_art.region = Rect2(1414,63,63,63)
@@ -61,11 +64,12 @@ func _ready() -> void:
 		else: _reward_progress.texture_under = strip
 	$HUD.add_child(_reward_progress)
 	var home := Button.new()
+	home.name = "Home"
 	home.text = "返回主菜单"
 	home.pressed.connect(return_to_menu)
 	$HUD/Menu/Buttons.add_child(home)
-	menu.position = Vector2(370, 115)
-	menu.size = Vector2(540, 520)
+	menu.position = Vector2(340, 85)
+	menu.size = Vector2(600, 550)
 	for option_name in ["Mute", "Shake", "Split"]:
 		var original := $HUD/Controls.get_node(option_name) as BaseButton
 		var option := CheckButton.new()
@@ -74,52 +78,107 @@ func _ready() -> void:
 		option.button_pressed = original.button_pressed
 		option.toggled.connect(func(value: bool): original.button_pressed = value)
 		$HUD/Menu/Buttons.add_child(option)
-	for kind in ["音效", "提示", "音乐"]:
-		var row := HBoxContainer.new()
-		var label := Label.new()
-		label.text = kind
-		row.add_child(label)
-		var slider := HSlider.new()
-		slider.custom_minimum_size = Vector2(260, 30)
-		slider.max_value = 1.0
-		slider.step = 0.01
-		slider.value = MusicManager.music_volume if kind == "音乐" else (sfx_volume if kind == "音效" else ui_volume)
-		if kind == "音乐":
-			slider.name = "MusicVolume"
-		slider.value_changed.connect(func(value: float):
+	var buttons: VBoxContainer = $HUD/Menu/Buttons
+	buttons.add_theme_constant_override("separation", 6)
+	$HUD/Menu/Buttons/Title.text = "暂停航行"
+	$HUD/Menu/Buttons/Title.add_theme_font_size_override("font_size", 26)
+	for action_name: String in ["Resume", "Reset"]:
+		buttons.get_node(action_name).custom_minimum_size.y = 40
+	$HUD/Menu/Buttons/Resume.text = "继续航行  ·  Esc"
+	$HUD/Menu/Buttons/Reset.text = "重新开局"
+	home.custom_minimum_size.y = 40
+	OceanUi.section(buttons, "声音与体验  /  战场已冻结")
+	buttons.move_child(buttons.get_child(buttons.get_child_count()-1), 4)
+	for kind: String in ["音效", "提示", "音乐"]:
+		OceanUi.volume_row(buttons, kind, MusicManager.music_volume if kind == "音乐" else (sfx_volume if kind == "音效" else ui_volume), func(value: float):
 			if kind == "音乐": MusicManager.set_music_volume(value)
 			elif kind == "音效": sfx_volume = value
 			else: ui_volume = value
 			sync_audio_mix()
-		)
-		row.add_child(slider)
-		$HUD/Menu/Buttons.add_child(row)
+		, "MusicVolume" if kind == "音乐" else "Volume")
+	for child: Node in buttons.get_children():
+		if child is BaseButton:
+			OceanUi.bind_button(child)
+	OceanUi.primary($HUD/Menu/Buttons/Resume)
+	var scrim := ColorRect.new()
+	scrim.name = "PauseScrim"
+	scrim.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	scrim.color = Color(0.01, 0.025, 0.05, 0.8)
+	scrim.visible = menu.visible
+	$HUD.add_child(scrim)
+	$HUD.move_child(scrim, menu.get_index())
+	menu.visibility_changed.connect(func():
+		scrim.visible = menu.visible
+		if menu.visible: OceanUi.reveal(menu)
+	)
 	MusicManager.mix_changed.connect(_sync_music_pause_controls)
 	var health_skin := Control.new()
+	_health_skin = health_skin
 	health_skin.set_script(load("res://scripts/ui/health_skin.gd"))
 	health_skin.source = $RunHUD.health_view
 	$RunHUD/Overlay.add_child(health_skin)
 	$RunHUD/Overlay/PlayerPanel.hide()
-	var panel_style := StyleBoxTexture.new()
-	var panel_atlas := AtlasTexture.new()
-	panel_atlas.atlas = load("res://assets/ui/panel_base.png")
-	panel_atlas.region = Rect2(28,112,1480,792)
-	panel_style.texture = panel_atlas
-	panel_style.set_content_margin_all(32)
-	menu.add_theme_stylebox_override("panel", panel_style)
-	$RunHUD.panel.add_theme_stylebox_override("panel", panel_style)
-	director.rest_panel.get_node("Backdrop/Panel").add_theme_stylebox_override("panel", panel_style)
+	_layout_pause_columns()
+	# 面板皮肤由各弹窗统一管理，避免父场景覆盖内容流和九宫格边距。
+
+func _layout_pause_columns() -> void:
+	var previous: VBoxContainer = $HUD/Menu/Buttons
+	previous.name = "PreviousButtons"
+	var grid := GridContainer.new()
+	grid.name = "Buttons"
+	grid.columns = 2
+	grid.add_theme_constant_override("h_separation", 32)
+	grid.add_theme_constant_override("v_separation", 12)
+	menu.add_child(grid)
+	var heading: Label = previous.get_node("Title")
+	heading.reparent(grid)
+	grid.add_child(OceanUi.label("声音与体验", 16, Color("586d99")))
+	# 保留原按钮对象和Buttons/Resume等路径；物理暂停、重开与请求信号不重接。
+	for pair: Array in [["Resume", "Mute"], ["Reset", "Shake"], ["Home", "Split"]]:
+		for key: String in pair:
+			var button: Control = previous.get_node(key)
+			button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			button.custom_minimum_size.x = 300
+			button.reparent(grid)
+	var character_note := Control.new()
+	character_note.custom_minimum_size = Vector2(300, 136)
+	character_note.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	grid.add_child(character_note)
+	var portrait := Control.new()
+	portrait.name = "WhaleMaidPortrait"
+	portrait.set_script(load("res://scripts/ui/ocean_motion.gd"))
+	portrait.set("is_badge", true)
+	portrait.set("is_portrait", true)
+	character_note.add_child(portrait)
+	portrait.size = Vector2(96, 130)
+	var note := OceanUi.label("歇一会儿，\n再去大闹一场。", 17, Color("5c6e91"))
+	note.position = Vector2(112, 32)
+	note.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	character_note.add_child(note)
+	var volumes := VBoxContainer.new()
+	volumes.name = "Volumes"
+	volumes.add_theme_constant_override("separation", 10)
+	grid.add_child(volumes)
+	for child: Node in previous.get_children():
+		if child is HBoxContainer:
+			child.reparent(volumes)
+	menu.remove_child(previous)
+	previous.queue_free()
+	menu.size = Vector2(820, 440)
 
 func _sync_music_pause_controls() -> void:
 	$HUD/Menu/Buttons/Mute.set_pressed_no_signal(MusicManager.muted)
-	for row: Node in $HUD/Menu/Buttons.get_children():
-		var slider: HSlider = row.get_node_or_null("MusicVolume")
-		if slider != null: slider.set_value_no_signal(MusicManager.music_volume)
+	for slider: HSlider in menu.find_children("MusicVolume", "HSlider", true, false):
+		slider.set_value_no_signal(MusicManager.music_volume)
 
 func _process(delta: float) -> void:
 	super._process(delta)
 	if is_instance_valid(director):
-		$HUD/Hint.visible = director.wave==1 and launcher.shots==0 and director.state==director.State.BATTLE and not launcher.aiming
+		var modal_open: bool = menu.visible or director.hud.panel.visible or director.rest_panel.visible
+		# 世界HUD不越过模态弹窗；弹窗关闭后恢复同一份真实读数。
+		for item: CanvasItem in [status, _wallet_icon, _pause_button, _reward_progress, _health_skin]:
+			item.visible = not modal_open
+		$HUD/Hint.visible = not modal_open and director.wave==1 and launcher.shots==0 and director.state==director.State.BATTLE and not launcher.aiming
 		status.text = "阶段 %d / 3  ·  第 %s 波\n金币 %d  ·  成长 %d / %d" % [director.flow.stage_number(director.wave), str(director.wave) if director.wave < 6 else "首领", director.wallet.balance, director.rewards.progress, director.rewards.next_target()]
 		if is_instance_valid(_reward_progress):
 			_reward_progress.max_value = director.rewards.next_target()

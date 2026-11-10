@@ -12,15 +12,19 @@ var _choice_count: int = 0
 @onready var title: Label = $Overlay/Panel/Content/Title
 @onready var summary: Label = $Overlay/Panel/Content/Summary
 @onready var cards: BoxContainer = $Overlay/Panel/Content/Cards
-@onready var restart_button: Button = $Overlay/Panel/Content/Restart
-@onready var home_button: Button = $Overlay/Panel/Content/Home
+@onready var restart_button: Button = $Overlay/Panel/Content/ResultActions/Restart
+@onready var home_button: Button = $Overlay/Panel/Content/ResultActions/Home
+@onready var result_body: DsResultBody = $Overlay/Panel/Content/ResultBody
+@onready var result_actions: HBoxContainer = $Overlay/Panel/Content/ResultActions
 @onready var health_view: DemoHealthView = $Overlay/PlayerPanel
 ## 保留旧脚本的只读节点路径兼容；实际刷新仍在 DemoHealthView。
 @onready var health_bar: ProgressBar = $Overlay/PlayerPanel/Content/HealthBar
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
-	preload("res://scripts/roguelite/presentation/sea_ui_theme.gd").apply($Overlay)
+	panel.remove_theme_stylebox_override("panel")
+	# 浅色弹窗主题只作用于弹窗，深色战斗HUD仍使用原来的浅色文字。
+	preload("res://scripts/roguelite/presentation/sea_ui_theme.gd").apply(panel)
 	var pause_menu: Control = get_parent().get_node_or_null("HUD/Menu")
 	if pause_menu != null:
 		preload("res://scripts/roguelite/presentation/sea_ui_theme.gd").apply(pause_menu)
@@ -35,6 +39,8 @@ func _ready() -> void:
 	restart_button.pressed.connect(func(): restart_requested.emit())
 	home_button.pressed.connect(func(): menu_requested.emit())
 	panel.z_index = 10
+	OceanUi.bind_button(restart_button)
+	OceanUi.bind_button(home_button)
 	var scrim := ColorRect.new()
 	scrim.color = Color(0.015,0.035,0.032,0.96)
 	scrim.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -59,6 +65,8 @@ func clear_cards() -> void:
 
 func show_choices(choices: Array, levels: Dictionary = {}, pending_count: int = 1, offer_id: int = 0) -> void:
 	clear_cards()
+	result_body.hide()
+	result_actions.hide()
 	panel.remove_theme_stylebox_override("panel")
 	_showing_choices = true
 	_choice_count = choices.size()
@@ -84,10 +92,13 @@ func show_choices(choices: Array, levels: Dictionary = {}, pending_count: int = 
 		card.modulate.a = 0.0
 		_animate_card.call_deferred(card, float(cards.get_child_count() - 1) * 0.1)
 	panel.show()
+	OceanUi.reveal(panel)
 
 func _card_width() -> float:
 	var slots: int = maxi(3, _choice_count)
-	return minf(reward_card_max_width, (panel.size.x - 48.0 - float(slots - 1) * cards.get_theme_constant("separation")) / float(slots))
+	var padding: float = panel.get_theme_stylebox("panel").get_minimum_size().x
+	# 容器会向上取整最小宽度；先按像素取整，避免四张半像素卡把面板反撑宽。
+	return floorf(minf(reward_card_max_width, (panel.size.x - padding - float(slots - 1) * cards.get_theme_constant("separation")) / float(slots)))
 
 func _layout_choices_panel() -> void:
 	var viewport_size: Vector2 = get_viewport().get_visible_rect().size
@@ -99,35 +110,57 @@ func _layout_choices_panel() -> void:
 func _on_overlay_resized() -> void:
 	if _showing_choices:
 		_layout_choices_panel()
+	elif is_instance_valid(result_body) and result_body.visible:
+		_layout_result_panel()
 
 func _animate_card(card: Button, delay: float) -> void:
 	if not is_instance_valid(card):
+		return
+	if OceanUi.reduced_motion:
+		card.modulate.a = 1.0
+		card.scale = Vector2.ONE
+		card.disabled = false
 		return
 	# HBoxContainer掌管位置；只动画视觉缩放和透明度，避免改坐标干扰布局。
 	card.scale = Vector2(0.97, 0.97)
 	var entrance: Tween = card.create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
 	entrance.tween_interval(delay)
-	entrance.tween_property(card, "modulate:a", 1.0, 0.42)
-	entrance.parallel().tween_property(card, "scale", Vector2.ONE, 0.42).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	entrance.tween_property(card, "modulate:a", 1.0, 0.28)
+	entrance.parallel().tween_property(card, "scale", Vector2.ONE, 0.28).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 	entrance.tween_callback(func(): card.disabled = false)
 
 func show_result(won: bool, kills: int, longest: int) -> void:
 	_showing_choices = false
 	clear_cards()
 	cards.hide()
-	var viewport_size: Vector2 = get_viewport().get_visible_rect().size
-	panel.size = Vector2(minf(580,viewport_size.x-64), 310)
-	panel.position = (viewport_size-panel.size)*0.5
-	title.text = "拆迁完成！" if won else "这次先到这里"
-	summary.text = "击破 %d · 最长接力 %d\nR 或按钮重新开局" % [kills, longest]
+	title.text = "这局，打得漂亮！" if won else "先吃口饭，再来一次"
+	summary.text = "R 快速重开 · 也可以返回主菜单"
+	result_body.configure(won, kills, longest)
+	result_body.show()
+	result_actions.show()
 	restart_button.show()
 	home_button.visible = not menu_requested.get_connections().is_empty()
 	panel.show()
+	_layout_result_panel.call_deferred()
+	OceanUi.reveal(panel)
 	restart_button.grab_focus()
+
+func _layout_result_panel() -> void:
+	if _showing_choices or not result_body.visible:
+		return
+	var viewport_size: Vector2 = get_viewport().get_visible_rect().size
+	panel.size.x = minf(760, viewport_size.x - 64)
+	result_body.fit_width(panel.size.x - panel.get_theme_stylebox("panel").get_minimum_size().x)
+	$Overlay/Panel/Content.update_minimum_size()
+	panel.update_minimum_size()
+	panel.size.y = panel.get_combined_minimum_size().y
+	panel.position = (viewport_size - panel.size) * 0.5
 
 func close() -> void:
 	_showing_choices = false
 	clear_cards()
+	result_body.hide()
+	result_actions.hide()
 	panel.hide()
 
 func benefit_preview(id: String, levels: Dictionary) -> String:

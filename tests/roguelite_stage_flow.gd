@@ -31,7 +31,7 @@ func run() -> void:
 	hazard.health = d.health
 	d.hazards.add_child(hazard)
 	d.combat.pending_echoes.append({"left": 10.0})
-	d.rice.stored_bonus = true
+	d.rice.elapsed = 5.0
 	d.player.chain_id = 9
 	d.launcher.remaining = 1.0
 	d.pending.clear()
@@ -42,7 +42,7 @@ func run() -> void:
 	d.wave_elapsed = d.spawn_duration + 1
 	d.advance(0.01)
 	check(d.state == d.State.SHOP and paused, "Stage one ends in paused shop")
-	check(d.hazards.get_child_count() == 0 and d.combat.pending_echoes.is_empty() and not d.rice.stored_bonus and not d.player.attacking(), "Stage rest clears dangerous leftovers and temporary attacks")
+	check(d.hazards.get_child_count() == 0 and d.combat.pending_echoes.is_empty() and d.rice.rice == null and d.rice.elapsed == 0.0 and not d.player.attacking(), "Stage rest clears dangerous leftovers and temporary attacks")
 	d.launcher.advance(10.0)
 	check(is_equal_approx(d.launcher.remaining, 1.0), "Rest does not recharge launches")
 	var rest_quote: int = d.rest_revision

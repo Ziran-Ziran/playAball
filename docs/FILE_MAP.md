@@ -133,6 +133,24 @@ playAball/
 │       │   ├── playaball.ico  # 由原画生成的16至256像素七尺寸Windows导出图标
 │       │   ├── playaball.png  # 内置生图独立肥鱼应用图标原画，项目与窗口使用
 │       │   └── playaball.png.import  # 同名素材的 Godot 导入配置，应随素材一起维护。
+│       ├── ds_console/  # 项目子目录
+│       │   ├── SOURCE.md  # DS鲸鱼娘UI第二轮内置生图来源、技术规格与拒绝旧动物鱼候选记录。
+│       │   ├── button.png  # 由按钮母图技术裁切/缩小的运行九宫格底图。
+│       │   ├── button.png.import  # 同名DS主题UI素材的Godot纹理导入配置。
+│       │   ├── button_source.png  # 内置生图哑光蓝矩形按钮透明母图。
+│       │   ├── button_source.png.import  # 同名DS主题UI素材的Godot纹理导入配置。
+│       │   ├── ds_maid_frames.png  # 参考已认可DS鲸鱼娘人物的内置生图八帧RGBA，禁止普通鱼替代。
+│       │   ├── ds_maid_frames.png.import  # 同名DS主题UI素材的Godot纹理导入配置。
+│       │   ├── generation.json  # 第二轮人物八帧/浅色面板/按钮/背景编辑的完整内置生图提示词、参考与指纹。
+│       │   ├── menu_room.png  # 内置修图移除原菜单背景动物鱼鲸和独立鲸尾标记，保留原室内构图。
+│       │   ├── menu_room.png.import  # 同名DS主题UI素材的Godot纹理导入配置。
+│       │   ├── panel.png  # 内置生图并透明修边的浅蓝白面板，九宫格底图。
+│       │   ├── panel.png.import  # 同名DS主题UI素材的Godot纹理导入配置。
+│       │   ├── result_generation.json  # 蓝白第三轮胜利/重试人物的完整内置生图提示词、参考与指纹。
+│       │   ├── result_retry.png  # 内置生图DS鲸鱼娘抱碗休息透明插画，用于重试结算。
+│       │   ├── result_retry.png.import  # 同名结算人物纹理的Godot导入配置。
+│       │   ├── result_victory.png  # 内置生图DS鲸鱼娘庆祝透明插画，用于真实胜利结算。
+│       │   └── result_victory.png.import  # 同名结算人物纹理的Godot导入配置。
 │       ├── arena_skin.png  # 用户认可的暗绿薄墙全景生图；正式运行仅裁取无字地面和四边墙纹理。
 │       ├── arena_skin.png.import  # UI贴图导入配置，由Godot维护。
 │       ├── fat_fish_exit_button_full.png  # 第一批生图UI运行贴图。
@@ -236,6 +254,7 @@ playAball/
 │   │   ├── 2026-11-06-let-me-go-music.md  # 原曲BGM独立复核、52套及退出修正复测、新包原曲与用户静音偏好交接
 │   │   ├── 2026-11-06-smooth-card-menu-actions.md  # 用户复验后的动画/卡牌/菜单独立审查、51套回归、新包与实际窗口未测边界
 │   │   ├── 2026-11-06-ui-animation-icon.md  # 本轮UI/动画/表情/图标独立验收、红绿修复、实际导出与安卓未测边界
+│   │   ├── 2026-11-10-rice-map-ds-ui.md  # 本批白饭/地图/DS蓝白UI的Git前最终Review、独立审查、新鲜测试与commit/push授权边界。
 │   │   └── collision-demo-final.md  # 当前Demo最终独立Review、首领真实接触修复、验证与人工未测证据。
 │   ├── tutorials/  # 每个功能的实现原理和手动修改教程
 │   │   ├── 001-prototype.md  # 球发射、碰撞表现、机关、目标和手动调参的初始教程。
@@ -245,7 +264,7 @@ playAball/
 │   │   ├── 005-build.md  # 十五项奖励候选/权重/等级与碰撞收益、资源调参和扩展教程。
 │   │   ├── 006-boss.md  # 首领模块/弱点/危险弧、物理接口、调参与验证教程。
 │   │   ├── 007-run-loop.md  # 完整战斗入口、波次/升级/结算、调试构筑及人工验证教程。
-│   │   ├── 008-rice.md  # 白饭力场/周期/拾取/强化链路、调参与复现教程。
+│   │   ├── 008-rice.md  # 白饭力场/周期/满血禁生成/拾取回血、调参与复现教程。
 │   │   ├── 009-theme.md  # 几何肥鱼/小鱼、主题资源、饱饭外观与物理隔离教程。
 │   │   ├── 010-kill-rewards.md  # 击杀奖励队列、三选四选、真实收益、调参与扩展教程。
 │   │   ├── 011-health-panel.md  # 生命面板节点、信号与只读状态、调参、扩展及手动复现教程。
@@ -292,7 +311,10 @@ playAball/
 │   │   ├── 049-card-content-flow.md  # 取代百分比定位和固定分隔的卡牌内容流、全规则测量与实际路径验证教程
 │   │   ├── 050-smooth-hero-animation.md  # 固定待机底图与连续阻尼回弹、生成表情构图校准及多帧率验证教程
 │   │   ├── 051-menu-visible-actions.md  # Live2D固定部位到可见头身动作、命中/打断/减少动态提示及网格证据教程
-│   │   └── 052-persistent-music.md  # 持续背景音乐、音源替换、音量与静音接线及导出排错开发教程
+│   │   ├── 052-persistent-music.md  # 持续背景音乐、音源替换、音量与静音接线及导出排错开发教程
+│   │   ├── 053-ocean-ui-polish.md  # UI/动效修改前后主观评分、生成素材接线、布局与减少动态教程。
+│   │   ├── 054-ds-character-ui.md  # 身份纠偏、蓝白双栏UI、审美重评、动画节奏和HUD隔离教程。
+│   │   └── 055-light-ui-refinement.md  # 已选蓝白方向的商店分栏、胜负人物/统计、内容测量与再评分教程。
 │   ├── .gdignore  # 让 Godot 跳过文档目录的资源导入，避免把交接图当作游戏素材。
 │   ├── FILE_MAP.md  # 自动生成的项目文件树、每个文件的用途及主要调用关系。
 │   ├── PROJECT.md  # 已采纳的游戏目标、技术选择、原型范围与模块边界。
@@ -357,7 +379,7 @@ playAball/
 │   │   ├── maps/  # 三张普通地图与首领地图的可编辑布局
 │   │   │   ├── boss_map.tscn  # 封闭内圈四刺、四开口外圈、四向翻板及绿黄两组传送门
 │   │   │   ├── map_01.tscn  # 固定左右斜板、上横下竖中心轴翻板的实际布局
-│   │   │   ├── map_02.tscn  # X形共轴翻板、世界上下移动斜板与左右分散短浅刺
+│   │   │   ├── map_02.tscn  # X形共轴翻板、世界上下移动斜板与左下/右上两处短浅刺
 │   │   │   └── map_03.tscn  # 环心出生、水平移动刺板与左右保速门的实际布局
 │   │   ├── mechanisms/  # 可编辑的刚体挡板、移动板、圆弧、尖刺与成对门场景
 │   │   │   ├── boss_inner_ring.tscn  # 首领完整内圆周的可编辑分段实体碰撞与视觉
@@ -397,7 +419,8 @@ playAball/
 │   ├── ui/  # 正式主菜单与完整战斗入口
 │   │   ├── game.tscn  # 继承完整run的发布场景，无调参节点。
 │   │   ├── main_menu.tscn  # F5正式开始界面，挂可编辑MenuCharacter表现组件
-│   │   └── menu_character.tscn  # 菜单角色区域、1440透明SubViewport、Portrait与无本机资源时的原PNG回退
+│   │   ├── menu_character.tscn  # 菜单角色区域、1440透明SubViewport、Portrait与无本机资源时的原PNG回退
+│   │   └── result_body.tscn  # DS胜负人物、真实击破/最长接力记录和说明的可编辑结算组件。
 │   ├── ball.tscn  # 可复用的球刚体、圆形碰撞形状与物理材质。
 │   ├── main.tscn  # 实验关卡的障碍、球、机关、目标、镜头和 HUD 节点布局。
 │   └── mechanism.tscn  # 可复用的区域机关入口，运行时按参数生成检测形状。
@@ -474,7 +497,7 @@ playAball/
 │   │   │   ├── health_view.gd.uid  # 关联GDScript稳定资源标识。
 │   │   │   ├── portal_view.gd  # 细弧/出口箭头与物理成功后过门短环，不播放假成功
 │   │   │   ├── portal_view.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
-│   │   │   ├── sea_ui_theme.gd  # 商店补给、结算与暂停共享的深海面板和按钮交互主题
+│   │   │   ├── sea_ui_theme.gd  # 委托生成海蓝主题与主操作状态，不参与购买许可。
 │   │   │   ├── sea_ui_theme.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
 │   │   │   ├── upgrade_card.gd  # 按实际字高顺排的卡牌内容流/安全边距、插画与真实收益显示和鼠标表现，不结算升级
 │   │   │   ├── upgrade_card.gd.uid  # 同名GDScript的稳定资源UID，随脚本提交
@@ -518,11 +541,11 @@ playAball/
 │   │   ├── player_ball.gd.uid  # 关联GDScript稳定资源标识。
 │   │   ├── player_health.gd  # 五格生命、受伤无敌/拒伤、一次死亡、真实扣血damaged事件与整局重置
 │   │   ├── player_health.gd.uid  # 关联GDScript稳定资源标识。
-│   │   ├── rest_panel.gd  # 休息商店报价/版本请求、统一主题与首显居中、按钮状态和焦点
+│   │   ├── rest_panel.gd  # 双栏人物/真实报价操作、主次按钮与原revision请求，内容测高不改变购买规则。
 │   │   ├── rest_panel.gd.uid  # 关联GDScript稳定资源标识。
 │   │   ├── rice_lure.gd  # 白饭拾取区域、有限平面吸力、寿命/闪烁及物理锁外清理。
 │   │   ├── rice_lure.gd.uid  # 关联GDScript稳定资源标识。
-│   │   ├── rice_manager.gd  # 白饭周期/安全候选、一次冷却返还与新发射链饱饭绑定。
+│   │   ├── rice_manager.gd  # 白饭周期/安全候选、满血禁生成与生命恢复/清理。
 │   │   ├── rice_manager.gd.uid  # 关联GDScript稳定资源标识。
 │   │   ├── run_arena.gd  # 整局输入与音频/生命HUD接线、生命色阶图例和玩家分裂开关。
 │   │   ├── run_arena.gd.uid  # 关联GDScript稳定资源标识。
@@ -555,14 +578,20 @@ playAball/
 │   │   ├── health_cell.gdshader.uid  # 关联表现资源的稳定标识。
 │   │   ├── health_skin.gd  # 消费DemoHealthView真实状态，动态分格生命与逐格提亮，保留准确数字。
 │   │   ├── health_skin.gd.uid  # 关联表现资源的稳定标识。
-│   │   ├── main_menu.gd  # 正式菜单导航、Live2D互动指南及主音量/音乐/全部静音与减少动态设置，不改玩法
+│   │   ├── main_menu.gd  # 原菜单导航/Live2D接线、无动物背景及DS人物插画与偏好的双栏设置。
 │   │   ├── main_menu.gd.uid  # 关联GDScript稳定资源标识。
 │   │   ├── menu_character.gd  # Native角色头眼跟随、固定头身短动作和安全表情、短冷却打断/黑脸禁止/阻断恢复，不读写玩法
 │   │   ├── menu_character.gd.uid  # 同名GDScript的稳定资源UID，随脚本保留
 │   │   ├── menu_character_view.gd  # 菜单与逻辑画布坐标换算、真实alpha点击/抚摸分类、GUI及窗口焦点阻断
 │   │   ├── menu_character_view.gd.uid  # 同名GDScript的稳定资源UID，随脚本保留
 │   │   ├── music_manager.gd  # 全局单播放器、Music总线、原曲循环/跨场景播放与音乐音量/全部静音持久化
-│   │   └── music_manager.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
+│   │   ├── music_manager.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
+│   │   ├── ocean_motion.gd  # DS鲸鱼娘八帧人物演出与按钮渐变，静候后回应，减少动态固定首帧。
+│   │   ├── ocean_motion.gd.uid  # 关联GDScript稳定资源标识。
+│   │   ├── ocean_ui.gd  # DS主题图片九宫格与音量/反馈辅助，浅色主题限定弹窗，不污染深色HUD。
+│   │   ├── ocean_ui.gd.uid  # 关联GDScript稳定资源标识。
+│   │   ├── result_body.gd  # 只展示传入胜负/记录，选择内置生图人物并测量说明宽度。
+│   │   └── result_body.gd.uid  # 关联GDScript稳定资源标识。
 │   ├── ball.gd  # 控制球的停稳、冲量发射、刚体复位与真实接触事件。
 │   ├── ball.gd.uid  # 关联GDScript稳定资源标识。
 │   ├── impact_feedback.gd  # 共用亮环/震动/粒子；run音频路由独立调度，旧场景保留原声音接口。
@@ -580,6 +609,8 @@ playAball/
 │   ├── menu_character_integration.gd.uid  # 同名GDScript的稳定资源UID，随脚本保留
 │   ├── music_manager.gd  # 真实MP3及短循环夹具、场景连续播放、音乐UI与静音/配置保留回归
 │   ├── music_manager.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
+│   ├── ocean_ui.gd  # 双分辨率DS分栏/输入/音量/HUD隔离、全卡池窄四卡及胜负统计/导航回归。
+│   ├── ocean_ui.gd.uid  # 关联GDScript稳定资源标识。
 │   ├── roguelite_actor_views.gd  # 伙伴/首领物理不受表现影响、真实事件与快照隔离回归
 │   ├── roguelite_actor_views.gd.uid  # 关联 GDScript 的稳定资源标识，由 Godot 维护，不手动修改。
 │   ├── roguelite_audio.gd  # 音组变体、PCM余量、优先级预算、混音与生命周期调度回归。
@@ -654,7 +685,7 @@ playAball/
 │   ├── roguelite_presentation_interface.gd.uid  # 关联GDScript稳定资源标识。
 │   ├── roguelite_reward_effects.gd  # 分级重击、有限二连撞、攻击缩圈、无伤震退与旧局事件回归。
 │   ├── roguelite_reward_effects.gd.uid  # 关联GDScript稳定资源标识。
-│   ├── roguelite_rice.gd  # 平面吸力限幅、生成/过期/暂停、冷却返还与强化链路检查。
+│   ├── roguelite_rice.gd  # 平面吸力、安全生成/过期/暂停、满血禁生成与回血上限/通知检查。
 │   ├── roguelite_rice.gd.uid  # 关联GDScript稳定资源标识。
 │   ├── roguelite_run.gd  # 整局清残敌、击杀升级/暂停优先级、五次清波到首领、胜负与十次重开检查。
 │   ├── roguelite_run.gd.uid  # 关联GDScript稳定资源标识。
@@ -738,7 +769,7 @@ playAball/
 ├── .editorconfig  # 统一编码、缩进、换行和文件末尾格式。
 ├── .gitattributes  # 统一 Git 文本换行，标记图片/音频为二进制。
 ├── .gitignore  # 排除引擎缓存、本机临时文件、凭据和导出成品。
-├── AGENTS.md  # 接手/物理与Git授权规则、最终Review及双线唯一文件负责人和owner边界。
+├── AGENTS.md  # 接手/物理/审查与Git授权、DS鲸鱼娘身份固定、双线唯一写入及owner边界。
 ├── CONTRIBUTING.md  # Git分支/Review/授权与A/B独立checkout及用户最终审阅合并约定。
 ├── README.md  # 游戏介绍、运行方式和面向开发者的总入口。
 ├── export_presets.cfg  # Windows标准版导出预设，明确包含正式卡面索引与文案JSON
@@ -769,6 +800,7 @@ scenes/roguelite/run.tscn → run_arena → run_director（阶段/击杀领奖/�
   ├─ run_build → resources/roguelite/upgrades（十五项池/分类权重）
   ├─ boss（可碎模块/撞墙弱点/缺口震波）
   ├─ run_hud（生命/3/4选卡/结算/重开）
+  │  └─ result_body（DS胜负人物与真实记录，只读展示）
   ├─ stage_flow / run_wallet → rest_panel（商店/补给/准备）
   ├─ audio_director → audio_palette（事件音组/声部预算）
   └─ rice_manager → rice_lure / theme_definition（白饭平面力/肥鱼绘图）

@@ -29,8 +29,10 @@ func run() -> void:
 			check(map.definition.player_spawn.y < map.get_node("CrossPivot").position.y, "Map two spawn is above X")
 			await check_movers(map, Vector2.DOWN)
 			var spikes: Array[Node] = map.find_children("*", "Area2D", true, false)
-			check(spikes.size() == 6, "Only three separated spike clusters on each side")
+			check(spikes.size() == 2, "Map two keeps exactly two spike clusters")
+			check(map.has_node("LeftSpikes2") and map.has_node("RightSpikes0"), "Only lower-left and upper-right clusters remain")
 			for spike: Node2D in spikes:
+				check(spike.position.is_equal_approx(Vector2(55, 560)) or spike.position.is_equal_approx(Vector2(1225, 240)), "Remaining spikes keep their authored corner positions")
 				check(spike.position.x < 100.0 or spike.position.x > 1180.0, "No top/bottom spikes")
 				check(spike.length <= 40.0 and spike.tooth_depth <= 8.0, "Side spikes are short and shallow")
 		elif id == "map_03":

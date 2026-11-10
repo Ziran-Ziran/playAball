@@ -42,6 +42,7 @@ foreach ($step in @(
     @{ Name = 'live_tuning'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_live_tuning.gd' },
     @{ Name = 'full_tuning'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_full_tuning.gd' },
     @{ Name = 'ui_integration'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/ui_integration.gd' },
+    @{ Name = 'ocean_ui'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/ocean_ui.gd' },
     @{ Name = 'map_mechanisms'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_map_mechanisms.gd' },
     @{ Name = 'portals'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_portals.gd' },
     @{ Name = 'maps'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_maps.gd' },
@@ -95,6 +96,7 @@ foreach ($step in @(
     $completionMarkers.reward_effects = 'REWARD EFFECTS CHECKS PASSED'
     $completionMarkers.audio = 'Audio checks: \d+, failures: 0'
     $completionMarkers.hud = 'HUD CHECKS PASSED'
+    $completionMarkers.ocean_ui = 'OCEAN UI CHECKS: \d+ checks, 0 failures'
     $completionMarkers.feedback_integration = 'FEEDBACK INTEGRATION CHECKS PASSED'
     $completionMarkers.stage_flow = 'STAGE FLOW CHECKS PASSED'
     $completionMarkers.shop_events = 'SHOP EVENT CHECKS PASSED'
@@ -138,4 +140,4 @@ foreach ($step in @(
         throw '未获得目录检查完成标志。'
     }
 }
-Write-Output 'VERIFIED: import + map + all 52 behavior suites including persistent music, continuous hero motion and card content flow'
+Write-Output 'VERIFIED: import + map + all 53 behavior suites including generated ocean UI and reduced motion'

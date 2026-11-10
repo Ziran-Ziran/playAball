@@ -2,12 +2,6 @@ extends SceneTree
 var checks: int = 0
 var failures: int = 0
 
-class RiceCounter extends Node:
-	var calls: int = 0
-	func consume_bonus(_chain: int) -> int:
-		calls += 1
-		return 0
-
 func _initialize() -> void:
 	call_deferred("run")
 	create_timer(30).timeout.connect(func(): push_error("Reward effects timeout"); quit(1))
@@ -146,16 +140,13 @@ func echo_isolation(arena: Node2D, player: DemoPlayer, combat: DemoCombat) -> vo
 	enemy.set_physics_process(false)
 	var neighbor := target_at(arena, Vector2(650, 100))
 	neighbor.add_to_group("demo_damageable")
-	var counter := RiceCounter.new()
-	arena.add_child(counter)
-	combat.rice_bonus = counter
 	combat.resolve(member, enemy, 300, enemy.position)
 	var nearby_hp: int = neighbor.hp
 	enemy.projectile_left = 0.05
 	combat._physics_process(0.13)
 	check(enemy.hp == 27, "Companion echo adds exactly one after direct hit and first explosion")
 	check(bursts.size() == 1 and bursts[0] == 80.0, "Exactly one presentation burst follows real first-hit explosion, never echo recursion")
-	check(neighbor.hp == nearby_hp and counter.calls == 1 and is_equal_approx(enemy.projectile_left, 0.05), "Echo cannot explode, consume rice, refresh bowling or add ranked heavy")
+	check(neighbor.hp == nearby_hp and is_equal_approx(enemy.projectile_left, 0.05), "Echo cannot explode, refresh bowling or add ranked heavy")
 	combat._physics_process(1.0)
 	check(enemy.hp == 27 and combat.pending_echoes.is_empty(), "Echo never recursively schedules another echo")
 	combat.reset_combat()
@@ -170,11 +161,9 @@ func echo_isolation(arena: Node2D, player: DemoPlayer, combat: DemoCombat) -> vo
 		combat._schedule_echo(player, neighbor, 300)
 	check(combat.pending_echoes.size() <= 256 and combat.echo_history.size() <= 256, "Echo queue and history stay bounded")
 	combat.reset_combat()
-	combat.rice_bonus = null
 	member.queue_free()
 	enemy.queue_free()
 	neighbor.queue_free()
-	counter.queue_free()
 	await frames(2)
 
 func scaling_and_pulse(arena: Node2D, player: DemoPlayer, build: DemoBuild) -> void:

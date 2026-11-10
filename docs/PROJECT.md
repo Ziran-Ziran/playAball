@@ -13,7 +13,7 @@ F5：`project.godot → scenes/ui/main_menu.tscn → scenes/ui/game.tscn`。正�
 | 波次 | 地图内容 |
 | --- | --- |
 | 1–2 | 左右固定斜板、上横下竖中心轴翻板，中央出生 |
-| 3–4 | X形翻板、沿世界Y对称移动斜板，左右分散短浅刺 |
+| 3–4 | X形翻板、沿世界Y对称移动斜板，左下和右上各一处短浅刺 |
 | 5 | 旋转缺口弧、沿世界X对称移动刺板、左右保速传送 |
 | 6 | 完整内圈四刺、四开口外圈和四向翻板；绿门上下互传，黄门左右互传 |
 
@@ -23,7 +23,7 @@ F5：`project.godot → scenes/ui/main_menu.tscn → scenes/ui/game.tscn`。正�
 
 - 内置生成角色/病毒素材；伙伴按槽位、病毒按出生最大生命选稳定身份，掉血不换皮。肥鱼逐帧连续形变，短表情使用生成姿势，见[042](tutorials/042-ball-art-and-effects.md)、[050](tutorials/050-smooth-hero-animation.md)。
 - Kenney CC0单体箭头与轻尾迹；全场瞄准暂停见[043](tutorials/043-tactical-aim.md)。
-- 深海商店/补给/结算/暂停主题，文字按内容高度排布；标题使用OFL字体，完整说明保留。
+- DS鲸鱼娘人物主导的蓝白设置/暂停与商店/补给/结算，文字按内容高度排布；标题使用OFL字体，完整说明保留。人物规则与第二轮重评见[054](tutorials/054-ds-character-ui.md)。
 - 菜单原模型参数驱动头眼/头身动作，保护黑脸参数，设置/失焦/减少动态阻断互动；操作表见[051](tutorials/051-menu-visible-actions.md)。
 - MusicManager单播放器/独立Music总线，用户原曲循环；主音量与全部静音覆盖音效和音乐，配置合并保存，见[052](tutorials/052-persistent-music.md)。
 

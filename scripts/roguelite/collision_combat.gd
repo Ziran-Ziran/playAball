@@ -16,7 +16,6 @@ var pairs: Dictionary = {}
 var events: Array[Dictionary] = []
 var longest_chain: int = 0
 var build: DemoBuild
-var rice_bonus: Node
 var exploded_chains: Dictionary = {}
 var relay_bonuses: Dictionary = {}
 var projectile_targets: Dictionary = {}
@@ -85,9 +84,6 @@ func resolve(actor: DemoBody, other: Node, speed: float, point: Vector2) -> void
 	var amount: int = base_damage
 	if actor is DemoPlayer and build != null:
 		amount += clampi(int(build.levels.get("heavy", 0)), 0, 3)
-	# 饱饭只属于吃饭后发起的新链，敌人投射物/爆炸不提前消费它。
-	if is_instance_valid(rice_bonus) and (actor is DemoPlayer or actor is DemoCompanion):
-		amount += int(rice_bonus.consume_bonus(actor.chain_id))
 	if other.has_method("hurt_at"):
 		other.call("hurt_at", amount, point)
 	else:

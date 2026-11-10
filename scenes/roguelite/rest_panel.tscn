@@ -1,5 +1,9 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=4 format=3]
 [ext_resource type="Script" path="res://scripts/roguelite/rest_panel.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/ui/ds_console/ds_maid_frames.png" id="portrait"]
+[sub_resource type="AtlasTexture" id="Portrait"]
+atlas = ExtResource("portrait")
+region = Rect2(0, 0, 384, 512)
 [node name="RestPanel" type="CanvasLayer"]
 layer = 12
 script = ExtResource("1")
@@ -25,11 +29,29 @@ theme_override_constants/separation = 18
 [node name="Heading" type="Label" parent="Backdrop/Panel/Content"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 28
-horizontal_alignment = 1
+horizontal_alignment = 0
 [node name="Detail" type="Label" parent="Backdrop/Panel/Content"]
 layout_mode = 2
 autowrap_mode = 2
+horizontal_alignment = 0
+[node name="Body" type="HBoxContainer" parent="Backdrop/Panel/Content"]
+theme_override_constants/separation = 28
+[node name="Character" type="VBoxContainer" parent="Backdrop/Panel/Content/Body"]
+custom_minimum_size = Vector2(188, 270)
+theme_override_constants/separation = 8
+[node name="Portrait" type="TextureRect" parent="Backdrop/Panel/Content/Body/Character"]
+custom_minimum_size = Vector2(176, 220)
+mouse_filter = 2
+texture = SubResource("Portrait")
+expand_mode = 1
+stretch_mode = 5
+[node name="Note" type="Label" parent="Backdrop/Panel/Content/Body/Character"]
+text = "饭要吃，\n状态也要补好。"
 horizontal_alignment = 1
-[node name="Actions" type="VBoxContainer" parent="Backdrop/Panel/Content"]
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0.36, 0.43, 0.58, 1)
+[node name="Actions" type="VBoxContainer" parent="Backdrop/Panel/Content/Body"]
 layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
 theme_override_constants/separation = 12

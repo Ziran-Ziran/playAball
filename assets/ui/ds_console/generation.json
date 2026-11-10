@@ -1,0 +1,42 @@
+{
+  "date": "2026-11-09",
+  "generator": "built-in image_gen",
+  "identity": "DS / DeepSeek 鲸鱼娘人物，不是普通鱼/鲸动物",
+  "local_character_references": [
+    "assets/ui/fat_fish_menu_character.png",
+    "assets/roguelite/ball_art_r4/hero.png"
+  ],
+  "source_reference": "https://github.com/xiaoweigen/deepseek-dafeiyu-assets",
+  "entries": [
+    {
+      "asset": "assets/ui/ds_console/ds_maid_frames.png",
+      "source_output": "exec-8ffd4f1d-30af-457a-9f82-3e12dfce3b0c.png",
+      "prompt": "Create a production GAME UI ANIMATION SPRITESHEET of this EXACT human whale-maid heroine, known as DS / DeepSeek whale girl. The provided first reference is the character identity master; second reference confirms her facial/hair/maid/whale identity. MUST keep blue anime eyes, cobalt blue long hair with cyan ends and curled ahoge, white ruffled maid headband, navy bows, whale fin ears, navy-and-white maid dress/apron, and blue whale tail. She is an adult anime woman drawn in chibi proportions, a HUMAN GIRL, NOT an animal fish, NOT an animal whale, NOT a generic aquatic mascot. Exactly EIGHT cells in a REGULAR FOUR COLUMNS by TWO ROWS grid on 1536x1024 canvas. Each cell 384x512. Same full-body small seated pose holding her familiar bowl of white rice with both hands. Her face occupies top third of each frame. Consistent camera, body scale, same silhouette and alignment centered at cell x192 and y270. Character fits inside 290x420 region, safe fully transparent padding. No elements crossing cells. Rich high quality hand-painted matte anime illustration, crisp ink lines, gentle soft shadows, pearlescent whites and periwinkle blue. No 3D plastic gloss or neon. Eight-frame gentle looping reaction: 1 neutral kind smile eyes open,2 slight smile,3 eyelids half down,4 eyes gently closed smile and small nod,5 eyes closed smile slight blush,6 eyelids half open,7 fully open,8 same as first. Only gentle 2-3 pixel hair/tail/shoulder drift, same registration. Rice bowl stable. ACTUAL transparent alpha background. NO BACKGROUND, no panel, no grid lines, no labels, no text, no additional animal mascot. Keep her recognizable DeepSeek whale-maid girl face and white headband in EVERY frame.",
+      "sha256_current": "9473498707cdfd3803acc45a86e9474b278a9e2a5483e89402dba2abc8decd42"
+    },
+    {
+      "asset": "assets/ui/ds_console/panel.png",
+      "source_output": "exec-7e446af9-100d-4940-a4e7-3f5aa2193b23.png",
+      "prompt": "A SINGLE production game UI blank background texture for a refined modern anime character-themed settings dialog. Wide landscape rectangular panel, fills canvas EDGE TO EDGE. Elegant contemporary visual-novel interface, MATTE very pale cool blue-white paper (#f2f5ff) with a faint lavender-gray shadow at far edges. Thin quiet navy outline at the outermost rim, rounded corners radius 20px. Absolutely restrained, NOT a fantasy MMORPG frame. The center and all usable area completely empty and uniform pale blue-white for real native text controls. Tiny simple flat cornflower-blue accent line at upper left ONLY, maximum 3% of canvas width. NO text, NO illustrations, NO animal fish or whales, NO symbols, NO icons, NO gold, NO metal, NO glowing outlines, NO neon, NO curls, NO waves, NO gems, NO ornaments, NO buttons. Designed for nine-slice stretching into a clean premium light-blue-and-white anime game control panel. Barely perceptible fine paper texture, flat matte lighting, no dramatic gradient. Landscape 1536x1024.",
+      "sha256_current": "98498e2adf233a5f467b61d095d5ca8486011b27aec4b45434fee1e2d0342f13"
+    },
+    {
+      "asset": "assets/ui/ds_console/button_source.png",
+      "source_output": "exec-e6ad4d5a-205e-4c4f-b11c-c7d85f074a8d.png",
+      "prompt": "ONE single production game UI button texture. Modern elegant anime visual-novel interface for a blue-haired navy-white maid heroine. A wide, low, horizontal rounded RECTANGLE with aspect 7:1 centered on actual transparent alpha canvas. Flat matte periwinkle / cornflower blue fill (#526adb), very subtle soft inner edge, thin slightly darker blue outline and restrained pale-blue top edge. Rounded corners radius 12px, straight flat sides, no bubble shape, no pill ends. Entire center blank for real white dynamic labels. High quality painted UI graphic but essentially clean and simple. NO TEXT, no letters, no icons, no fish, no animal, no whale, no figure, no gold, no metallic end caps, no ornate decoration, no glow, no neon, no lens flare, no shiny chrome, no gems. Exactly one complete rectangle button, minimal transparent padding, fully visible. Intended for nine-slice resizing for primary and secondary game buttons. Actual transparent background.",
+      "sha256_current": "ef176ba0f183e850a1344ba461d14e11755412907b551982709eb96d1551b3f4"
+    },
+    {
+      "asset": "assets/ui/ds_console/menu_room.png",
+      "source_output": "exec-ca5c3391-c5a9-420e-a7e5-121971b48b50.png",
+      "prompt": "Edit this existing blue submarine lounge background conservatively. Keep the exact room composition, clean left wall negative space for UI, blue lighting, floor, seat, window placement, architectural lines, camera and illustration quality. CHANGE ONLY the following: remove all animal fish or animal whale silhouettes visible through the right window; replace them with quiet empty blue underwater depth and soft light shafts, no creatures. Remove the isolated whale-tail stamps/logos from the upper wall, basket and towel, leaving those material surfaces plain. No new animal imagery and no new character. The DS whale-maid HUMAN heroine will be overlaid as a separate real game layer, so leave the right-side standing-character area usable. Keep the left 60% empty/dark blue for title and menu actions. No text, no UI buttons. Preserve all other original details. Same landscape composition.",
+      "sha256_current": "57ee03cce3a7e3dbae701330d5ff081da895813a53a84a4ea6179c22fba3c03f"
+    },
+    {
+      "asset": "assets/ui/ds_console/panel.png",
+      "source_output": "exec-60b7887f-8396-45ea-817d-7a6148b50b7a.png",
+      "prompt": "Make this exact pale blue-white blank UI panel into a clean transparent cutout. Preserve its pale matte face, dimensions, thin navy outer outline, tiny blue dash top left, and rounded rectangular shape. REMOVE ONLY the white pixels OUTSIDE the rounded-corner navy outer contour at the four corners and any exterior margins; outside the panel must have real zero-alpha transparency. Do not alter or add decoration, no shadow, no text, no new image inside, no buttons, no fish or animal. Keep the entire inner rounded rectangle fully opaque pale blue-white. Output one same-size landscape panel with genuine transparent alpha corners.",
+      "sha256_current": "98498e2adf233a5f467b61d095d5ca8486011b27aec4b45434fee1e2d0342f13"
+    }
+  ]
+}

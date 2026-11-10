@@ -85,12 +85,10 @@ func setup(owner_arena: Node2D) -> void:
 	maps.player_health = health
 	rice = load("res://scripts/roguelite/rice_manager.gd").new()
 	rice.player = player
-	rice.launcher = launcher
+	rice.health = health
 	rice.enemies = enemies
 	rice.map_provider = maps
 	add_child(rice)
-	combat.rice_bonus = rice
-	launcher.fired.connect(rice.bind_launch)
 	rice.eaten.connect(arena.feedback.play_cue)
 	assists = load("res://scripts/roguelite/assist_effects.gd").new()
 	assists.player = player
@@ -544,8 +542,6 @@ func debug_wave(number: int) -> void:
 
 func status_text() -> String:
 	var energy: String = "%d/%d次可发" % [launcher.charges, launcher.capacity] if launcher.available() else "冷却 %.1f" % (ceilf(launcher.remaining * 10.0) / 10.0)
-	if rice.stored_bonus:
-		energy += " · 饱饭"
 	return "生命%d/%d · %s · %s波 · 发射%d · 敌%d · 击杀%d · 奖励%d/%d（待选%d）" % [health.hp, health.max_hp, energy, "首领" if wave == 6 else str(wave), launcher.shots, alive_count(), kills, rewards.progress, rewards.next_target(), rewards.pending]
 
 func enter_rest(kind: String) -> void:

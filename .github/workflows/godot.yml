@@ -100,6 +100,9 @@ jobs:
       - name: UI integration
         run: |
           set -euo pipefail
+          /tmp/godot/Godot_v4.7.1-stable_linux.x86_64 --headless --path . --script tests/ocean_ui.gd 2>&1 | tee /tmp/ocean-ui.log
+          ! grep -E '^(SCRIPT ERROR|ERROR):' /tmp/ocean-ui.log
+          grep -qE 'OCEAN UI CHECKS: [0-9]+ checks, 0 failures' /tmp/ocean-ui.log
           /tmp/godot/Godot_v4.7.1-stable_linux.x86_64 --headless --path . --script tests/ui_integration.gd 2>&1 | tee /tmp/ui-integration.log
           ! grep -E "^(SCRIPT ERROR|ERROR):" /tmp/ui-integration.log
           grep -q "UI INTEGRATION CHECKS PASSED" /tmp/ui-integration.log

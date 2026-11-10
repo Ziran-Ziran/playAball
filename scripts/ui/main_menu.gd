@@ -5,6 +5,8 @@ var _music_slider: HSlider
 var _music_status: Label
 var _all_mute: CheckButton
 var interaction_status: Label
+var _settings_scrim: ColorRect
+var _master_slider: HSlider
 var settings_panel: PanelContainer
 @onready var character_view: Control = $MenuCharacter
 
@@ -38,10 +40,7 @@ func action(node_name: String, file: String, bounds: Rect2, callback: Callable) 
 	mask.create_from_image_alpha(button.texture_normal.get_image(), 0.2)
 	button.texture_click_mask = mask
 	button.tooltip_text = {"Start": "开始游戏", "Settings": "设置", "Exit": "退出"}[node_name]
-	button.mouse_entered.connect(func(): button.modulate = Color(1.15, 1.15, 1.15))
-	button.mouse_exited.connect(func(): button.modulate = Color.WHITE)
-	button.focus_entered.connect(func(): button.modulate = Color(1.25, 1.25, 1.25))
-	button.focus_exited.connect(func(): button.modulate = Color.WHITE)
+	OceanUi.bind_button(button)
 	button.pressed.connect(callback)
 	add_child(button)
 
@@ -52,79 +51,14 @@ func _ready() -> void:
 	theme = Theme.new()
 	theme.default_font = font
 	theme.default_font_size = 22
-	picture("fat_fish_menu_background", Rect2(0, 0, 1280, 720))
+	picture("ds_console/menu_room", Rect2(0, 0, 1280, 720))
 	picture("fat_fish_menu_title", Rect2(64, 94, 576, 230))
 	# 角色组件在背景之后、按钮/设置之前，透明区域不挡导航。
 	move_child(character_view,get_child_count()-1)
 	action("Start", "fat_fish_start_button_full", Rect2(102, 367, 461, 115), start_game)
 	action("Settings", "fat_fish_settings_button_full", Rect2(102, 504, 223, 101), show_settings)
 	action("Exit", "fat_fish_exit_button_full", Rect2(340, 504, 223, 101), func(): get_tree().quit())
-	settings_panel = PanelContainer.new()
-	settings_panel.position = Vector2(340, 170)
-	settings_panel.size = Vector2(600, 350)
-	var settings_style := StyleBoxFlat.new()
-	settings_style.bg_color = Color("102c28")
-	settings_style.border_color = Color("667d66")
-	settings_style.set_border_width_all(1)
-	settings_style.set_corner_radius_all(14)
-	settings_style.set_content_margin_all(24)
-	settings_panel.add_theme_stylebox_override("panel",settings_style)
-	add_child(settings_panel)
-	var content := VBoxContainer.new()
-	content.add_theme_constant_override("separation", 12)
-	settings_panel.add_child(content)
-	var heading := Label.new()
-	heading.text = "设置 · 主音量"
-	content.add_child(heading)
-	var slider := HSlider.new()
-	slider.max_value = 1.0
-	slider.step = 0.01
-	var config := ConfigFile.new()
-	config.load("user://ui_settings.cfg")
-	slider.value = float(config.get_value("audio", "volume", 0.8))
-	apply_volume(slider.value)
-	slider.value_changed.connect(apply_volume)
-	content.add_child(slider)
-	var reduce := CheckButton.new()
-	reduce.text = "减少动态效果"
-	reduce.button_pressed = bool(config.get_value("visual","reduced_motion",false))
-	character_view.character.set_reduced_motion(reduce.button_pressed)
-	reduce.toggled.connect(apply_reduced_motion)
-	content.add_child(reduce)
-	var music_row := HBoxContainer.new()
-	var music_label := Label.new()
-	music_label.text = "音乐"
-	music_row.add_child(music_label)
-	var music_slider := HSlider.new()
-	_music_slider = music_slider
-	music_slider.name = "MusicVolume"
-	music_slider.custom_minimum_size = Vector2(280,30)
-	music_slider.max_value = 1.0
-	music_slider.step = 0.01
-	music_slider.value = MusicManager.music_volume
-	music_slider.value_changed.connect(MusicManager.set_music_volume)
-	music_row.add_child(music_slider)
-	content.add_child(music_row)
-	var music_status := Label.new()
-	_music_status = music_status
-	music_status.name = "MusicStatus"
-	music_status.text = MusicManager.status_text()
-	music_status.add_theme_font_size_override("font_size",15)
-	content.add_child(music_status)
-	MusicManager.track_changed.connect(_sync_music_status)
-	var mute := CheckButton.new()
-	_all_mute = mute
-	mute.name = "AllMute"
-	mute.text = "全部静音"
-	mute.button_pressed = MusicManager.muted
-	mute.toggled.connect(MusicManager.set_muted)
-	content.add_child(mute)
-	MusicManager.mix_changed.connect(_sync_music_controls)
-	var back := Button.new()
-	back.text = "返回"
-	back.pressed.connect(close_settings)
-	content.add_child(back)
-	settings_panel.hide()
+	_build_settings()
 	if character_view.character.loaded:
 		var hint := Label.new()
 		hint.text = "头顶：点头笑 · 左脸：眨眼歪头 · 右脸：鼓脸摇头"
@@ -158,6 +92,92 @@ func _ready() -> void:
 		add_child(credits)
 		move_child(settings_panel,get_child_count()-1)
 
+func _build_settings() -> void:
+	_settings_scrim = ColorRect.new()
+	_settings_scrim.name = "SettingsScrim"
+	_settings_scrim.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_settings_scrim.color = Color(0.015, 0.035, 0.07, 0.8)
+	_settings_scrim.z_index = 20
+	add_child(_settings_scrim)
+	_settings_scrim.hide()
+	settings_panel = PanelContainer.new()
+	settings_panel.name = "SettingsPanel"
+	settings_panel.z_index = 21
+	settings_panel.size = Vector2(880, 500)
+	OceanUi.apply(settings_panel)
+	add_child(settings_panel)
+	var columns := HBoxContainer.new()
+	columns.name = "Columns"
+	columns.add_theme_constant_override("separation", 32)
+	settings_panel.add_child(columns)
+	var character_column := Control.new()
+	character_column.name = "CharacterColumn"
+	character_column.custom_minimum_size = Vector2(220, 420)
+	columns.add_child(character_column)
+	var portrait := Control.new()
+	portrait.name = "WhaleMaidPortrait"
+	portrait.set_script(load("res://scripts/ui/ocean_motion.gd"))
+	portrait.set("is_badge", true)
+	portrait.set("is_portrait", true)
+	portrait.position = Vector2(0, 24)
+	character_column.add_child(portrait)
+	var identity := OceanUi.label("DS  /  鲸鱼娘", 13, Color("5a70ad"))
+	identity.position = Vector2(16, 0)
+	character_column.add_child(identity)
+	var aside := OceanUi.label("等调好声音，\n我再陪你出发。", 20)
+	aside.position = Vector2(16, 338)
+	character_column.add_child(aside)
+	var content := VBoxContainer.new()
+	content.name = "Preferences"
+	content.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	content.add_theme_constant_override("separation", 10)
+	columns.add_child(content)
+	OceanUi.section(content, "PREFERENCES  /  偏好")
+	content.add_child(OceanUi.label("设置", 30))
+	content.add_child(OceanUi.label("声音、音乐，还有舒服的互动节奏。", 16, Color("5c6e91")))
+	content.add_child(HSeparator.new())
+	var config := ConfigFile.new()
+	config.load("user://ui_settings.cfg")
+	OceanUi.section(content, "声音")
+	var volume: float = float(config.get_value("audio", "volume", 0.8))
+	_master_slider = OceanUi.volume_row(content, "主音量", volume, apply_volume, "MasterVolume")
+	apply_volume(volume)
+	_music_slider = OceanUi.volume_row(content, "背景音乐", MusicManager.music_volume, MusicManager.set_music_volume, "MusicVolume")
+	_music_status = OceanUi.label(MusicManager.status_text(), 14, Color("5c6e91"))
+	_music_status.name = "MusicStatus"
+	_music_status.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	content.add_child(_music_status)
+	MusicManager.track_changed.connect(_sync_music_status)
+	var options := HBoxContainer.new()
+	options.add_theme_constant_override("separation", 24)
+	content.add_child(options)
+	_all_mute = CheckButton.new()
+	_all_mute.name = "AllMute"
+	_all_mute.text = "全部静音"
+	_all_mute.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_all_mute.button_pressed = MusicManager.muted
+	_all_mute.toggled.connect(MusicManager.set_muted)
+	options.add_child(_all_mute)
+	var reduce := CheckButton.new()
+	reduce.name = "ReducedMotion"
+	reduce.text = "减少动态效果"
+	reduce.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	reduce.button_pressed = bool(config.get_value("visual", "reduced_motion", false))
+	character_view.character.set_reduced_motion(reduce.button_pressed)
+	reduce.toggled.connect(apply_reduced_motion)
+	options.add_child(reduce)
+	content.add_child(OceanUi.label("减少角色动作、装饰动画与界面过渡。", 14, Color("5c6e91")))
+	content.add_child(HSeparator.new())
+	var back := Button.new()
+	back.text = "保存并返回  ·  Esc"
+	back.custom_minimum_size.y = 46
+	back.pressed.connect(close_settings)
+	content.add_child(back)
+	OceanUi.primary(back)
+	MusicManager.mix_changed.connect(_sync_music_controls)
+	settings_panel.hide()
+	get_viewport().size_changed.connect(_layout_settings)
+
 func _sync_music_status() -> void:
 	_music_status.text = MusicManager.status_text()
 
@@ -170,6 +190,7 @@ func _update_interaction_status() -> void:
 		interaction_status.text = "减少动态已开启：设置中关闭后可互动" if character_view.character.reduced_motion else "左右按你看屏幕的方向 · 点一下，马上回应"
 
 func apply_reduced_motion(value: bool) -> void:
+	OceanUi.reduced_motion = value
 	character_view.character.set_reduced_motion(value)
 	_update_interaction_status()
 	var config := ConfigFile.new()
@@ -186,7 +207,8 @@ func apply_volume(value: float) -> void:
 
 func _layout_settings() -> void:
 	var visible_size: Vector2 = get_viewport().get_visible_rect().size
-	settings_panel.size.x = minf(600.0,visible_size.x-64.0)
+	settings_panel.size.x = minf(880.0,visible_size.x-64.0)
+	settings_panel.size.y = maxf(500.0, settings_panel.get_combined_minimum_size().y)
 	settings_panel.position = (visible_size-settings_panel.size)*0.5
 
 func show_settings() -> void:
@@ -194,11 +216,19 @@ func show_settings() -> void:
 	for child in get_children():
 		if child is TextureButton:
 			child.disabled = true
+	_settings_scrim.show()
 	settings_panel.show()
+	OceanUi.reveal(settings_panel)
 	_layout_settings.call_deferred()
-	settings_panel.get_child(0).get_child(1).grab_focus()
+	_master_slider.grab_focus()
+	# 字体和自动换行需要完成布局后再收紧高度，避免初次最小尺寸撑出屏幕。
+	await get_tree().process_frame
+	await get_tree().process_frame
+	if is_instance_valid(settings_panel) and settings_panel.visible:
+		_layout_settings()
 
 func close_settings() -> void:
+	_settings_scrim.hide()
 	settings_panel.hide()
 	character_view.set_suspended(false)
 	for child in get_children():

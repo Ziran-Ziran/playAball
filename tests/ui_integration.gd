@@ -146,7 +146,10 @@ func check_game() -> void:
 	await process_frame
 	assert(not launch_hint.visible)
 	await process_frame
-	assert(hud.panel.size.y <= 340.0 and hud.panel.size.x <= 620.0)
+	# 人物化结算按真实内容测高；检查视口边界与内容，避免锁死旧纯文字框尺寸。
+	assert(root.get_visible_rect().encloses(hud.panel.get_global_rect()))
+	assert(hud.result_body.visible and hud.result_actions.visible)
+	assert(hud.result_body.get_global_rect().end.y <= hud.result_actions.get_global_rect().position.y)
 	assert(hud.home_button.visible)
 	hud.home_button.pressed.emit()
 	await process_frame

@@ -59,14 +59,11 @@ func _process(delta: float) -> void:
 	super._process(delta)
 	if is_instance_valid(director):
 		status.text = "阶段%d/3 · 第%s波 · %d/%d 次可发 · 冷却 %.1fs · 发射%d · 钱币%d\n击杀%d · 奖励 %d/%d · 待选%d" % [director.flow.stage_number(director.wave), "首领" if director.wave == 6 else str(director.wave), launcher.charges, launcher.capacity, ceilf(launcher.remaining * 10.0) / 10.0, launcher.shots, director.wallet.balance, director.kills, director.rewards.progress, director.rewards.next_target(), director.rewards.pending]
-		if director.rice.stored_bonus:
-			status.text += " · 饱饭"
 		audio.set_audio_paused(get_tree().paused)
 		sync_audio_mix()
 		if not get_tree().paused:
 			_hurt_flash = maxf(0.0, _hurt_flash - delta)
 		player.modulate = Color.WHITE.lerp(Color("ff776b"), _hurt_flash / 0.3)
-		player.well_fed = director.rice.stored_bonus
 		player.queue_redraw()
 
 func set_paused(value: bool) -> void:

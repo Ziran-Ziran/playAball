@@ -8,10 +8,15 @@ func _ready() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 
 func _process(delta: float) -> void:
+	if OceanUi.reduced_motion:
+		queue_redraw()
+		return
 	clock += delta
 	queue_redraw()
 
 func _draw() -> void:
+	if OceanUi.reduced_motion:
+		return
 	var points := PackedVector2Array()
 	var margin := Vector2(size.x * 0.065, size.y * 0.04)
 	var rect := Rect2(margin, size - margin * 2)
@@ -28,4 +33,4 @@ func _draw() -> void:
 	var length: float = path.get_baked_length()
 	for index in range(12):
 		var distance: float = fmod(clock / 2.4 * length + index*2.0, length)
-		draw_line(path.sample_baked(distance), path.sample_baked(fmod(distance+2, length)), Color(0.7,1,0.85,float(index)/24.0),1.2,true)
+		draw_line(path.sample_baked(distance), path.sample_baked(fmod(distance+2, length)), Color(0.35,0.48,0.92,float(index)/30.0),1.2,true)

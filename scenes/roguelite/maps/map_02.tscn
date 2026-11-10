@@ -32,22 +32,6 @@ position = Vector2(300,260)
 travel = Vector2(0,40)
 [node name="Body" parent="MovingLeft" index="0"]
 rotation = -0.7853981633974483
-[node name="LeftSpikes0" parent="." instance=ExtResource("spikes")]
-position = Vector2(55,240)
-rotation = 1.5707963267948966
-length = 36.0
-tooth_depth = 8.0
-[node name="Shape" parent="LeftSpikes0" index="0"]
-shape = SubResource("ShortSpike")
-position = Vector2(0,-1.5)
-[node name="LeftSpikes1" parent="." instance=ExtResource("spikes")]
-position = Vector2(55,400)
-rotation = 1.5707963267948966
-length = 36.0
-tooth_depth = 8.0
-[node name="Shape" parent="LeftSpikes1" index="0"]
-shape = SubResource("ShortSpike")
-position = Vector2(0,-1.5)
 [node name="LeftSpikes2" parent="." instance=ExtResource("spikes")]
 position = Vector2(55,560)
 rotation = 1.5707963267948966
@@ -69,37 +53,12 @@ tooth_depth = 8.0
 [node name="Shape" parent="RightSpikes0" index="0"]
 shape = SubResource("ShortSpike")
 position = Vector2(0,-1.5)
-[node name="RightSpikes1" parent="." instance=ExtResource("spikes")]
-position = Vector2(1225,400)
-rotation = -1.5707963267948966
-length = 36.0
-tooth_depth = 8.0
-[node name="Shape" parent="RightSpikes1" index="0"]
-shape = SubResource("ShortSpike")
-position = Vector2(0,-1.5)
-[node name="RightSpikes2" parent="." instance=ExtResource("spikes")]
-position = Vector2(1225,560)
-rotation = -1.5707963267948966
-length = 36.0
-tooth_depth = 8.0
-[node name="Shape" parent="RightSpikes2" index="0"]
-shape = SubResource("ShortSpike")
-position = Vector2(0,-1.5)
-
 [editable path="CrossPivot"]
 
 [editable path="MovingLeft"]
 
 [editable path="MovingRight"]
 
-[editable path="LeftSpikes0"]
-
-[editable path="LeftSpikes1"]
-
 [editable path="LeftSpikes2"]
 
 [editable path="RightSpikes0"]
-
-[editable path="RightSpikes1"]
-
-[editable path="RightSpikes2"]

@@ -19,7 +19,7 @@ func mouse(point: Vector2,pressed: bool) -> void:
 	Input.parse_input_event(event)
 func validate_physical_maps() -> void:
 	# 导出重打包曾丢失实例内部添加的节点和端点覆盖，必须检查实际包而非仅资源存在。
-	var counts: Dictionary={"map_01":0,"map_02":6,"map_03":2,"boss_map":4}
+	var counts: Dictionary={"map_01":0,"map_02":2,"map_03":2,"boss_map":4}
 	for id: String in counts:
 		var map: Node=load("res://scenes/roguelite/maps/%s.tscn"%id).instantiate()
 		var spikes: Array[Node]=[]

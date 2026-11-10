@@ -1,0 +1,19 @@
+{
+  "date": "2026-11-09",
+  "generator": "built-in image_gen",
+  "reference": "assets/ui/fat_fish_menu_character.png",
+  "entries": [
+    {
+      "asset": "assets/ui/ds_console/result_victory.png",
+      "source_output": "exec-ad8c07a2-f367-4bd2-a223-25ac1513791f.png",
+      "prompt": "Production transparent game UI character illustration, ONE isolated complete DS / DeepSeek whale-maid HUMAN GIRL, preserve the exact identity from the supplied reference: cobalt blue long hair with cyan ends, curled ahoge, blue anime eyes, white frilled maid headband, navy bows, whale fin ears, navy-and-white maid dress/apron and blue whale tail. Adult character drawn in cute chibi proportions, NOT a fish animal, NOT a whale animal. Celebration pose for a victory result dialog: small confident triumphant grin, one hand raises a modest fist near shoulder and other hand proudly cradles her familiar bowl of white rice. Playful personality, gentle blush. Full seated/chibi body visible, safe margins, center composition. Premium clean matte anime cel illustration matching reference, navy and cornflower blue, pearly whites, no metallic gloss, no neon, no background, no ground shadow, no text, no numbers, no logo outside character clothing, no confetti covering face. Actual transparent alpha. Portrait image, character cleanly readable at 220x270 pixels. The girl herself is the entire subject; no extra fish mascots.",
+      "sha256": "5a755cd5a4068366fec7935913d9430fd5576018124bd49f3d89bffb0297700a"
+    },
+    {
+      "asset": "assets/ui/ds_console/result_retry.png",
+      "source_output": "exec-2413a407-4671-4d17-9970-5fef71a2aa8f.png",
+      "prompt": "Production transparent game UI character illustration, ONE isolated complete DS / DeepSeek whale-maid HUMAN GIRL, preserve exact identity from supplied reference: cobalt blue long hair with cyan ends, curled ahoge, blue anime eyes, white frilled maid headband, navy bows, whale fin ears, navy-and-white maid dress/apron and blue whale tail. Adult character drawn in cute chibi proportions, NOT an animal fish or whale. Gentle defeated-but-determined resting pose for a retry result dialog: seated neatly, shoulders relaxed, slightly puffed cheeks and a small wry smile, eyes half-lidded looking toward viewer, both hands hugging her familiar bowl of white rice. Mood 'let me eat one bite and try again', adorable and resilient, not crying dramatically, not injured, no bandages. Whole chibi figure and tail visible, safe margins, centered. Premium clean matte anime cel illustration matching reference, navy and cornflower blue, pearly whites. No metallic gloss, no neon, no background, no ground shadow, no text, no numbers, no additional mascot, no floating symbols. Actual transparent alpha. Portrait image, character readable at 220x270 pixels.",
+      "sha256": "00a4e7049ad1c18e787f91311675561a3a704d67214d416d502af1b33b0496dc"
+    }
+  ]
+}

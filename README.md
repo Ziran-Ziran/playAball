@@ -23,6 +23,7 @@ Live2D是可选本机组件，模型、Native DLL和SDK资源不在仓库。未�
 - 肥鱼与三只AI伙伴、分级病毒外观、连续呼吸/碰撞/受伤/击破反馈，见[角色042](docs/tutorials/042-ball-art-and-effects.md)、[动画050](docs/tutorials/050-smooth-hero-animation.md)。
 - 16种成长、28张等级卡图，商店/补给、胜负重开；卡牌以真实文字高度排版，见[卡片037](docs/tutorials/037-integrated-upgrade-cards.md)、[布局049](docs/tutorials/049-card-content-flow.md)。
 - 单体素材瞄准箭头与全场瞄准暂停，见[教程043](docs/tutorials/043-tactical-aim.md)。
+- DS鲸鱼娘人物双栏设置/暂停、蓝白弹窗与成长卡，内置生图人物八帧、音量百分比和减少动态；[第二轮](docs/tutorials/054-ds-character-ui.md)、[已选蓝白方向的商店/结算精修](docs/tutorials/055-light-ui-refinement.md)。
 - 用户提供的《Let Me Go（共创版）》循环BGM，跨菜单/战斗连续播放，见[音乐052](docs/tutorials/052-persistent-music.md)及[来源](assets/music/SOURCE.md)。
 - 独立PNG/Windows ICO图标；Windows优先，安卓触控/布局/性能仍为待实施适配，见[平台048](docs/tutorials/048-icon-and-windows-android.md)。
 
