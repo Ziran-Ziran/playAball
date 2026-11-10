@@ -47,7 +47,14 @@ func run() -> void:
 					outcome = "death"
 					break
 			agent.poll_boss_damage()
+			agent.collect_source_damage()
 			var row: Dictionary = {"profile": profile.snapshot(), "route": route, "strategy": agent.policy.strategy, "seed": seed_value, "outcome": outcome, "seconds": agent.elapsed, "battle_seconds": agent.battle_seconds, "physics_steps": completed_steps, "physics_hz": Engine.physics_ticks_per_second, "time_scale": Engine.time_scale, "wave": game.director.wave, "kills": game.director.kills, "hp": game.director.health.hp, "hp_lost": agent.hp_lost, "effective_damage": agent.effective_damage, "module_damage": agent.module_damage, "input_attempts": agent.metrics.input_attempts, "shots": game.launcher.shots, "build": game.director.build.levels.duplicate(), "wall_seconds": (Time.get_ticks_usec() - start) / 1000000.0, "normal_ai": true, "forced_clear_or_health": false}
+			row["version"] = "full_agent_v4"
+			row["active_seed"] = game.director.active_seed_value() if game.director.has_method("active_seed_value") else game.director.run_seed
+			row["wallet_balance"] = game.director.wallet.balance
+			row["paid_actions"] = agent.paid_actions.duplicate(true)
+			row["source_effective_damage"] = agent.source_damage_snapshot()
+			row["attribution_method"] = "combat_records_reconciled_to_observed_hp; legacy_without_effective_field_uses_capped_requests; residual_explicit"
 			var file := FileAccess.open("%s/%s-%d.json" % [output, route, seed_value], FileAccess.WRITE)
 			file.store_string(JSON.stringify({"summary": row, "recoveries": agent.recoveries, "choices": agent.choices, "stage_events": agent.stage_events, "events": agent.metrics.raw, "samples": samples}))
 			file.close()
@@ -58,7 +65,7 @@ func run() -> void:
 			await process_frame
 			await physics_frame
 	var summary := FileAccess.open(output + "/summary.json", FileAccess.WRITE)
-	summary.store_string(JSON.stringify({"config": config, "rows": rows, "version": "full_agent_v3"}))
+	summary.store_string(JSON.stringify({"config": config, "rows": rows, "version": "full_agent_v4"}))
 	summary.close()
 	print("NATURAL FULL RUN MATRIX COMPLETE: ", rows.size())
 	quit(0)

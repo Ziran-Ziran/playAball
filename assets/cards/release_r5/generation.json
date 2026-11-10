@@ -1,0 +1,63 @@
+{
+  "tool": "built-in image_gen",
+  "date": "2026-11-10",
+  "records": [
+    {
+      "level": 1,
+      "path": "assets/cards/release_r5/companion_lv1.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "sha256": "b2643df6ffb2d706c986b87af84a628a9a02ef0e68bb274c3eee6861be7994a6",
+      "prompt": "Create one gorgeous production game upgrade card illustration, landscape 3:2 composition. Match the last reference's clean soft hand-painted anime chibi card illustration style with pale icy blue-white lightly textured background, crisp thin navy linework and appealing gestures, no text, no frame. First reference is the SAME protagonist DS whale maid girl: cobalt blue hair and eyes, whale-fin ears, white maid headdress, navy and white maid dress, whale tail. Preserve her identity exactly, never replace her with an animal. She is organizing a team of distinct round chibi companions. Other supplied character references are their exact identities. Make their faces and clothing colors recognizable at card size. Keep all figures fully within frame, dynamic charming cooperative staging, clear count, no duplicated clones of the blue protagonist. No robot bodies or animal replacements. Exactly TWO characters total: DS maid protagonist on left warmly inviting one white-haired mint-hooded green-eyed GPT chibi on the right; they gently bump fists to start the team.",
+      "reference_paths": [
+        "assets/roguelite/ball_art_r4/hero.png",
+        "assets/roguelite/ball_art_r4/gpt.png",
+        "assets/roguelite/ball_art_r4/claude.png",
+        "assets/roguelite/ball_art_r4/qwen.png",
+        "assets/cards/companion_lv3.png"
+      ],
+      "output": "exec-e2b67ef7-7be1-40aa-be9b-797ffd873db5.png",
+      "visual_review": "Actual generated image viewed; exact protagonist plus 1/2/3 distinct actual partner identities verified; small-size in-game review pending"
+    },
+    {
+      "level": 2,
+      "path": "assets/cards/release_r5/companion_lv2.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "sha256": "35d80b4efce85ee8f0e13050278339e67cf5b3010c04f3c4e63889b614f2a1b5",
+      "prompt": "Create one gorgeous production game upgrade card illustration, landscape 3:2 composition. Match the last reference's clean soft hand-painted anime chibi card illustration style with pale icy blue-white lightly textured background, crisp thin navy linework and appealing gestures, no text, no frame. First reference is the SAME protagonist DS whale maid girl: cobalt blue hair and eyes, whale-fin ears, white maid headdress, navy and white maid dress, whale tail. Preserve her identity exactly, never replace her with an animal. She is organizing a team of distinct round chibi companions. Other supplied character references are their exact identities. Make their faces and clothing colors recognizable at card size. Keep all figures fully within frame, dynamic charming cooperative staging, clear count, no duplicated clones of the blue protagonist. No robot bodies or animal replacements. Exactly THREE characters total: DS maid protagonist on left pointing forward, with one white-haired mint-hooded green-eyed GPT chibi and one peach-haired curly amber-eyed sleepy smiling Claude chibi on right. They form a purposeful little line.",
+      "reference_paths": [
+        "assets/roguelite/ball_art_r4/hero.png",
+        "assets/roguelite/ball_art_r4/gpt.png",
+        "assets/roguelite/ball_art_r4/claude.png",
+        "assets/roguelite/ball_art_r4/qwen.png",
+        "assets/cards/companion_lv3.png"
+      ],
+      "output": "exec-aa758fab-6361-48ef-a4aa-9415fcb9181b.png",
+      "visual_review": "Actual generated image viewed; exact protagonist plus 1/2/3 distinct actual partner identities verified; small-size in-game review pending"
+    },
+    {
+      "level": 3,
+      "path": "assets/cards/release_r5/companion_lv3.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "sha256": "e950f8463dfb8fdfb13ae7701f29c96bcd781e7f80f79b55a2aa03aa70c563aa",
+      "prompt": "Create one gorgeous production game upgrade card illustration, landscape 3:2 composition. Match the last reference's clean soft hand-painted anime chibi card illustration style with pale icy blue-white lightly textured background, crisp thin navy linework and appealing gestures, no text, no frame. First reference is the SAME protagonist DS whale maid girl: cobalt blue hair and eyes, whale-fin ears, white maid headdress, navy and white maid dress, whale tail. Preserve her identity exactly, never replace her with an animal. She is organizing a team of distinct round chibi companions. Other supplied character references are their exact identities. Make their faces and clothing colors recognizable at card size. Keep all figures fully within frame, dynamic charming cooperative staging, clear count, no duplicated clones of the blue protagonist. No robot bodies or animal replacements. Exactly FOUR characters total: DS maid protagonist on left directing the fully assembled squad on right: white-haired mint-hooded GPT, peach-haired curly sleepy smiling Claude, purple-haired cloud-patterned violet Qwen. They form an energetic ascending relay arc, celebrating teamwork, all three helpers distinct and equal-sized.",
+      "reference_paths": [
+        "assets/roguelite/ball_art_r4/hero.png",
+        "assets/roguelite/ball_art_r4/gpt.png",
+        "assets/roguelite/ball_art_r4/claude.png",
+        "assets/roguelite/ball_art_r4/qwen.png",
+        "assets/cards/companion_lv3.png"
+      ],
+      "output": "exec-cb152eed-6a13-49c0-b97c-e0b4a10e2de4.png",
+      "visual_review": "Actual generated image viewed; exact protagonist plus 1/2/3 distinct actual partner identities verified; small-size in-game review pending"
+    }
+  ]
+}

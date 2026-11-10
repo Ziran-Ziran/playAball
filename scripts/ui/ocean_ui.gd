@@ -40,6 +40,8 @@ static func apply(control: Control) -> void:
 	var skin := Theme.new()
 	var font := SystemFont.new()
 	font.font_names = PackedStringArray(["Microsoft YaHei", "Noto Sans CJK SC", "WenQuanYi Zen Hei"])
+	# 安卓系统字体不可假定覆盖全角标点，使用随包OFL字体兜底，保持桌面首选字体。
+	font.fallbacks = [preload("res://resources/ui/body_fallback.tres")]
 	skin.default_font = font
 	skin.default_font_size = 18
 	var colors: Dictionary = {"normal": Color(1, 1, 1, 0.1), "hover": Color(1, 1, 1, 0.2), "pressed": Color(1, 1, 1, 0.28), "disabled": Color(1, 1, 1, 0.04)}

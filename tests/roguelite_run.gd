@@ -25,6 +25,8 @@ func run() -> void:
 		quit(1)
 		return
 	var arena = load("res://scenes/roguelite/run.tscn").instantiate()
+	# 此夹具依赖首批敌人数；正式默认随机后，显式保留旧基线以复现奖励门槛。
+	arena.get_node("RunDirector").run_seed = 31030
 	root.add_child(arena)
 	current_scene = arena
 	await frames(3)

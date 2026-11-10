@@ -6,7 +6,7 @@
 script = ExtResource("1")
 id = "explosion"
 title = "炸鱼"
-description = "每次发射首次外包伙伴有效命中触发半径 80、伤害 1 的爆炸，不递归。"
+description = "每次发射仅首次伙伴有效命中炸1伤；按触发者第1/2/3代，半径80/96/112，不递归。"
 max_level = 1
 category = "伙伴"
 weight = 1

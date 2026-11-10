@@ -5,6 +5,7 @@ var sfx_volume: float = 0.65
 var ui_volume: float = 0.65
 var _previous_hp: int = 5
 var _hurt_flash: float = 0.0
+var _last_audio_mix := Vector3(-1,-1,-1)
 
 func _ready() -> void:
 	super._ready()
@@ -58,7 +59,6 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	super._process(delta)
 	if is_instance_valid(director):
-		status.text = "阶段%d/3 · 第%s波 · %d/%d 次可发 · 冷却 %.1fs · 发射%d · 钱币%d\n击杀%d · 奖励 %d/%d · 待选%d" % [director.flow.stage_number(director.wave), "首领" if director.wave == 6 else str(director.wave), launcher.charges, launcher.capacity, ceilf(launcher.remaining * 10.0) / 10.0, launcher.shots, director.wallet.balance, director.kills, director.rewards.progress, director.rewards.next_target(), director.rewards.pending]
 		audio.set_audio_paused(get_tree().paused)
 		sync_audio_mix()
 		if not get_tree().paused:
@@ -79,12 +79,18 @@ func reset_range() -> void:
 		super.reset_range()
 
 func _input(event: InputEvent) -> void:
+	if _platform_pause_intents != 0:
+		super._input(event)
+		return
 	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_R and is_instance_valid(director):
 		if director.state in [director.State.VICTORY, director.State.DEFEAT]:
 			director.restart()
 			get_viewport().set_input_as_handled()
 			return
 	super._input(event)
+
+func _platform_context_revision() -> int:
+	return director._run_revision if is_instance_valid(director) else super._platform_context_revision()
 
 func add_volume_control(label_text: String, is_ui: bool) -> void:
 	var label := Label.new()
@@ -110,7 +116,16 @@ func _sync_music_mute() -> void:
 	sync_audio_mix()
 
 func sync_audio_mix() -> void:
+	var next_mix := Vector3(sfx_volume, ui_volume, float(not feedback.sound_enabled))
+	if next_mix == _last_audio_mix:
+		return
+	_last_audio_mix = next_mix
 	audio.set_mix(sfx_volume, ui_volume, not feedback.sound_enabled)
+
+func battle_status_text() -> String:
+	if not is_instance_valid(director):
+		return "准备航行"
+	return "阶段%d/3 · 第%s波 · %d/%d 次可发 · 冷却 %.1fs · 发射%d · 钱币%d\n击杀%d · 奖励 %d/%d · 待选%d" % [director.flow.stage_number(director.wave), "首领" if director.wave == 6 else str(director.wave), launcher.charges, launcher.capacity, ceilf(launcher.remaining * 10.0) / 10.0, launcher.shots, director.wallet.balance, director.kills, director.rewards.progress, director.rewards.next_target(), director.rewards.pending]
 
 func on_run_event(event: String) -> void:
 	if event == "reset":

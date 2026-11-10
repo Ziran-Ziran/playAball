@@ -4,6 +4,59 @@ extends Button
 @export_group("插画与文字布局")
 @export_range(18, 28, 1) var title_font_size: int = 20
 @export_range(13, 18, 1) var detail_font_size: int = 13
+@export_range(48, 120, 1) var minimum_image_height: float = 72.0
+const SELECTION_DRAG_THRESHOLD: float = 18.0
+var _gesture_origin: Vector2
+var _gesture_moved: bool = false
+var _pointer_active: bool = false
+var _pointer_touch_index: int = -1
+var _keyboard_selection: bool = false
+
+func _input(event: InputEvent) -> void:
+	# 只观察输入，不accept_event，外层ScrollContainer仍能完整接收滚动。
+	# _input先于Button处理释放；保留拖动标记直到下一次真实按下，避免pressed误提交。
+	if event is InputEventMouse and event.device == InputEvent.DEVICE_ID_EMULATION:
+		return
+	if event is InputEventScreenTouch:
+		if event.pressed:
+			if not _pointer_active and _can_begin_gesture(event.position):
+				_begin_selection_gesture(event.position,event.index)
+		elif _pointer_active and event.index == _pointer_touch_index:
+			_measure_selection_drag(event.position)
+			_gesture_moved = _gesture_moved or event.canceled
+			_pointer_active = false
+	elif event is InputEventScreenDrag:
+		if _pointer_active and event.index == _pointer_touch_index:
+			_measure_selection_drag(event.position)
+	elif event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+		if event.pressed:
+			if _can_begin_gesture(event.position):
+				_begin_selection_gesture(event.position,-1)
+		elif _pointer_active and _pointer_touch_index == -1:
+			_measure_selection_drag(event.position)
+			_pointer_active = false
+	elif event is InputEventMouseMotion:
+		if _pointer_active and _pointer_touch_index == -1:
+			_measure_selection_drag(event.position)
+	elif event.is_action_pressed("ui_accept"):
+		_keyboard_selection = true
+
+func _can_begin_gesture(point: Vector2) -> bool:
+	return is_visible_in_tree() and not disabled and Rect2(Vector2.ZERO,size).has_point(get_global_transform_with_canvas().affine_inverse()*point)
+
+func _begin_selection_gesture(point: Vector2, touch_index: int) -> void:
+	_gesture_origin = point
+	_gesture_moved = false
+	_keyboard_selection = false
+	_pointer_active = true
+	_pointer_touch_index = touch_index
+
+func _measure_selection_drag(point: Vector2) -> void:
+	# 事件坐标为视口逻辑像素，与固定画布的18像素阈值一致，不随卡片滚动重置。
+	_gesture_moved = _gesture_moved or point.distance_to(_gesture_origin) > SELECTION_DRAG_THRESHOLD
+
+func can_submit_selection() -> bool:
+	return _keyboard_selection or not _gesture_moved
 
 func _ready() -> void:
 	resized.connect(_layout)
@@ -44,7 +97,14 @@ func _layout() -> void:
 	var text_total: float = 0.0
 	for value: float in heights.values(): text_total += value
 	var gap: float = 5.0
-	var image_height: float = maxf(24.0,size.y-inset*2-text_total-gap*6)
+	# 四卡窄屏和新增完整规则可能超过固定420高度；让外层滚动承载正文，不裁字。
+	var required_height: float = maxf(420.0, inset * 2.0 + text_total + gap * 6.0 + minimum_image_height)
+	if not is_equal_approx(custom_minimum_size.y, required_height):
+		custom_minimum_size.y = required_height
+	# 容器下一次排序前也保持当前帧正文完整，避免最小高度已更新而实际卡高仍旧。
+	if size.y < required_height:
+		size.y = required_height
+	var image_height: float = maxf(minimum_image_height,size.y-inset*2-text_total-gap*6)
 	var y: float = inset
 	for key: String in ["Category","Heading","Illustration","Level","Preview","Detail","Flavor"]:
 		var height: float = image_height if key == "Illustration" else float(heights[key])

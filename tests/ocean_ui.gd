@@ -90,8 +90,11 @@ func run() -> void:
 	game.director.hud.show_choices(choices, {}, 1, 43)
 	await frames()
 	for entry: Control in game.director.hud.cards.get_children():
-		check(game.director.hud.panel.get_global_rect().encloses(entry.get_global_rect()), "Four-card content respects generated frame padding")
-		check(root.get_visible_rect().encloses(entry.get_global_rect()), "Four-card row remains inside small viewport")
+		var scroll: ScrollContainer = game.director.hud.get("_choice_scroll")
+		var visible_part: Rect2 = entry.get_global_rect().intersection(scroll.get_global_rect())
+		# 新增重选行后正文允许竖向滚动；检查裁剪视窗和完整横向宽度，不把可滚内容误判为越界。
+		check(scroll.clip_contents and game.director.hud.panel.get_global_rect().encloses(scroll.get_global_rect()), "Four-card scroll viewport respects generated frame padding")
+		check(visible_part.has_area() and root.get_visible_rect().encloses(visible_part) and entry.global_position.x >= scroll.global_position.x and entry.get_global_rect().end.x <= scroll.get_global_rect().end.x, "Four-card visible content and full width remain inside small viewport")
 	var catalog: Array = []
 	for filename: String in DirAccess.get_files_at("res://resources/roguelite/upgrades"):
 		if filename.ends_with(".tres"):
@@ -102,6 +105,8 @@ func run() -> void:
 		for entry: Control in game.director.hud.cards.get_children():
 			for key: String in ["Preview", "Detail", "Flavor"]:
 				var text: Label = entry.get_node("Content/" + key)
+				if text.position.y + text.get_minimum_size().y > entry.size.y - 18.0:
+					print("CARD_OVERFLOW ", entry.get_meta("upgrade_id"), "/", key, " card=", entry.size, " minimum=", entry.custom_minimum_size, " label=", text.get_rect(), " text_min=", text.get_minimum_size())
 				check(text.position.y + text.get_minimum_size().y <= entry.size.y - 18.0, "Narrow four-card text remains inside: " + str(entry.get_meta("upgrade_id")) + "/" + key)
 	var growth_width: float = game.director.hud.panel.size.x
 	for resolution: Vector2i in [Vector2i(1280,720), Vector2i(1024,576)]:

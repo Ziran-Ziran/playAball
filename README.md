@@ -22,10 +22,12 @@ Live2D是可选本机组件，模型、Native DLL和SDK资源不在仓库。未�
 - 四张地图：固定/翻转挡板、移动刺板、旋转缺口弧与两组同色传送门，见[地图041](docs/tutorials/041-map-blueprint-correction.md)。
 - 肥鱼与三只AI伙伴、分级病毒外观、连续呼吸/碰撞/受伤/击破反馈，见[角色042](docs/tutorials/042-ball-art-and-effects.md)、[动画050](docs/tutorials/050-smooth-hero-animation.md)。
 - 16种成长、28张等级卡图，商店/补给、胜负重开；卡牌以真实文字高度排版，见[卡片037](docs/tutorials/037-integrated-upgrade-cards.md)、[布局049](docs/tutorials/049-card-content-flow.md)。
+- 深代接力/爆破与撞杀余势、后段金币整备；每局3次递增费用重选，同发直撞3个不同敌人返还已有冷却，见[策略056](docs/tutorials/056-strategy-payoff.md)、[重选060](docs/tutorials/060-rerolls-and-precision-chain.md)。
 - 单体素材瞄准箭头与全场瞄准暂停，见[教程043](docs/tutorials/043-tactical-aim.md)。
 - DS鲸鱼娘人物双栏设置/暂停、蓝白弹窗与成长卡，内置生图人物八帧、音量百分比和减少动态；[第二轮](docs/tutorials/054-ds-character-ui.md)、[已选蓝白方向的商店/结算精修](docs/tutorials/055-light-ui-refinement.md)。
 - 用户提供的《Let Me Go（共创版）》循环BGM，跨菜单/战斗连续播放，见[音乐052](docs/tutorials/052-persistent-music.md)及[来源](assets/music/SOURCE.md)。
-- 独立PNG/Windows ICO图标；Windows优先，安卓触控/布局/性能仍为待实施适配，见[平台048](docs/tutorials/048-icon-and-windows-android.md)。
+- Windows鼠标与安卓原生单指拖拽、取消/系统返回/后台暂停，独立PNG/ICO及DS安卓分层图标；已完成模拟器验证，ARM真机性能仍未验收，见[平台058](docs/tutorials/058-mobile-input-and-release.md)。
+- 构筑状态和真实策略兑现提示、窄屏补给/卡片滚动、设置内离线可读制作与许可；[表现057](docs/tutorials/057-build-feedback-and-supply.md)、[发布打包061](docs/tutorials/061-release-packaging.md)。
 
 技术检查不等于真人自然整局或审美验收。音乐退出时仍偶发两个MP3引用警告，当前未观察到运行中跨场景累积，详见[状态](docs/STATUS.md)。
 
@@ -39,6 +41,8 @@ python -X utf8 -m unittest discover -s tests -p test_prepare_menu_live2d.py
 ```
 
 导出需安装同版Windows模板。普通导出包含BGM与图标，不携带私有Live2D；已有本机资源的独立体验包见[教程040](docs/tutorials/040-live2d-start-menu.md)的Release说明。成品位于忽略的 `builds/`，日志/预览位于 `.local/`，引擎缓存位于 `.godot/`。
+
+正式Windows可用`-Live2DRuntime`新增旁置接线并保留模型原字节；安卓使用`tools/export_android.ps1`和本机SDK/JDK/签名身份。两平台release构建及署名说明见[061](docs/tutorials/061-release-packaging.md)，公开分发音乐和本轮Live2D许可已由用户确认。构建通过不替代真人自然通关或全部机型验收。
 
 开发场景可F6独立运行：`run.tscn`整局、`gameplay_lab.tscn`玩法实验室、`tuning_run.tscn`调参、`card_art_gallery.tscn`卡面图鉴，均在 `scenes/roguelite/`。
 

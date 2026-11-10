@@ -49,6 +49,13 @@ func _burst(point: Vector2, strength: float, damaging: bool) -> void:
 	var intensity: float = clampf(strength / 800.0, 0.12, 1.0)
 	_append_ring({"point": point, "life": 1.0, "intensity": intensity if damaging else intensity*0.35, "kind":&"damage" if damaging else &"contact"})
 	_shake = maxf(_shake, intensity * shake_amount * (1.0 if damaging else 0.16))
+	# 声音由独立预算校验，不因粒子上限而吞掉有效撞击。
+	if sound_enabled:
+		if is_instance_valid(audio_director):
+			audio_director.play_event(&"heavy" if strength >= 500.0 else &"light", intensity)
+		else:
+			play_sound(point, intensity, lerpf(1.5, 0.7, intensity))
+
 	var particle_count: int = 0
 	for child in get_children():
 		if child is CPUParticles2D: particle_count += 1
@@ -70,11 +77,6 @@ func _burst(point: Vector2, strength: float, damaging: bool) -> void:
 	add_child(sparks)
 	sparks.finished.connect(sparks.queue_free)
 	sparks.emitting = true
-	if sound_enabled:
-		if is_instance_valid(audio_director):
-			audio_director.play_event(&"heavy" if strength >= 500.0 else &"light", intensity)
-		else:
-			play_sound(point, intensity, lerpf(1.5, 0.7, intensity))
 
 func play_cue(point: Vector2) -> void:
 	# 食物消耗轻提示，不生成看起来像碰撞的粒子。

@@ -36,6 +36,13 @@ func attack_radius_scale() -> float:
 func launch_capacity() -> int:
 	return 2 if has_upgrade("double_launch") else 1
 
+func relay_damage_bonus(generation: int) -> int:
+	# 回报来自实际传能深度，而非仅仅购买更多伙伴。
+	return clampi(generation - 1, 0, 2) if has_upgrade("relay") else 0
+
+func explosion_radius(generation: int) -> float:
+	return 80.0 + 16.0 * clampi(generation - 1, 0, 2)
+
 func max_health() -> int:
 	return 5 + int(levels.get("vigor", 0))
 
@@ -56,9 +63,8 @@ func choose(id: String) -> bool:
 		return true
 	return false
 
-func candidates(rng: RandomNumberGenerator, first_wave: bool, hp: int, max_hp: int) -> Array[DemoUpgrade]:
+func eligible_upgrades(hp: int, max_hp: int) -> Array[DemoUpgrade]:
 	var pool: Array[DemoUpgrade] = []
-	var result: Array[DemoUpgrade] = []
 	for upgrade: DemoUpgrade in definitions:
 		if upgrade.id in ["follow", "explosion"] and companion_count() == 0:
 			continue
@@ -69,6 +75,13 @@ func candidates(rng: RandomNumberGenerator, first_wave: bool, hp: int, max_hp: i
 			continue
 		if upgrade.max_level > 0 and int(levels.get(upgrade.id, 0)) >= upgrade.max_level:
 			continue
+		pool.append(upgrade)
+	return pool
+
+func candidates(rng: RandomNumberGenerator, first_wave: bool, hp: int, max_hp: int) -> Array[DemoUpgrade]:
+	var pool: Array[DemoUpgrade] = []
+	var result: Array[DemoUpgrade] = []
+	for upgrade: DemoUpgrade in eligible_upgrades(hp, max_hp):
 		if first_wave and upgrade.id == "companion":
 			result.append(upgrade)
 		else:

@@ -33,8 +33,14 @@ F5：`project.godot → scenes/ui/main_menu.tscn → scenes/ui/game.tscn`。正�
 
 开发工具：玩法实验室、实时调参、卡图鉴、原生角色/动画专项及导出包探针。早期侧视/三靶场和3D/Live2D样板保留作独立实验，不是正式F5入口；文件职责见[目录](FILE_MAP.md)。
 
+## 发布优化
+
+基础物理不改；接力2/3代直接命中奖励、随实际代数扩大的首爆和撞杀余势补足构筑兑现。后段免费补给保留，可付费整备；每局最多3次重选费用6/10/14，与后段预算共用。主球同一发射链直伤3个不同普通敌一次返还已有冷却最多0.5秒，附加伤害不凑数。规则、边界和实际验证见[056](tutorials/056-strategy-payoff.md)、[060](tutorials/060-rerolls-and-precision-chain.md)。
+
+Windows旁置Live2D仅新增路径接线，原模型/动作/互动脚本不改；安卓静态回退。原生触摸index归属、取消、系统返回、后台暂停与横屏保比例已实施；设置“制作与来源”可离线读取许可。正式版本1.0.0，构建可生成Windows与签名ARM APK，模板实际min24/target36，见[058](tutorials/058-mobile-input-and-release.md)、[061](tutorials/061-release-packaging.md)。
+
 ## 当前边界
 
-Windows x86_64为已验证平台；安卓需触控、横屏安全区、分档性能和原生库适配，尚未交付APK。私有模型/DLL仅本机准备；Native完整L0内存与手臂自然度未完成验收。音乐进程退出仍偶发MP3/Playback两引用，固定50ms回收不是所有驱动的完成确认；未见运行中跨场景累积。
+Windows x86_64与Android host-GPU模拟器已有运行证据，正式包状态以STATUS和最终Review为准；ARM真机兼容、长期温升与峰值性能仍未测。私有模型/DLL在本机准备并按用户确认许可随Windows完整包旁置；Native完整L0内存与手臂自然度未完成验收。音乐进程退出仍偶发MP3/Playback两引用，固定50ms回收不是所有驱动的完成确认；未见运行中跨场景累积。
 
 完整功能、审查和未测项见[STATUS](STATUS.md)。自动回归/原生截图不等于真人自然通关、平衡完成或用户审美认可。旧文档原文见[整理前快照](history/development_before_20261106.md)。

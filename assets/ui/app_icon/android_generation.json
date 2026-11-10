@@ -1,0 +1,22 @@
+{
+  "tool": "built-in image_gen",
+  "date": "2026-11-10",
+  "path": "assets/ui/app_icon/android_foreground.png",
+  "size": [
+    1254,
+    1254
+  ],
+  "sha256": "82fccfa149d6649f890d2f7e16781a2c61be0534ccfe2beb628bc03515d26e58",
+  "references": [
+    "assets/roguelite/ball_art_r4/hero.png",
+    "assets/ui/app_icon/playaball.png"
+  ],
+  "prompt": "Create a square Android adaptive launcher icon FOREGROUND layer on a fully transparent background. Use these existing game character and icon references: preserve exactly the same DS whale maid chibi girl, cobalt blue hair, bright blue eyes, white maid headband, dark navy and white maid dress/apron, small whale-fin ears and whale tail, sweet puffed cheeks with a rice crumb. This is a human girl, never an animal whale. Draw her as one simple beautifully polished chibi portrait hugging a tiny rice bowl. Critical layout: the ENTIRE character silhouette, hair tuft, ears, tail, bowl and all visible pixels MUST fit inside the CENTERED CIRCLE whose DIAMETER IS ONLY 58 PERCENT OF THE FULL SQUARE CANVAS. The remaining wide outer margins must be completely transparent; do not enlarge subject to fill the canvas. Keep the art compact, centered, round in silhouette with no stray sparkles/glow outside. Premium crisp cel-painted anime line art in the existing style, no text, no frame, no background, no gradients around silhouette, no other characters. This foreground will be composited over a separate navy background then masked by launchers, so generous transparent safe margins are mandatory.",
+  "alpha_analysis": {
+    "threshold": 16,
+    "android_safe_radius": 383.1667,
+    "max_visible_radius": 391.2729,
+    "visible_fraction_outside_safe_circle": 0.00167
+  },
+  "visual_review": "Actual output viewed. All facial details and character identity safely centered; small fringe pixels outside conservative safe circle may be masked. Existing desktop icon not overwritten."
+}

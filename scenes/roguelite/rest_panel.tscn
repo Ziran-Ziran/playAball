@@ -35,6 +35,7 @@ layout_mode = 2
 autowrap_mode = 2
 horizontal_alignment = 0
 [node name="Body" type="HBoxContainer" parent="Backdrop/Panel/Content"]
+size_flags_vertical = 3
 theme_override_constants/separation = 28
 [node name="Character" type="VBoxContainer" parent="Backdrop/Panel/Content/Body"]
 custom_minimum_size = Vector2(188, 270)
@@ -50,8 +51,13 @@ text = "饭要吃，\n状态也要补好。"
 horizontal_alignment = 1
 theme_override_font_sizes/font_size = 16
 theme_override_colors/font_color = Color(0.36, 0.43, 0.58, 1)
-[node name="Actions" type="VBoxContainer" parent="Backdrop/Panel/Content/Body"]
+[node name="Scroll" type="ScrollContainer" parent="Backdrop/Panel/Content/Body"]
 layout_mode = 2
 size_flags_horizontal = 3
-alignment = 1
-theme_override_constants/separation = 12
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="Actions" type="VBoxContainer" parent="Backdrop/Panel/Content/Body/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 10

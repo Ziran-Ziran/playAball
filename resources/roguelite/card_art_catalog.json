@@ -16,11 +16,11 @@
       "asset_id": "companion_lv1",
       "id": "companion",
       "level": 1,
-      "path": "res://assets/cards/companion_lv1.png",
+      "path": "res://assets/cards/release_r5/companion_lv1.png",
       "approved": false,
       "historical_approval": "Round-eye level-one master accepted before whole-set homogeneity feedback on 2026-11-04; retained as history only",
-      "review_status": "integrated_pending_user_review",
-      "production_revision": "historical_round_eye_master_reused"
+      "review_status": "agent_visual_verified_pending_user_review",
+      "production_revision": "release_r5_actual_partner_identities"
     },
     {
       "asset_id": "cooldown_lv1",
@@ -63,19 +63,19 @@
       "asset_id": "companion_lv2",
       "id": "companion",
       "level": 2,
-      "path": "res://assets/cards/companion_lv2.png",
+      "path": "res://assets/cards/release_r5/companion_lv2.png",
       "approved": false,
-      "review_status": "integrated_pending_user_review",
-      "production_revision": "r3_revised"
+      "review_status": "agent_visual_verified_pending_user_review",
+      "production_revision": "release_r5_actual_partner_identities"
     },
     {
       "asset_id": "companion_lv3",
       "id": "companion",
       "level": 3,
-      "path": "res://assets/cards/companion_lv3.png",
+      "path": "res://assets/cards/release_r5/companion_lv3.png",
       "approved": false,
-      "review_status": "integrated_pending_user_review",
-      "production_revision": "r3_revised"
+      "review_status": "agent_visual_verified_pending_user_review",
+      "production_revision": "release_r5_actual_partner_identities"
     },
     {
       "asset_id": "cooldown_lv2",

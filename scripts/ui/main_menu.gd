@@ -8,6 +8,7 @@ var interaction_status: Label
 var _settings_scrim: ColorRect
 var _master_slider: HSlider
 var settings_panel: PanelContainer
+var credits_panel: Control
 @onready var character_view: Control = $MenuCharacter
 
 func picture(file: String, bounds: Rect2) -> TextureRect:
@@ -48,6 +49,7 @@ func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var font := SystemFont.new()
 	font.font_names = PackedStringArray(["Microsoft YaHei", "Noto Sans CJK SC"])
+	font.fallbacks = [preload("res://resources/ui/body_fallback.tres")]
 	theme = Theme.new()
 	theme.default_font = font
 	theme.default_font_size = 22
@@ -172,7 +174,21 @@ func _build_settings() -> void:
 	back.text = "保存并返回  ·  Esc"
 	back.custom_minimum_size.y = 46
 	back.pressed.connect(close_settings)
-	content.add_child(back)
+	var footer := HBoxContainer.new()
+	footer.add_theme_constant_override("separation", 12)
+	content.add_child(footer)
+	back.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	footer.add_child(back)
+	credits_panel = Control.new()
+	credits_panel.name = "CreditsPanel"
+	credits_panel.set_script(load("res://scripts/ui/credits_panel.gd"))
+	add_child(credits_panel)
+	var credits_button := Button.new()
+	credits_button.name = "Credits"
+	credits_button.text = "制作与来源"
+	credits_button.custom_minimum_size = Vector2(150, 46)
+	credits_button.pressed.connect(func(): credits_panel.call("open"))
+	footer.add_child(credits_button)
 	OceanUi.primary(back)
 	MusicManager.mix_changed.connect(_sync_music_controls)
 	settings_panel.hide()
@@ -244,3 +260,11 @@ func _unhandled_key_input(event: InputEvent) -> void:
 func start_game() -> void:
 	get_tree().paused = false
 	get_tree().change_scene_to_file("res://scenes/ui/game.tscn")
+
+func _notification(what: int) -> void:
+	# 返回由一处关闭最上层，避免同一通知同时关闭来源弹窗和下方设置。
+	if what == NOTIFICATION_WM_GO_BACK_REQUEST:
+		if is_instance_valid(credits_panel) and credits_panel.visible:
+			credits_panel.hide()
+		elif is_instance_valid(settings_panel) and settings_panel.visible:
+			close_settings()

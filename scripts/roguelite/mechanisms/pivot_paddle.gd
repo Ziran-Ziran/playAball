@@ -7,14 +7,26 @@ extends Node2D
 @export_range(40.0, 400.0) var length: float = 180.0
 var _saved_velocity: Vector2 = Vector2.ZERO
 var _saved_spin: float = 0.0
+var active: bool = true
+var _activation_revision: int = 0
 func set_active(value: bool) -> void:
-	if $Paddle.freeze == not value:
+	if active == value:
 		return
-	if not value:
+	active = value
+	_activation_revision += 1
+	if not value and not $Paddle.freeze:
 		_saved_velocity = $Paddle.linear_velocity
 		_saved_spin = $Paddle.angular_velocity
-	$Paddle.freeze = not value
-	if value:
+	# 死亡可来自Area2D的query flush回调；逻辑立即停，物理mode延后改。
+	# revision防同帧停→开及旧地图退出后的请求把新状态覆盖。
+	_apply_active.call_deferred(_activation_revision)
+
+func _apply_active(revision: int) -> void:
+	if revision != _activation_revision or not is_inside_tree() or is_queued_for_deletion():
+		return
+	var was_frozen: bool = $Paddle.freeze
+	$Paddle.freeze = not active
+	if active and was_frozen:
 		$Paddle.linear_velocity = _saved_velocity
 		$Paddle.angular_velocity = _saved_spin
 func _ready() -> void:
