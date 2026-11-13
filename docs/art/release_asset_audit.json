@@ -1,0 +1,2693 @@
+{
+  "scope": "assets全源文件；import旁车逐份关联；非assets程序绘制另见审查报告",
+  "count": 96,
+  "image_count": 71,
+  "records": [
+    {
+      "path": "assets/cards/bowling_lv1.png",
+      "bytes": 2151873,
+      "sha256": "63135305da602082a3946c91f408d87e5d0de8d2459ae3c7fdbcb18aec1de16a",
+      "direct_reference_files": [
+        "resources/roguelite/card_art_catalog.json"
+      ],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "2026-11-10 实看 contact sheet；未逐图100%像素检查，未以此声称动态实机验收",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB",
+      "import_options": {
+        "compress/mode": "0",
+        "mipmaps/generate": "true",
+        "process/size_limit": "512"
+      },
+      "import_sidecar": "assets/cards/bowling_lv1.png.import",
+      "visual_score_10": 7.3,
+      "runtime_role": "正式成长卡：动态JSON索引引用",
+      "assessment": "保龄木偶队列能表达群体击退，但正式敌人为病毒；保留构图，下一轮换病毒演员。",
+      "priority": "P2",
+      "source_record": "docs/art/production_r2.json"
+    },
+    {
+      "path": "assets/cards/choices_lv1.png",
+      "bytes": 2114131,
+      "sha256": "93946a351a465439421d8719228b189cf2193e9497c6a5ebdf7875762648e1b7",
+      "direct_reference_files": [
+        "resources/roguelite/card_art_catalog.json"
+      ],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "2026-11-10 实看 contact sheet；未逐图100%像素检查，未以此声称动态实机验收",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB",
+      "import_options": {
+        "compress/mode": "0",
+        "mipmaps/generate": "true",
+        "process/size_limit": "512"
+      },
+      "import_sidecar": "assets/cards/choices_lv1.png.import",
+      "visual_score_10": 7.3,
+      "runtime_role": "正式成长卡：动态JSON索引引用",
+      "assessment": "四张空白牌和DS旁观清楚表达多选；保留。",
+      "priority": "P3",
+      "source_record": "docs/art/production_r2.json"
+    },
+    {
+      "path": "assets/cards/companion_lv1.png",
+      "bytes": 2275039,
+      "sha256": "f949f9c9401b15848e8a1d6c17dc8c54fa57a326de7a56919f13c6624ff8d947",
+      "direct_reference_files": [],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "2026-11-10 实看 contact sheet；未逐图100%像素检查，未以此声称动态实机验收",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB",
+      "import_options": {
+        "compress/mode": "0",
+        "mipmaps/generate": "true",
+        "process/size_limit": "512"
+      },
+      "import_sidecar": "assets/cards/companion_lv1.png.import",
+      "visual_score_10": 6.3,
+      "runtime_role": "原卡母版/历史保留，正式catalog已换release_r5",
+      "assessment": "DS分身语义问题已由release_r5真实伙伴卡纠正；不删除历史原画。",
+      "priority": "已处理/保留历史",
+      "source_record": "docs/art/production_r2.json"
+    },
+    {
+      "path": "assets/cards/companion_lv2.png",
+      "bytes": 2157467,
+      "sha256": "28d579aee46c6dbd3d2fa035a6b7f9114632438c9302352df74a8d45e2ab9d98",
+      "direct_reference_files": [],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "2026-11-10 实看 contact sheet；未逐图100%像素检查，未以此声称动态实机验收",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB",
+      "import_options": {
+        "compress/mode": "0",
+        "mipmaps/generate": "true",
+        "process/size_limit": "512"
+      },
+      "import_sidecar": "assets/cards/companion_lv2.png.import",
+      "visual_score_10": 6.3,
+      "runtime_role": "原卡母版/历史保留，正式catalog已换release_r5",
+      "assessment": "DS分身语义问题已由release_r5真实伙伴卡纠正；不删除历史原画。",
+      "priority": "已处理/保留历史",
+      "source_record": "docs/art/production_r2.json"
+    },
+    {
+      "path": "assets/cards/companion_lv3.png",
+      "bytes": 2307571,
+      "sha256": "cd539c7a72fbb11c3b14d71342339c0f797b2320746b019402602eb4873e09ea",
+      "direct_reference_files": [],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "2026-11-10 实看 contact sheet；未逐图100%像素检查，未以此声称动态实机验收",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB",
+      "import_options": {
+        "compress/mode": "0",
+        "mipmaps/generate": "true",
+        "process/size_limit": "512"
+      },
+      "import_sidecar": "assets/cards/companion_lv3.png.import",
+      "visual_score_10": 6.3,
+      "runtime_role": "原卡母版/历史保留，正式catalog已换release_r5",
+      "assessment": "DS分身语义问题已由release_r5真实伙伴卡纠正；不删除历史原画。",
+      "priority": "已处理/保留历史",
+      "source_record": "docs/art/production_r2.json"
+    },
+    {
+      "path": "assets/cards/cooldown_lv1.png",
+      "bytes": 2165498,
+      "sha256": "87a4ff1fa6dccee04134b2e66b9ac15011339bc1d1a7ed6b7a71395c0e4ccda4",
+      "direct_reference_files": [
+        "resources/roguelite/card_art_catalog.json"
+      ],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "2026-11-10 实看 contact sheet；未逐图100%像素检查，未以此声称动态实机验收",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB",
+      "import_options": {
+        "compress/mode": "0",
+        "mipmaps/generate": "true",
+        "process/size_limit": "512"
+      },
+      "import_sidecar": "assets/cards/cooldown_lv1.png.import",
+      "visual_score_10": 7.3,
+      "runtime_role": "正式成长卡：动态JSON索引引用",
+      "assessment": "发条发射器能表达等待缩短；四级以构图变化为主，等级差异须由真实收益文字承担。",
+      "priority": "P3",
+      "source_record": "docs/art/production_r2.json"
+    },
+    {
+      "path": "assets/cards/cooldown_lv2.png",
+      "bytes": 2165556,
+      "sha256": "f9b0a0e1faeb9c132cd0c7b4e5c2ce662d2f744bbbea0b85ee57c31ead47ed0d",
+      "direct_reference_files": [
+        "resources/roguelite/card_art_catalog.json"
+      ],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "2026-11-10 实看 contact sheet；未逐图100%像素检查，未以此声称动态实机验收",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB",
+      "import_options": {
+        "compress/mode": "0",
+        "mipmaps/generate": "true",
+        "process/size_limit": "512"
+      },
+      "import_sidecar": "assets/cards/cooldown_lv2.png.import",
+      "visual_score_10": 7.3,
+      "runtime_role": "正式成长卡：动态JSON索引引用",
+      "assessment": "发条发射器能表达等待缩短；四级以构图变化为主，等级差异须由真实收益文字承担。",
+      "priority": "P3",
+      "source_record": "docs/art/production_r2.json"
+    },
+    {
+      "path": "assets/cards/cooldown_lv3.png",
+      "bytes": 2169772,
+      "sha256": "2e995883a782b4a09f04b61acfab101bca1961fbea06e546530d459629e01eec",
+      "direct_reference_files": [
+        "resources/roguelite/card_art_catalog.json"
+      ],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "2026-11-10 实看 contact sheet；未逐图100%像素检查，未以此声称动态实机验收",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB",
+      "import_options": {
+        "compress/mode": "0",
+        "mipmaps/generate": "true",
+        "process/size_limit": "512"
+      },
+      "import_sidecar": "assets/cards/cooldown_lv3.png.import",
+      "visual_score_10": 7.3,
+      "runtime_role": "正式成长卡：动态JSON索引引用",
+      "assessment": "发条发射器能表达等待缩短；四级以构图变化为主，等级差异须由真实收益文字承担。",
+      "priority": "P3",
+      "source_record": "docs/art/production_r2.json"
+    },
+    {
+      "path": "assets/cards/cooldown_lv4.png",
+      "bytes": 2106282,
+      "sha256": "d9f62eebb6323203b436dc7941af5579b392e7bc22869aea836d550878f60920",
+      "direct_reference_files": [
+        "resources/roguelite/card_art_catalog.json"
+      ],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "2026-11-10 实看 contact sheet；未逐图100%像素检查，未以此声称动态实机验收",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB",
+      "import_options": {
+        "compress/mode": "0",
+        "mipmaps/generate": "true",
+        "process/size_limit": "512"
+      },
+      "import_sidecar": "assets/cards/cooldown_lv4.png.import",
+      "visual_score_10": 7.3,
+      "runtime_role": "正式成长卡：动态JSON索引引用",
+      "assessment": "发条发射器能表达等待缩短；四级以构图变化为主，等级差异须由真实收益文字承担。",
+      "priority": "P3",
+      "source_record": "docs/art/production_r2.json"
+    },
+    {
+      "path": "assets/cards/double_launch_lv1.png",
+      "bytes": 2157025,
+      "sha256": "393b90f741dfc92f29136bfa29683ba1d46bc07b704c436dc2c0420cbbec1744",
+      "direct_reference_files": [
+        "resources/roguelite/card_art_catalog.json"
+      ],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "2026-11-10 实看 contact sheet；未逐图100%像素检查，未以此声称动态实机验收",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB",
+      "import_options": {
+        "compress/mode": "0",
+        "mipmaps/generate": "true",
+        "process/size_limit": "512"
+      },
+      "import_sidecar": "assets/cards/double_launch_lv1.png.import",
+      "visual_score_10": 7.3,
+      "runtime_role": "正式成长卡：动态JSON索引引用",
+      "assessment": "两个发光球清楚表达双发；保留。",
+      "priority": "P3",
+      "source_record": "docs/art/production_r2.json"
+    },
+    {
+      "path": "assets/cards/echo_lv1.png",
+      "bytes": 2206277,
+      "sha256": "85e940bb0b824eba3cafbf4dac03c54c4feab69c6da1257212ef926e203a48e8",
+      "direct_reference_files": [
+        "resources/roguelite/card_art_catalog.json"
+      ],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "2026-11-10 实看 contact sheet；未逐图100%像素检查，未以此声称动态实机验收",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB",
+      "import_options": {
+        "compress/mode": "0",
+        "mipmaps/generate": "true",
+        "process/size_limit": "512"
+      },
+      "import_sidecar": "assets/cards/echo_lv1.png.import",
+      "visual_score_10": 7.3,
+      "runtime_role": "正式成长卡：动态JSON索引引用",
+      "assessment": "木偶与主角分置可读为再撞一次；敌人演员与正式病毒不一致，需换演员且添加二次轨迹。",
+      "priority": "P2",
+      "source_record": "docs/art/production_r2.json"
+    },
+    {
+      "path": "assets/cards/explosion_lv1.png",
+      "bytes": 2026500,
+      "sha256": "ed2d39b2957cca882e1ddc3519e831b59e29673359433b1dca7beb94bea0d287",
+      "direct_reference_files": [
+        "resources/roguelite/card_art_catalog.json"
+      ],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "2026-11-10 实看 contact sheet；未逐图100%像素检查，未以此声称动态实机验收",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB",
+      "import_options": {
+        "compress/mode": "0",
+        "mipmaps/generate": "true",
+        "process/size_limit": "512"
+      },
+      "import_sidecar": "assets/cards/explosion_lv1.png.import",
+      "visual_score_10": 7.3,
+      "runtime_role": "正式成长卡：动态JSON索引引用",
+      "assessment": "冲击爆炸构图清楚但木偶敌人与病毒不一致；轻薄范围环与真实半径保持一致。",
+      "priority": "P2",
+      "source_record": "docs/art/production_r2.json"
+    },
+    {
+      "path": "assets/cards/follow_lv1.png",
+      "bytes": 2039027,
+      "sha256": "931fe4c4d51d3c138d026770f452a100087ebe0209f9aae6e6565a2419a4d0ad",
+      "direct_reference_files": [
+        "resources/roguelite/card_art_catalog.json"
+      ],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "2026-11-10 实看 contact sheet；未逐图100%像素检查，未以此声称动态实机验收",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB",
+      "import_options": {
+        "compress/mode": "0",
+        "mipmaps/generate": "true",
+        "process/size_limit": "512"
+      },
+      "import_sidecar": "assets/cards/follow_lv1.png.import",
+      "visual_score_10": 6.3,
+      "runtime_role": "正式成长卡：动态JSON索引引用",
+      "assessment": "墙角与大小DS表达绕行跟随，实际伙伴不是DS；改为真实伙伴跟随的曲线，避免暗示自动穿墙。",
+      "priority": "P2",
+      "source_record": "docs/art/production_r2.json"
+    },
+    {
+      "path": "assets/cards/glide_lv1.png",
+      "bytes": 2022794,
+      "sha256": "1df1117e3bc0b0214869028fe8f6134740040e8c10bcc704abc51b18c922c1b2",
+      "direct_reference_files": [
+        "resources/roguelite/card_art_catalog.json"
+      ],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "2026-11-10 实看 contact sheet；未逐图100%像素检查，未以此声称动态实机验收",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB",
+      "import_options": {
+        "compress/mode": "0",
+        "mipmaps/generate": "true",
+        "process/size_limit": "512"
+      },
+      "import_sidecar": "assets/cards/glide_lv1.png.import",
+      "visual_score_10": 7.3,
+      "runtime_role": "正式成长卡：动态JSON索引引用",
+      "assessment": "滑行动势明确，三级远景主角变小；小尺寸应保留脸部和轨迹端点。",
+      "priority": "P3",
+      "source_record": "docs/art/production_r2.json"
+    },
+    {
+      "path": "assets/cards/glide_lv2.png",
+      "bytes": 2093729,
+      "sha256": "6f0beb41cfb0826227a1df9e22d5d2e33f5a064a2287a7ae39108525f53b0b8d",
+      "direct_reference_files": [
+        "resources/roguelite/card_art_catalog.json"
+      ],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "2026-11-10 实看 contact sheet；未逐图100%像素检查，未以此声称动态实机验收",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB",
+      "import_options": {
+        "compress/mode": "0",
+        "mipmaps/generate": "true",
+        "process/size_limit": "512"
+      },
+      "import_sidecar": "assets/cards/glide_lv2.png.import",
+      "visual_score_10": 7.3,
+      "runtime_role": "正式成长卡：动态JSON索引引用",
+      "assessment": "滑行动势明确，三级远景主角变小；小尺寸应保留脸部和轨迹端点。",
+      "priority": "P3",
+      "source_record": "docs/art/production_r2.json"
+    },
+    {
+      "path": "assets/cards/glide_lv3.png",
+      "bytes": 1875630,
+      "sha256": "e4c5eae9284fe8ec9a61893b34b8701b01211c6b6a4fb7780330cf416b19fa0e",
+      "direct_reference_files": [
+        "resources/roguelite/card_art_catalog.json"
+      ],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "2026-11-10 实看 contact sheet；未逐图100%像素检查，未以此声称动态实机验收",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB",
+      "import_options": {
+        "compress/mode": "0",
+        "mipmaps/generate": "true",
+        "process/size_limit": "512"
+      },
+      "import_sidecar": "assets/cards/glide_lv3.png.import",
+      "visual_score_10": 7.3,
+      "runtime_role": "正式成长卡：动态JSON索引引用",
+      "assessment": "滑行动势明确，三级远景主角变小；小尺寸应保留脸部和轨迹端点。",
+      "priority": "P3",
+      "source_record": "docs/art/production_r2.json"
+    },
+    {
+      "path": "assets/cards/heal_repeat.png",
+      "bytes": 2097061,
+      "sha256": "4937c5775731ec95dce48a1278a87c4dd7335d921e4e13ab4a0394743739f960",
+      "direct_reference_files": [
+        "resources/roguelite/card_art_catalog.json"
+      ],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "2026-11-10 实看 contact sheet；未逐图100%像素检查，未以此声称动态实机验收",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB",
+      "import_options": {
+        "compress/mode": "0",
+        "mipmaps/generate": "true",
+        "process/size_limit": "512"
+      },
+      "import_sidecar": "assets/cards/heal_repeat.png.import",
+      "visual_score_10": 7.3,
+      "runtime_role": "正式成长卡：动态JSON索引引用",
+      "assessment": "饭碗与满足表情准确对应恢复；保持与实际回血规则同步。",
+      "priority": "P3",
+      "source_record": "docs/art/production_r2.json"
+    },
+    {
+      "path": "assets/cards/heavy_lv1.png",
+      "bytes": 2237017,
+      "sha256": "c3c45f2dd4fe95e2a0683b33bf52ce9a640891385493d62cf7fee1e3d7ad8207",
+      "direct_reference_files": [
+        "resources/roguelite/card_art_catalog.json"
+      ],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "2026-11-10 实看 contact sheet；未逐图100%像素检查，未以此声称动态实机验收",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB",
+      "import_options": {
+        "compress/mode": "0",
+        "mipmaps/generate": "true",
+        "process/size_limit": "512"
+      },
+      "import_sidecar": "assets/cards/heavy_lv1.png.import",
+      "visual_score_10": 6.3,
+      "runtime_role": "正式成长卡：动态JSON索引引用",
+      "assessment": "靠/推枕头是萌图但厚重增伤含义不直观；增加重量/撞击符号而不写死数值。",
+      "priority": "P2",
+      "source_record": "docs/art/production_r2.json"
+    },
+    {
+      "path": "assets/cards/heavy_lv2.png",
+      "bytes": 2123321,
+      "sha256": "88d86371a0ef9bad9446f42035a01fc5512d415822397b8eebbbd7db5cb34c1f",
+      "direct_reference_files": [
+        "resources/roguelite/card_art_catalog.json"
+      ],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "2026-11-10 实看 contact sheet；未逐图100%像素检查，未以此声称动态实机验收",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB",
+      "import_options": {
+        "compress/mode": "0",
+        "mipmaps/generate": "true",
+        "process/size_limit": "512"
+      },
+      "import_sidecar": "assets/cards/heavy_lv2.png.import",
+      "visual_score_10": 6.3,
+      "runtime_role": "正式成长卡：动态JSON索引引用",
+      "assessment": "靠/推枕头是萌图但厚重增伤含义不直观；增加重量/撞击符号而不写死数值。",
+      "priority": "P2",
+      "source_record": "docs/art/production_r2.json"
+    },
+    {
+      "path": "assets/cards/heavy_lv3.png",
+      "bytes": 2411147,
+      "sha256": "c5d551b532cfe11761bff86f55f9a350f1a95ac8d9816fb822ccad6b685f2f59",
+      "direct_reference_files": [
+        "resources/roguelite/card_art_catalog.json"
+      ],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "2026-11-10 实看 contact sheet；未逐图100%像素检查，未以此声称动态实机验收",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB",
+      "import_options": {
+        "compress/mode": "0",
+        "mipmaps/generate": "true",
+        "process/size_limit": "512"
+      },
+      "import_sidecar": "assets/cards/heavy_lv3.png.import",
+      "visual_score_10": 6.3,
+      "runtime_role": "正式成长卡：动态JSON索引引用",
+      "assessment": "靠/推枕头是萌图但厚重增伤含义不直观；增加重量/撞击符号而不写死数值。",
+      "priority": "P2",
+      "source_record": "docs/art/production_r2.json"
+    },
+    {
+      "path": "assets/cards/launch_power_lv1.png",
+      "bytes": 2010029,
+      "sha256": "8fea424166085ba32e0e4e9e10e0b1ce2ff00d0f706a1c509ef9f306b6fb5bd1",
+      "direct_reference_files": [
+        "resources/roguelite/card_art_catalog.json"
+      ],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "2026-11-10 实看 contact sheet；未逐图100%像素检查，未以此声称动态实机验收",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB",
+      "import_options": {
+        "compress/mode": "0",
+        "mipmaps/generate": "true",
+        "process/size_limit": "512"
+      },
+      "import_sidecar": "assets/cards/launch_power_lv1.png.import",
+      "visual_score_10": 7.3,
+      "runtime_role": "正式成长卡：动态JSON索引引用",
+      "assessment": "由冲刺到跃起动势增强，第三张更像飞行；保留真实冲量收益文字避免误解。",
+      "priority": "P3",
+      "source_record": "docs/art/production_r2.json"
+    },
+    {
+      "path": "assets/cards/launch_power_lv2.png",
+      "bytes": 1980806,
+      "sha256": "79c1519ed1f4f6919132a4040a0490ddff07866ce1a3960ac98353db05b61f35",
+      "direct_reference_files": [
+        "resources/roguelite/card_art_catalog.json"
+      ],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "2026-11-10 实看 contact sheet；未逐图100%像素检查，未以此声称动态实机验收",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB",
+      "import_options": {
+        "compress/mode": "0",
+        "mipmaps/generate": "true",
+        "process/size_limit": "512"
+      },
+      "import_sidecar": "assets/cards/launch_power_lv2.png.import",
+      "visual_score_10": 7.3,
+      "runtime_role": "正式成长卡：动态JSON索引引用",
+      "assessment": "由冲刺到跃起动势增强，第三张更像飞行；保留真实冲量收益文字避免误解。",
+      "priority": "P3",
+      "source_record": "docs/art/production_r2.json"
+    },
+    {
+      "path": "assets/cards/launch_power_lv3.png",
+      "bytes": 2101577,
+      "sha256": "6a429d4f44d781e805750f548b5ea0bce3609dfd15211b0ea55f628e44df0183",
+      "direct_reference_files": [
+        "resources/roguelite/card_art_catalog.json"
+      ],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "2026-11-10 实看 contact sheet；未逐图100%像素检查，未以此声称动态实机验收",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB",
+      "import_options": {
+        "compress/mode": "0",
+        "mipmaps/generate": "true",
+        "process/size_limit": "512"
+      },
+      "import_sidecar": "assets/cards/launch_power_lv3.png.import",
+      "visual_score_10": 7.3,
+      "runtime_role": "正式成长卡：动态JSON索引引用",
+      "assessment": "由冲刺到跃起动势增强，第三张更像飞行；保留真实冲量收益文字避免误解。",
+      "priority": "P3",
+      "source_record": "docs/art/production_r2.json"
+    },
+    {
+      "path": "assets/cards/pulse_lv1.png",
+      "bytes": 2240493,
+      "sha256": "f7d4031d78b3ab2e1228d21b539bd92dde40bd9fec71c307d168a24c03a42033",
+      "direct_reference_files": [
+        "resources/roguelite/card_art_catalog.json"
+      ],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "2026-11-10 实看 contact sheet；未逐图100%像素检查，未以此声称动态实机验收",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB",
+      "import_options": {
+        "compress/mode": "0",
+        "mipmaps/generate": "true",
+        "process/size_limit": "512"
+      },
+      "import_sidecar": "assets/cards/pulse_lv1.png.import",
+      "visual_score_10": 7.3,
+      "runtime_role": "正式成长卡：动态JSON索引引用",
+      "assessment": "推开左右木偶清楚表达震退，但应换病毒且别使用伤害数字。",
+      "priority": "P2",
+      "source_record": "docs/art/production_r2.json"
+    },
+    {
+      "path": "assets/cards/relay_lv1.png",
+      "bytes": 2327671,
+      "sha256": "9e256f405596d9da53178aee608e3f656558763c88c4384f1f04d14e88cde406",
+      "direct_reference_files": [
+        "resources/roguelite/card_art_catalog.json"
+      ],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "2026-11-10 实看 contact sheet；未逐图100%像素检查，未以此声称动态实机验收",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB",
+      "import_options": {
+        "compress/mode": "0",
+        "mipmaps/generate": "true",
+        "process/size_limit": "512"
+      },
+      "import_sidecar": "assets/cards/relay_lv1.png.import",
+      "visual_score_10": 6.3,
+      "runtime_role": "正式成长卡：动态JSON索引引用",
+      "assessment": "多人DS接力造成身份错觉；使用实际三伙伴并以接力光线表示代际。",
+      "priority": "P2",
+      "source_record": "docs/art/production_r2.json"
+    },
+    {
+      "path": "assets/cards/release_r5/companion_lv1.png",
+      "visual_review": "2026-11-10 直接打开新PNG逐张查看（非联系表）；非自然整局验收",
+      "priority": "保留/语义已纠正",
+      "bytes": 2383089,
+      "sha256": "b2643df6ffb2d706c986b87af84a628a9a02ef0e68bb274c3eee6861be7994a6",
+      "direct_reference_files": [
+        "resources/roguelite/card_art_catalog.json"
+      ],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "import_sidecar": "assets/cards/release_r5/companion_lv1.png.import",
+      "import_options": {
+        "compress/mode": "0",
+        "mipmaps/generate": "true",
+        "process/size_limit": "512"
+      },
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB",
+      "runtime_role": "正式companion三级真实伙伴身份卡（JSON索引）",
+      "source_record": "assets/cards/release_r5/SOURCE.md",
+      "license_evidence": "本地内置生成来源与参考记录；既有二创身份，不宣称官方拟人",
+      "assessment": "实际逐张打开：DS主角不变，1级白发薄荷GPT，2级增加杏色卷发Claude，3级增加紫发Qwen；等级与真实伙伴数量语义一致。小尺寸卡面仍需最终导出复验。",
+      "visual_score_10": 8.1
+    },
+    {
+      "path": "assets/cards/release_r5/companion_lv2.png",
+      "visual_review": "2026-11-10 直接打开新PNG逐张查看（非联系表）；非自然整局验收",
+      "priority": "保留/语义已纠正",
+      "bytes": 2427973,
+      "sha256": "35d80b4efce85ee8f0e13050278339e67cf5b3010c04f3c4e63889b614f2a1b5",
+      "direct_reference_files": [
+        "resources/roguelite/card_art_catalog.json"
+      ],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "import_sidecar": "assets/cards/release_r5/companion_lv2.png.import",
+      "import_options": {
+        "compress/mode": "0",
+        "mipmaps/generate": "true",
+        "process/size_limit": "512"
+      },
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB",
+      "runtime_role": "正式companion三级真实伙伴身份卡（JSON索引）",
+      "source_record": "assets/cards/release_r5/SOURCE.md",
+      "license_evidence": "本地内置生成来源与参考记录；既有二创身份，不宣称官方拟人",
+      "assessment": "实际逐张打开：DS主角不变，1级白发薄荷GPT，2级增加杏色卷发Claude，3级增加紫发Qwen；等级与真实伙伴数量语义一致。小尺寸卡面仍需最终导出复验。",
+      "visual_score_10": 8.1
+    },
+    {
+      "path": "assets/cards/release_r5/companion_lv3.png",
+      "visual_review": "2026-11-10 直接打开新PNG逐张查看（非联系表）；非自然整局验收",
+      "priority": "保留/语义已纠正",
+      "bytes": 2527953,
+      "sha256": "e950f8463dfb8fdfb13ae7701f29c96bcd781e7f80f79b55a2aa03aa70c563aa",
+      "direct_reference_files": [
+        "resources/roguelite/card_art_catalog.json"
+      ],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "import_sidecar": "assets/cards/release_r5/companion_lv3.png.import",
+      "import_options": {
+        "compress/mode": "0",
+        "mipmaps/generate": "true",
+        "process/size_limit": "512"
+      },
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB",
+      "runtime_role": "正式companion三级真实伙伴身份卡（JSON索引）",
+      "source_record": "assets/cards/release_r5/SOURCE.md",
+      "license_evidence": "本地内置生成来源与参考记录；既有二创身份，不宣称官方拟人",
+      "assessment": "实际逐张打开：DS主角不变，1级白发薄荷GPT，2级增加杏色卷发Claude，3级增加紫发Qwen；等级与真实伙伴数量语义一致。小尺寸卡面仍需最终导出复验。",
+      "visual_score_10": 8.1
+    },
+    {
+      "path": "assets/cards/release_r5/generation.json",
+      "visual_review": "非位图；按来源说明/几何源码读取核对",
+      "priority": "保留/语义已纠正",
+      "bytes": 5813,
+      "sha256": "250aa3f15c316b13db29b4198417d7cad154bc3ca8cf29f2125c35439b33dc52",
+      "direct_reference_files": [],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "import_sidecar": null,
+      "import_options": {},
+      "runtime_role": "正式companion三级真实伙伴身份卡（JSON索引）",
+      "source_record": "assets/cards/release_r5/SOURCE.md",
+      "license_evidence": "本地内置生成来源与参考记录；既有二创身份，不宣称官方拟人",
+      "assessment": "实际逐张打开：DS主角不变，1级白发薄荷GPT，2级增加杏色卷发Claude，3级增加紫发Qwen；等级与真实伙伴数量语义一致。小尺寸卡面仍需最终导出复验。",
+      "visual_score_10": 8.1
+    },
+    {
+      "path": "assets/cards/release_r5/SOURCE.md",
+      "visual_review": "非位图；按来源说明/几何源码读取核对",
+      "priority": "保留/语义已纠正",
+      "bytes": 882,
+      "sha256": "925612256d92bd2048ce8c9a389f458f28eb00057b2b30d688758af6299fc1e7",
+      "direct_reference_files": [],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "import_sidecar": null,
+      "import_options": {},
+      "runtime_role": "正式companion三级真实伙伴身份卡（JSON索引）",
+      "source_record": "assets/cards/release_r5/SOURCE.md",
+      "license_evidence": "本地内置生成来源与参考记录；既有二创身份，不宣称官方拟人",
+      "assessment": "实际逐张打开：DS主角不变，1级白发薄荷GPT，2级增加杏色卷发Claude，3级增加紫发Qwen；等级与真实伙伴数量语义一致。小尺寸卡面仍需最终导出复验。",
+      "visual_score_10": 8.1
+    },
+    {
+      "path": "assets/cards/shrink_lv1.png",
+      "bytes": 2043267,
+      "sha256": "e0a1788a219bcd4f1cda22978e5c0cf3ba001c33c514d14a2e7f98f8ce33461d",
+      "direct_reference_files": [
+        "resources/roguelite/card_art_catalog.json"
+      ],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "2026-11-10 实看 contact sheet；未逐图100%像素检查，未以此声称动态实机验收",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB",
+      "import_options": {
+        "compress/mode": "0",
+        "mipmaps/generate": "true",
+        "process/size_limit": "512"
+      },
+      "import_sidecar": "assets/cards/shrink_lv1.png.import",
+      "visual_score_10": 6.3,
+      "runtime_role": "正式成长卡：动态JSON索引引用",
+      "assessment": "红布范围缩小寓意偏隐晦，木偶演员不同；改为病毒预警圈收缩前后对照。",
+      "priority": "P2",
+      "source_record": "docs/art/production_r2.json"
+    },
+    {
+      "path": "assets/cards/shrink_lv2.png",
+      "bytes": 2223763,
+      "sha256": "ff18c6d8ef486a3fc0d9b0009a51fa436b69c5d9980329ae8ccd86f16ee02642",
+      "direct_reference_files": [
+        "resources/roguelite/card_art_catalog.json"
+      ],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "2026-11-10 实看 contact sheet；未逐图100%像素检查，未以此声称动态实机验收",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB",
+      "import_options": {
+        "compress/mode": "0",
+        "mipmaps/generate": "true",
+        "process/size_limit": "512"
+      },
+      "import_sidecar": "assets/cards/shrink_lv2.png.import",
+      "visual_score_10": 6.3,
+      "runtime_role": "正式成长卡：动态JSON索引引用",
+      "assessment": "红布范围缩小寓意偏隐晦，木偶演员不同；改为病毒预警圈收缩前后对照。",
+      "priority": "P2",
+      "source_record": "docs/art/production_r2.json"
+    },
+    {
+      "path": "assets/cards/vigor_repeat.png",
+      "bytes": 2115369,
+      "sha256": "5993527637bc2ba6e489b5ba6bafcfbd2cc127ae8b25063135c7583e2a98f8c6",
+      "direct_reference_files": [
+        "resources/roguelite/card_art_catalog.json"
+      ],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "2026-11-10 实看 contact sheet；未逐图100%像素检查，未以此声称动态实机验收",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB",
+      "import_options": {
+        "compress/mode": "0",
+        "mipmaps/generate": "true",
+        "process/size_limit": "512"
+      },
+      "import_sidecar": "assets/cards/vigor_repeat.png.import",
+      "visual_score_10": 7.3,
+      "runtime_role": "正式成长卡：动态JSON索引引用",
+      "assessment": "心形光清楚表达生命上限；保留，避免与回血同图。",
+      "priority": "P3",
+      "source_record": "docs/art/production_r2.json"
+    },
+    {
+      "path": "assets/fonts/noto_sans_sc/NotoSansSC.ttf",
+      "bytes": 17772300,
+      "sha256": "a3041811a78c361b1de50f953c805e0244951c21c5bd412f7232ef0d899af0da",
+      "import_sidecar": "assets/fonts/noto_sans_sc/NotoSansSC.ttf.import",
+      "import_options": {
+        "antialiasing": "1",
+        "generate_mipmaps": "false",
+        "multichannel_signed_distance_field": "false",
+        "allow_system_fallback": "true",
+        "compress": "true"
+      },
+      "runtime_role": "正式UI系统字体的跨平台fallback及许可/来源",
+      "source_record": "assets/fonts/noto_sans_sc/SOURCE.md",
+      "license_evidence": "本地OFL 1.1原文及Google Fonts官方源记录已读取，未修改TTF",
+      "assessment": "补安卓全角标点/符号缺字，桌面首选字体和ZCOOL标题保留；字体映射核验与Android实际渲染验收分开。",
+      "priority": "保留/待候选2原生渲染确认",
+      "visual_review": "字体元信息/本地OFL/SHA256核验；不将字体冒作图片实看",
+      "direct_reference_files": [
+        "resources/ui/body_fallback.tres"
+      ],
+      "reference_evidence": "main_menu/ocean_ui显式SystemFont.fallbacks路径读取核验",
+      "font_coverage": {
+        "method": "fontTools读取字体cmap：仅证明字形映射存在，不冒充安卓渲染验收",
+        "cmap_checked": {
+          "，": true,
+          "。": true,
+          "！": true,
+          "？": true,
+          "：": true,
+          "；": true,
+          "（": true,
+          "）": true,
+          "【": true,
+          "】": true,
+          "《": true,
+          "》": true,
+          "「": true,
+          "」": true,
+          "—": true,
+          "…": true,
+          "→": true,
+          "·": true,
+          "精": true,
+          "准": true,
+          "连": true,
+          "击": true,
+          "回": true,
+          "能": true,
+          "秒": true
+        },
+        "glyphs": 30890
+      },
+      "source_hash_matches": true,
+      "regular_weight": "原TTF不改，FontVariation选择wght400；原默认100由fontTools实查。"
+    },
+    {
+      "path": "assets/fonts/noto_sans_sc/OFL.txt",
+      "bytes": 4388,
+      "sha256": "1c05c68c34f9708415aada51f17e1b0092d2cea709bf4a94cd38114f9e73d7d9",
+      "import_sidecar": null,
+      "runtime_role": "正式UI系统字体的跨平台fallback及许可/来源",
+      "source_record": "assets/fonts/noto_sans_sc/SOURCE.md",
+      "license_evidence": "本地OFL 1.1原文及Google Fonts官方源记录已读取，未修改TTF",
+      "assessment": "补安卓全角标点/符号缺字，桌面首选字体和ZCOOL标题保留；字体映射核验与Android实际渲染验收分开。",
+      "priority": "保留/待候选2原生渲染确认",
+      "visual_review": "字体元信息/本地OFL/SHA256核验；不将字体冒作图片实看",
+      "direct_reference_files": [],
+      "reference_evidence": "main_menu/ocean_ui显式SystemFont.fallbacks路径读取核验"
+    },
+    {
+      "path": "assets/fonts/noto_sans_sc/SOURCE.md",
+      "bytes": 765,
+      "sha256": "043f0609df6e490f0390d4441c93461bed2c607b90db1b0e4ce2c876c346f3ed",
+      "import_sidecar": null,
+      "runtime_role": "正式UI系统字体的跨平台fallback及许可/来源",
+      "source_record": "assets/fonts/noto_sans_sc/SOURCE.md",
+      "license_evidence": "本地OFL 1.1原文及Google Fonts官方源记录已读取，未修改TTF",
+      "assessment": "补安卓全角标点/符号缺字，桌面首选字体和ZCOOL标题保留；字体映射核验与Android实际渲染验收分开。",
+      "priority": "保留/待候选2原生渲染确认",
+      "visual_review": "字体元信息/本地OFL/SHA256核验；不将字体冒作图片实看",
+      "direct_reference_files": [],
+      "reference_evidence": "main_menu/ocean_ui显式SystemFont.fallbacks路径读取核验"
+    },
+    {
+      "path": "assets/fonts/zcool_kuaile/OFL.txt",
+      "bytes": 4397,
+      "sha256": "91ef06981e715027e93a66e95fe827db07c4c959dbca164489509febc0dfe400",
+      "direct_reference_files": [],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "not visual media",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "import_sidecar": null,
+      "runtime_role": "正式卡标题字体及OFL许可",
+      "assessment": "本地OFL与来源文件存在；逐字形fallback/安卓字号未在本轮验证。",
+      "source_record": "assets/fonts/zcool_kuaile/SOURCE.txt",
+      "priority": "P3",
+      "import_options": {}
+    },
+    {
+      "path": "assets/fonts/zcool_kuaile/SOURCE.txt",
+      "bytes": 149,
+      "sha256": "7c28e5bae18ae8d3a76ace32d4673c683f5179801cddd28d6463815eb8c5131e",
+      "direct_reference_files": [],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "not visual media",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "import_sidecar": null,
+      "runtime_role": "正式卡标题字体及OFL许可",
+      "assessment": "本地OFL与来源文件存在；逐字形fallback/安卓字号未在本轮验证。",
+      "source_record": "assets/fonts/zcool_kuaile/SOURCE.txt",
+      "priority": "P3",
+      "import_options": {}
+    },
+    {
+      "path": "assets/fonts/zcool_kuaile/ZCOOLKuaiLe-Regular.ttf",
+      "bytes": 1514968,
+      "sha256": "812a6fc1fe54b6d73a419245c32dfeba8aa33104d5be90d1cf6af082007cb71d",
+      "direct_reference_files": [
+        "scenes/roguelite/presentation/upgrade_card.tscn"
+      ],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "not visual media",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "import_sidecar": "assets/fonts/zcool_kuaile/ZCOOLKuaiLe-Regular.ttf.import",
+      "runtime_role": "正式卡标题字体及OFL许可",
+      "assessment": "本地OFL与来源文件存在；逐字形fallback/安卓字号未在本轮验证。",
+      "source_record": "assets/fonts/zcool_kuaile/SOURCE.txt",
+      "priority": "P3",
+      "import_options": {
+        "antialiasing": "1",
+        "generate_mipmaps": "false",
+        "multichannel_signed_distance_field": "false",
+        "allow_system_fallback": "true",
+        "compress": "true"
+      }
+    },
+    {
+      "path": "assets/music/let_me_go.mp3",
+      "bytes": 3581165,
+      "sha256": "4895eb01e8667ddf51d39546cdf73b172fea71f8cc3c3ef20ce1e933a972e826",
+      "direct_reference_files": [],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "not visual media",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "import_sidecar": "assets/music/let_me_go.mp3.import",
+      "runtime_role": "正式BGM及原曲来源",
+      "assessment": "本轮未试听；2026-11-10用户明确确认已获得许可，可保留该曲。保留原曲和署名，依据用户确认，不冒称Agent审阅授权合同。",
+      "source_record": "assets/music/SOURCE.md",
+      "priority": "保留/用户确认许可",
+      "import_options": {}
+    },
+    {
+      "path": "assets/music/SOURCE.md",
+      "bytes": 1089,
+      "sha256": "e513c74e140a548a1147f8f415236c110f637cc94abf4a7fda588e87e758b526",
+      "direct_reference_files": [],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "not visual media",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "import_sidecar": null,
+      "runtime_role": "正式BGM及原曲来源",
+      "assessment": "本轮未试听；2026-11-10用户明确确认已获得许可，可保留该曲。保留原曲和署名，依据用户确认，不冒称Agent审阅授权合同。",
+      "source_record": "assets/music/SOURCE.md",
+      "priority": "保留/用户确认许可",
+      "import_options": {}
+    },
+    {
+      "path": "assets/roguelite/ball_animation_r5/generation.json",
+      "bytes": 3516,
+      "sha256": "fa371d56c1faaefae28203fa6c663e7856ce8dca93e1b3472952e6247eee0914",
+      "direct_reference_files": [],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "not visual media",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "import_sidecar": null,
+      "runtime_role": "正式动画图集或生成记录",
+      "assessment": "四格碰撞/痛脸/病毒碎裂；逐格外框不同，运行alpha裁切与主角framing补偿已有代码。图片被实看，连续时序未在本轮实机验证。",
+      "source_record": "assets/roguelite/ball_animation_r5/generation.json",
+      "priority": "P3",
+      "import_options": {}
+    },
+    {
+      "path": "assets/roguelite/ball_animation_r5/hashes.json",
+      "bytes": 631,
+      "sha256": "0e6139c529c6a170347407815e46416b29de17c5d42d04cc17ff19351f5ca1cb",
+      "direct_reference_files": [],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "not visual media",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "import_sidecar": null,
+      "runtime_role": "正式动画图集或生成记录",
+      "assessment": "四格碰撞/痛脸/病毒碎裂；逐格外框不同，运行alpha裁切与主角framing补偿已有代码。图片被实看，连续时序未在本轮实机验证。",
+      "source_record": "assets/roguelite/ball_animation_r5/generation.json",
+      "priority": "P3",
+      "import_options": {}
+    },
+    {
+      "path": "assets/roguelite/ball_animation_r5/hero_sheet.png",
+      "bytes": 1642612,
+      "sha256": "04078a6b36978d86f93fb426eb313afbf85bfb06a1d0b321548c05d4bc18d6c3",
+      "direct_reference_files": [],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "2026-11-10 实看 contact sheet；未逐图100%像素检查，未以此声称动态实机验收",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "size": [
+        1261,
+        1247
+      ],
+      "mode": "RGBA",
+      "alpha_bbox": [
+        0,
+        0,
+        1243,
+        1247
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "import_options": {
+        "compress/mode": "0",
+        "mipmaps/generate": "true",
+        "process/size_limit": "1024"
+      },
+      "import_sidecar": "assets/roguelite/ball_animation_r5/hero_sheet.png.import",
+      "visual_score_10": 7,
+      "runtime_role": "正式动画图集或生成记录",
+      "assessment": "四格碰撞/痛脸/病毒碎裂；逐格外框不同，运行alpha裁切与主角framing补偿已有代码。图片被实看，连续时序未在本轮实机验证。",
+      "source_record": "assets/roguelite/ball_animation_r5/generation.json",
+      "priority": "P3"
+    },
+    {
+      "path": "assets/roguelite/ball_animation_r5/virus_high_sheet.png",
+      "bytes": 1131078,
+      "sha256": "b9ed270f97c3fa049cc03eab32d4748e48ef724518fc4c5722dc84f19abdba5a",
+      "direct_reference_files": [],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "2026-11-10 实看 contact sheet；未逐图100%像素检查，未以此声称动态实机验收",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "alpha_bbox": [
+        0,
+        9,
+        1254,
+        1254
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "import_options": {
+        "compress/mode": "0",
+        "mipmaps/generate": "true",
+        "process/size_limit": "1024"
+      },
+      "import_sidecar": "assets/roguelite/ball_animation_r5/virus_high_sheet.png.import",
+      "visual_score_10": 7,
+      "runtime_role": "正式动画图集或生成记录",
+      "assessment": "四格碰撞/痛脸/病毒碎裂；逐格外框不同，运行alpha裁切与主角framing补偿已有代码。图片被实看，连续时序未在本轮实机验证。",
+      "source_record": "assets/roguelite/ball_animation_r5/generation.json",
+      "priority": "P3"
+    },
+    {
+      "path": "assets/roguelite/ball_animation_r5/virus_low_sheet.png",
+      "bytes": 1189921,
+      "sha256": "fa68e72c7a3780a52d6474129a78f5ef514e3880e5c9e4363471ecf785016aa8",
+      "direct_reference_files": [],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "2026-11-10 实看 contact sheet；未逐图100%像素检查，未以此声称动态实机验收",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "alpha_bbox": [
+        0,
+        0,
+        1253,
+        1254
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "import_options": {
+        "compress/mode": "0",
+        "mipmaps/generate": "true",
+        "process/size_limit": "1024"
+      },
+      "import_sidecar": "assets/roguelite/ball_animation_r5/virus_low_sheet.png.import",
+      "visual_score_10": 7,
+      "runtime_role": "正式动画图集或生成记录",
+      "assessment": "四格碰撞/痛脸/病毒碎裂；逐格外框不同，运行alpha裁切与主角framing补偿已有代码。图片被实看，连续时序未在本轮实机验证。",
+      "source_record": "assets/roguelite/ball_animation_r5/generation.json",
+      "priority": "P3"
+    },
+    {
+      "path": "assets/roguelite/ball_animation_r5/virus_mid_sheet.png",
+      "bytes": 1496476,
+      "sha256": "a6e21f230fbb7fe374065b3cef77d3a0ba355ab8d6b4421304134e94f16654cc",
+      "direct_reference_files": [],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "2026-11-10 实看 contact sheet；未逐图100%像素检查，未以此声称动态实机验收",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "alpha_bbox": [
+        0,
+        0,
+        1240,
+        1254
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "import_options": {
+        "compress/mode": "0",
+        "mipmaps/generate": "true",
+        "process/size_limit": "1024"
+      },
+      "import_sidecar": "assets/roguelite/ball_animation_r5/virus_mid_sheet.png.import",
+      "visual_score_10": 7,
+      "runtime_role": "正式动画图集或生成记录",
+      "assessment": "四格碰撞/痛脸/病毒碎裂；逐格外框不同，运行alpha裁切与主角framing补偿已有代码。图片被实看，连续时序未在本轮实机验证。",
+      "source_record": "assets/roguelite/ball_animation_r5/generation.json",
+      "priority": "P3"
+    },
+    {
+      "path": "assets/roguelite/ball_art_r4/claude.png",
+      "bytes": 1182082,
+      "sha256": "b9f56fc8a5ea14a13f9650f49ee8acb097a05784c532bf51f816cfa40df30a5c",
+      "direct_reference_files": [
+        "scripts/roguelite/presentation/ball_art.gd"
+      ],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "2026-11-10 实看 contact sheet；未逐图100%像素检查，未以此声称动态实机验收",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "alpha_bbox": [
+        0,
+        30,
+        1218,
+        1254
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "import_options": {
+        "compress/mode": "0",
+        "mipmaps/generate": "true",
+        "process/size_limit": "512"
+      },
+      "import_sidecar": "assets/roguelite/ball_art_r4/claude.png.import",
+      "visual_score_10": 8,
+      "runtime_role": "正式实体静态身份",
+      "assessment": "人物/病毒轮廓清楚，透明边界已记录；小尺寸需结合真实战场验证。伙伴/病毒采用稳定身份，出生max_hp选择纹理。",
+      "priority": "P3",
+      "source_record": "docs/art/ball_art_r4.json"
+    },
+    {
+      "path": "assets/roguelite/ball_art_r4/gpt.png",
+      "bytes": 1190263,
+      "sha256": "d018332215bcaff636218bec6e2a9448a49b368e0fc6765242d37e58671350c5",
+      "direct_reference_files": [
+        "scripts/roguelite/presentation/ball_art.gd",
+        "scenes/roguelite/presentation/companion_view.tscn"
+      ],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "2026-11-10 实看 contact sheet；未逐图100%像素检查，未以此声称动态实机验收",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "size": [
+        1312,
+        1199
+      ],
+      "mode": "RGBA",
+      "alpha_bbox": [
+        0,
+        31,
+        1228,
+        1118
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "import_options": {
+        "compress/mode": "0",
+        "mipmaps/generate": "true",
+        "process/size_limit": "512"
+      },
+      "import_sidecar": "assets/roguelite/ball_art_r4/gpt.png.import",
+      "visual_score_10": 8,
+      "runtime_role": "正式实体静态身份",
+      "assessment": "人物/病毒轮廓清楚，透明边界已记录；小尺寸需结合真实战场验证。伙伴/病毒采用稳定身份，出生max_hp选择纹理。",
+      "priority": "P3",
+      "source_record": "docs/art/ball_art_r4.json"
+    },
+    {
+      "path": "assets/roguelite/ball_art_r4/hero.png",
+      "bytes": 1436644,
+      "sha256": "a82390e7e5b604cbd1cc011b2d21365eb07340b834a737c29c380a0654e4f0d6",
+      "direct_reference_files": [
+        "scripts/roguelite/presentation/ball_art.gd",
+        "scenes/roguelite/presentation/fish_ball_view.tscn"
+      ],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "2026-11-10 实看 contact sheet；未逐图100%像素检查，未以此声称动态实机验收",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "alpha_bbox": [
+        0,
+        11,
+        1198,
+        1200
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "import_options": {
+        "compress/mode": "0",
+        "mipmaps/generate": "true",
+        "process/size_limit": "512"
+      },
+      "import_sidecar": "assets/roguelite/ball_art_r4/hero.png.import",
+      "visual_score_10": 8,
+      "runtime_role": "正式实体静态身份",
+      "assessment": "人物/病毒轮廓清楚，透明边界已记录；小尺寸需结合真实战场验证。蓝发蓝瞳、头饰、鳍耳、鲸尾符合DS人物；不替换为动物鱼。",
+      "priority": "P3",
+      "source_record": "docs/art/ball_art_r4.json"
+    },
+    {
+      "path": "assets/roguelite/ball_art_r4/qwen.png",
+      "bytes": 1279563,
+      "sha256": "0f95181ba18a4d9a1f09e82fb22865c8b4d32057a002595b5d41762cb8791424",
+      "direct_reference_files": [
+        "scripts/roguelite/presentation/ball_art.gd"
+      ],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "2026-11-10 实看 contact sheet；未逐图100%像素检查，未以此声称动态实机验收",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "alpha_bbox": [
+        0,
+        47,
+        1234,
+        1254
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "import_options": {
+        "compress/mode": "0",
+        "mipmaps/generate": "true",
+        "process/size_limit": "512"
+      },
+      "import_sidecar": "assets/roguelite/ball_art_r4/qwen.png.import",
+      "visual_score_10": 8,
+      "runtime_role": "正式实体静态身份",
+      "assessment": "人物/病毒轮廓清楚，透明边界已记录；小尺寸需结合真实战场验证。伙伴/病毒采用稳定身份，出生max_hp选择纹理。",
+      "priority": "P3",
+      "source_record": "docs/art/ball_art_r4.json"
+    },
+    {
+      "path": "assets/roguelite/ball_art_r4/virus_high.png",
+      "bytes": 1036880,
+      "sha256": "1fb1f173481fd48660a257b859b610206549f47de9b084051e9f7bdf90da74b3",
+      "direct_reference_files": [
+        "scripts/roguelite/presentation/ball_art.gd",
+        "scripts/roguelite/presentation/boss_view.gd"
+      ],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "2026-11-10 实看 contact sheet；未逐图100%像素检查，未以此声称动态实机验收",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "alpha_bbox": [
+        0,
+        19,
+        1234,
+        1254
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "import_options": {
+        "compress/mode": "0",
+        "mipmaps/generate": "true",
+        "process/size_limit": "512"
+      },
+      "import_sidecar": "assets/roguelite/ball_art_r4/virus_high.png.import",
+      "visual_score_10": 8,
+      "runtime_role": "正式实体静态身份",
+      "assessment": "人物/病毒轮廓清楚，透明边界已记录；小尺寸需结合真实战场验证。伙伴/病毒采用稳定身份，出生max_hp选择纹理。",
+      "priority": "P3",
+      "source_record": "docs/art/ball_art_r4.json"
+    },
+    {
+      "path": "assets/roguelite/ball_art_r4/virus_low.png",
+      "bytes": 1013269,
+      "sha256": "c09cc29e508f32724426177823a12c6bbb47a2722f84738efe6a916f2be96920",
+      "direct_reference_files": [
+        "scripts/roguelite/presentation/ball_art.gd"
+      ],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "2026-11-10 实看 contact sheet；未逐图100%像素检查，未以此声称动态实机验收",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "alpha_bbox": [
+        0,
+        15,
+        1234,
+        1232
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "import_options": {
+        "compress/mode": "0",
+        "mipmaps/generate": "true",
+        "process/size_limit": "512"
+      },
+      "import_sidecar": "assets/roguelite/ball_art_r4/virus_low.png.import",
+      "visual_score_10": 8,
+      "runtime_role": "正式实体静态身份",
+      "assessment": "人物/病毒轮廓清楚，透明边界已记录；小尺寸需结合真实战场验证。伙伴/病毒采用稳定身份，出生max_hp选择纹理。",
+      "priority": "P3",
+      "source_record": "docs/art/ball_art_r4.json"
+    },
+    {
+      "path": "assets/roguelite/ball_art_r4/virus_mid.png",
+      "bytes": 1185977,
+      "sha256": "43d39506e55cdd0ff4cb13de8c57569fcb52d516abd8f6514b68208158357a31",
+      "direct_reference_files": [
+        "scripts/roguelite/presentation/ball_art.gd"
+      ],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "2026-11-10 实看 contact sheet；未逐图100%像素检查，未以此声称动态实机验收",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "alpha_bbox": [
+        0,
+        3,
+        1226,
+        1254
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "import_options": {
+        "compress/mode": "0",
+        "mipmaps/generate": "true",
+        "process/size_limit": "512"
+      },
+      "import_sidecar": "assets/roguelite/ball_art_r4/virus_mid.png.import",
+      "visual_score_10": 8,
+      "runtime_role": "正式实体静态身份",
+      "assessment": "人物/病毒轮廓清楚，透明边界已记录；小尺寸需结合真实战场验证。伙伴/病毒采用稳定身份，出生max_hp选择纹理。",
+      "priority": "P3",
+      "source_record": "docs/art/ball_art_r4.json"
+    },
+    {
+      "path": "assets/roguelite/presentation/fat_fish_ball_v1.png",
+      "bytes": 1218931,
+      "sha256": "9afe52aa4ecbe79d112aa02acae7e4231b43d7ee8fd0aeabbf858e87731f90e2",
+      "direct_reference_files": [],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "2026-11-10 实看 contact sheet；未逐图100%像素检查，未以此声称动态实机验收",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "alpha_bbox": [
+        0,
+        8,
+        1254,
+        1254
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "import_options": {
+        "compress/mode": "0",
+        "mipmaps/generate": "true",
+        "process/size_limit": "256"
+      },
+      "import_sidecar": "assets/roguelite/presentation/fat_fish_ball_v1.png.import",
+      "visual_score_10": 7,
+      "runtime_role": "历史资产，无脚本/场景/资源字面引用；all_resources仍可能打包",
+      "assessment": "保留历史，不应继续作为正式角色；旧fat_fish_ball是动物鱼，与DS身份不符。",
+      "priority": "P2",
+      "source_record": "assets/roguelite/presentation/generation_metadata.json"
+    },
+    {
+      "path": "assets/roguelite/presentation/fragile_crate_v1.png",
+      "bytes": 1042420,
+      "sha256": "a8171d8d7693a3d4084fc28c2bb28f14a80d690542bbad02fafc9f0bbc9e760e",
+      "direct_reference_files": [],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "2026-11-10 实看 contact sheet；未逐图100%像素检查，未以此声称动态实机验收",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "alpha_bbox": [
+        0,
+        0,
+        1251,
+        1254
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "import_options": {
+        "compress/mode": "0",
+        "mipmaps/generate": "true",
+        "process/size_limit": "256"
+      },
+      "import_sidecar": "assets/roguelite/presentation/fragile_crate_v1.png.import",
+      "visual_score_10": 7,
+      "runtime_role": "历史资产，无脚本/场景/资源字面引用；all_resources仍可能打包",
+      "assessment": "保留历史，不应继续作为正式角色；旧fat_fish_ball是动物鱼，与DS身份不符。",
+      "priority": "P3",
+      "source_record": "assets/roguelite/presentation/generation_metadata.json"
+    },
+    {
+      "path": "assets/roguelite/presentation/generation_metadata.json",
+      "bytes": 7159,
+      "sha256": "df0cb46d53a098e9aa98f21ce50d68c67bdd4a6ea6743a2e052460e335b20d7a",
+      "direct_reference_files": [],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "not visual media",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "import_sidecar": null,
+      "runtime_role": "历史资产，无脚本/场景/资源字面引用；all_resources仍可能打包",
+      "assessment": "保留历史，不应继续作为正式角色；旧fat_fish_ball是动物鱼，与DS身份不符。",
+      "priority": "P3",
+      "source_record": "assets/roguelite/presentation/generation_metadata.json",
+      "import_options": {}
+    },
+    {
+      "path": "assets/roguelite/presentation/heavy_shell_v1.png",
+      "bytes": 1400083,
+      "sha256": "ceeeb913bddfddf912ecef3d422e8e8cda3d491cc79b8f809f3ce5416a58044f",
+      "direct_reference_files": [],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "2026-11-10 实看 contact sheet；未逐图100%像素检查，未以此声称动态实机验收",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "alpha_bbox": [
+        32,
+        49,
+        1216,
+        1232
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "import_options": {
+        "compress/mode": "0",
+        "mipmaps/generate": "true",
+        "process/size_limit": "256"
+      },
+      "import_sidecar": "assets/roguelite/presentation/heavy_shell_v1.png.import",
+      "visual_score_10": 7,
+      "runtime_role": "历史资产，无脚本/场景/资源字面引用；all_resources仍可能打包",
+      "assessment": "保留历史，不应继续作为正式角色；旧fat_fish_ball是动物鱼，与DS身份不符。",
+      "priority": "P3",
+      "source_record": "assets/roguelite/presentation/generation_metadata.json"
+    },
+    {
+      "path": "assets/roguelite/presentation/turret_base_v1.png",
+      "bytes": 899877,
+      "sha256": "1bf15f19100f0fae3571ec6b0509b5a32d63f5ce27dde1052872668859cbf533",
+      "direct_reference_files": [],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "2026-11-10 实看 contact sheet；未逐图100%像素检查，未以此声称动态实机验收",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "alpha_bbox": [
+        0,
+        49,
+        1242,
+        1254
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "import_options": {
+        "compress/mode": "0",
+        "mipmaps/generate": "true",
+        "process/size_limit": "256"
+      },
+      "import_sidecar": "assets/roguelite/presentation/turret_base_v1.png.import",
+      "visual_score_10": 7,
+      "runtime_role": "历史资产，无脚本/场景/资源字面引用；all_resources仍可能打包",
+      "assessment": "保留历史，不应继续作为正式角色；旧fat_fish_ball是动物鱼，与DS身份不符。",
+      "priority": "P3",
+      "source_record": "assets/roguelite/presentation/generation_metadata.json"
+    },
+    {
+      "path": "assets/ui/aim_kenney/KENNEY_PARTICLE_LICENSE.txt",
+      "bytes": 629,
+      "sha256": "7edd59126c258e602e69905a0517cf51bedea489b1a69eb06a77edee1769e81e",
+      "direct_reference_files": [],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "not visual media",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "import_sidecar": null,
+      "runtime_role": "正式瞄准头/尾流及来源",
+      "assessment": "纯白原图以运行颜色调制呈现，需在暗场与亮弹窗下分别看对比；navigation为可选对照。",
+      "source_record": "assets/ui/aim_kenney/SOURCE.md",
+      "priority": "P3",
+      "import_options": {}
+    },
+    {
+      "path": "assets/ui/aim_kenney/light_03.png",
+      "bytes": 94243,
+      "sha256": "4e5ebf85c0b9b76336037330f6f6003aec0bfba4c266aba4e24f5876c0bd1d96",
+      "direct_reference_files": [
+        "scripts/roguelite/presentation/aim_indicator.gd"
+      ],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "2026-11-10 实看 contact sheet；未逐图100%像素检查，未以此声称动态实机验收",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "size": [
+        512,
+        512
+      ],
+      "mode": "P",
+      "import_options": {
+        "compress/mode": "0",
+        "mipmaps/generate": "false",
+        "process/size_limit": "0"
+      },
+      "import_sidecar": "assets/ui/aim_kenney/light_03.png.import",
+      "visual_score_10": 7,
+      "runtime_role": "正式瞄准头/尾流及来源",
+      "assessment": "纯白原图以运行颜色调制呈现，需在暗场与亮弹窗下分别看对比；navigation为可选对照。",
+      "source_record": "assets/ui/aim_kenney/SOURCE.md",
+      "priority": "P3"
+    },
+    {
+      "path": "assets/ui/aim_kenney/navigation_e.png",
+      "bytes": 420,
+      "sha256": "96d308d1cca1f3958df78708cde12511f5ade75ce9207d1fbe32ea44ace07628",
+      "direct_reference_files": [
+        "scripts/roguelite/presentation/aim_indicator.gd"
+      ],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "2026-11-10 实看 contact sheet；未逐图100%像素检查，未以此声称动态实机验收",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "size": [
+        64,
+        64
+      ],
+      "mode": "P",
+      "import_options": {
+        "compress/mode": "0",
+        "mipmaps/generate": "false",
+        "process/size_limit": "0"
+      },
+      "import_sidecar": "assets/ui/aim_kenney/navigation_e.png.import",
+      "visual_score_10": 7,
+      "runtime_role": "正式瞄准头/尾流及来源",
+      "assessment": "纯白原图以运行颜色调制呈现，需在暗场与亮弹窗下分别看对比；navigation为可选对照。",
+      "source_record": "assets/ui/aim_kenney/SOURCE.md",
+      "priority": "P3"
+    },
+    {
+      "path": "assets/ui/aim_kenney/pointer_toon_a.png",
+      "bytes": 496,
+      "sha256": "43338b67a5167c5a4a71b563c50b14f11e219531780fd220334289fbb04ea230",
+      "direct_reference_files": [
+        "scripts/roguelite/presentation/aim_indicator.gd"
+      ],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "2026-11-10 实看 contact sheet；未逐图100%像素检查，未以此声称动态实机验收",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "size": [
+        64,
+        64
+      ],
+      "mode": "P",
+      "import_options": {
+        "compress/mode": "0",
+        "mipmaps/generate": "false",
+        "process/size_limit": "0"
+      },
+      "import_sidecar": "assets/ui/aim_kenney/pointer_toon_a.png.import",
+      "visual_score_10": 7,
+      "runtime_role": "正式瞄准头/尾流及来源",
+      "assessment": "纯白原图以运行颜色调制呈现，需在暗场与亮弹窗下分别看对比；navigation为可选对照。",
+      "source_record": "assets/ui/aim_kenney/SOURCE.md",
+      "priority": "P3"
+    },
+    {
+      "path": "assets/ui/aim_kenney/SOURCE.md",
+      "bytes": 1478,
+      "sha256": "c0c032870357d5158203d40070dbed8d55255163aefea513a0e943e8da28e2bc",
+      "direct_reference_files": [],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "not visual media",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "import_sidecar": null,
+      "runtime_role": "正式瞄准头/尾流及来源",
+      "assessment": "纯白原图以运行颜色调制呈现，需在暗场与亮弹窗下分别看对比；navigation为可选对照。",
+      "source_record": "assets/ui/aim_kenney/SOURCE.md",
+      "priority": "P3",
+      "import_options": {}
+    },
+    {
+      "path": "assets/ui/aim_kenney/sources.json",
+      "bytes": 1592,
+      "sha256": "557b9544e8cdae022fd45b8b9d8a48cecf8e1dda69701c92883f678984b65a04",
+      "direct_reference_files": [],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "not visual media",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "import_sidecar": null,
+      "runtime_role": "正式瞄准头/尾流及来源",
+      "assessment": "纯白原图以运行颜色调制呈现，需在暗场与亮弹窗下分别看对比；navigation为可选对照。",
+      "source_record": "assets/ui/aim_kenney/SOURCE.md",
+      "priority": "P3",
+      "import_options": {}
+    },
+    {
+      "path": "assets/ui/aim_kenney/trace_06.png",
+      "bytes": 34070,
+      "sha256": "7f9fde6077987e13760cdfc82cce5ab75c798999c53276abdfa807f4ef6e057d",
+      "direct_reference_files": [
+        "scripts/roguelite/presentation/aim_indicator.gd"
+      ],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "2026-11-10 实看 contact sheet；未逐图100%像素检查，未以此声称动态实机验收",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "size": [
+        512,
+        512
+      ],
+      "mode": "P",
+      "import_options": {
+        "compress/mode": "0",
+        "mipmaps/generate": "false",
+        "process/size_limit": "0"
+      },
+      "import_sidecar": "assets/ui/aim_kenney/trace_06.png.import",
+      "visual_score_10": 7,
+      "runtime_role": "正式瞄准头/尾流及来源",
+      "assessment": "纯白原图以运行颜色调制呈现，需在暗场与亮弹窗下分别看对比；navigation为可选对照。",
+      "source_record": "assets/ui/aim_kenney/SOURCE.md",
+      "priority": "P3"
+    },
+    {
+      "path": "assets/ui/app_icon/android_background.svg",
+      "visual_review": "非位图；按来源说明/几何源码读取核对",
+      "priority": "保留/待真机裁切",
+      "bytes": 141,
+      "sha256": "d546a6d52e540226d3be02d777cb495542d1e19e1dcccb9473d0efcd1cb1dffb",
+      "direct_reference_files": [
+        "export_presets.cfg"
+      ],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "import_sidecar": "assets/ui/app_icon/android_background.svg.import",
+      "import_options": {
+        "compress/mode": "0",
+        "mipmaps/generate": "false",
+        "process/size_limit": "0",
+        "svg/scale": "1.0"
+      },
+      "runtime_role": "Android adaptive图标前景/背景与来源",
+      "source_record": "assets/ui/app_icon/ANDROID_SOURCE.md",
+      "license_evidence": "新增DS前景内置imagegen；背景为项目纯色SVG，未修改Live2D",
+      "assessment": "DS团子居中、透明前景、纯深蓝背景；已核对源图/背景几何，系统桌面裁切仍需真机验证。",
+      "visual_score_10": 8.0
+    },
+    {
+      "path": "assets/ui/app_icon/android_foreground.png",
+      "visual_review": "2026-11-10直接打开新PNG核对DS身份和中央留白",
+      "priority": "保留/待真机裁切",
+      "bytes": 722077,
+      "sha256": "82fccfa149d6649f890d2f7e16781a2c61be0534ccfe2beb628bc03515d26e58",
+      "direct_reference_files": [
+        "export_presets.cfg"
+      ],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "import_sidecar": "assets/ui/app_icon/android_foreground.png.import",
+      "import_options": {
+        "compress/mode": "0",
+        "mipmaps/generate": "true",
+        "process/size_limit": "512"
+      },
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "alpha_bbox": [
+        0,
+        37,
+        1192,
+        1212
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "runtime_role": "Android adaptive图标前景/背景与来源",
+      "source_record": "assets/ui/app_icon/ANDROID_SOURCE.md",
+      "license_evidence": "新增DS前景内置imagegen；背景为项目纯色SVG，未修改Live2D",
+      "assessment": "DS团子居中、透明前景、纯深蓝背景；已核对源图/背景几何，系统桌面裁切仍需真机验证。",
+      "visual_score_10": 8.0
+    },
+    {
+      "path": "assets/ui/app_icon/android_generation.json",
+      "visual_review": "非位图；按来源说明/几何源码读取核对",
+      "priority": "保留/待真机裁切",
+      "bytes": 1955,
+      "sha256": "dca2376f05c4682dbbc2c7be67e776a8badba944eee221771ee2d1a0a81dc8c8",
+      "direct_reference_files": [],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "import_sidecar": null,
+      "import_options": {},
+      "runtime_role": "Android adaptive图标前景/背景与来源",
+      "source_record": "assets/ui/app_icon/ANDROID_SOURCE.md",
+      "license_evidence": "新增DS前景内置imagegen；背景为项目纯色SVG，未修改Live2D",
+      "assessment": "DS团子居中、透明前景、纯深蓝背景；已核对源图/背景几何，系统桌面裁切仍需真机验证。",
+      "visual_score_10": 8.0
+    },
+    {
+      "path": "assets/ui/app_icon/ANDROID_SOURCE.md",
+      "visual_review": "非位图；按来源说明/几何源码读取核对",
+      "priority": "保留/待真机裁切",
+      "bytes": 652,
+      "sha256": "227a708cb4db03574df7c6289ac934dbc084eadff905da5f4a835cc2b9014ca1",
+      "direct_reference_files": [],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "import_sidecar": null,
+      "import_options": {},
+      "runtime_role": "Android adaptive图标前景/背景与来源",
+      "source_record": "assets/ui/app_icon/ANDROID_SOURCE.md",
+      "license_evidence": "新增DS前景内置imagegen；背景为项目纯色SVG，未修改Live2D",
+      "assessment": "DS团子居中、透明前景、纯深蓝背景；已核对源图/背景几何，系统桌面裁切仍需真机验证。",
+      "visual_score_10": 8.0
+    },
+    {
+      "path": "assets/ui/app_icon/playaball.ico",
+      "bytes": 169158,
+      "sha256": "89d2532abc935d9e10d343b82f56947ce1f6ed4d110293dacc14ec67797ddc76",
+      "direct_reference_files": [
+        "project.godot",
+        "export_presets.cfg"
+      ],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "2026-11-10 实看 contact sheet；未逐图100%像素检查，未以此声称动态实机验收",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGB",
+      "import_options": {},
+      "import_sidecar": null,
+      "visual_score_10": 7,
+      "runtime_role": "正式Windows/工程图标",
+      "assessment": "DS团子辨识强；Android adaptive前景/背景尚缺，不能直接假定裁切安全。",
+      "source_record": "assets/ui/app_icon/SOURCE.md",
+      "priority": "P2"
+    },
+    {
+      "path": "assets/ui/app_icon/playaball.png",
+      "bytes": 1848108,
+      "sha256": "4884d5a872fe24c28ef75529158789f514ecc3e3ae7a379214cb8c742285ae13",
+      "direct_reference_files": [
+        "project.godot",
+        "export_presets.cfg"
+      ],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "2026-11-10 实看 contact sheet；未逐图100%像素检查，未以此声称动态实机验收",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGB",
+      "import_options": {
+        "compress/mode": "0",
+        "mipmaps/generate": "false",
+        "process/size_limit": "0"
+      },
+      "import_sidecar": "assets/ui/app_icon/playaball.png.import",
+      "visual_score_10": 7,
+      "runtime_role": "正式Windows/工程图标",
+      "assessment": "DS团子辨识强；Android adaptive前景/背景尚缺，不能直接假定裁切安全。",
+      "source_record": "assets/ui/app_icon/SOURCE.md",
+      "priority": "P2"
+    },
+    {
+      "path": "assets/ui/app_icon/SOURCE.md",
+      "bytes": 603,
+      "sha256": "37bfd75d404f8dc68ca2b8f8f2a5e94c2fcafcce34801fa54c1629ecd3fbf1c9",
+      "direct_reference_files": [],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "not visual media",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "import_sidecar": null,
+      "runtime_role": "正式Windows/工程图标",
+      "assessment": "DS团子辨识强；Android adaptive前景/背景尚缺，不能直接假定裁切安全。",
+      "source_record": "assets/ui/app_icon/SOURCE.md",
+      "priority": "P2",
+      "import_options": {}
+    },
+    {
+      "path": "assets/ui/arena_skin.png",
+      "bytes": 1452820,
+      "sha256": "478dd1295b95dd78b8ce597ce2e89b2df02de8fd6081e12eb25ade6d74af04de",
+      "direct_reference_files": [
+        "scripts/ui/arena_skin.gd",
+        "scripts/roguelite/maps/map_layout.gd"
+      ],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "2026-11-10 实看 contact sheet；未逐图100%像素检查，未以此声称动态实机验收",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "size": [
+        1672,
+        941
+      ],
+      "mode": "RGB",
+      "import_options": {
+        "compress/mode": "0",
+        "mipmaps/generate": "false",
+        "process/size_limit": "0"
+      },
+      "import_sidecar": "assets/ui/arena_skin.png.import",
+      "visual_score_10": 7,
+      "runtime_role": "正式UI（部分旧母版/未引用）",
+      "source_record": "docs/tutorials/024-fat-fish-menu.md; docs/tutorials/026-ui-game-integration.md",
+      "priority": "P3",
+      "assessment": "深绿场地与蓝白弹窗风格不同，现有代码仅取无字地面墙条，不显示图中示例HUD。暗地面利于高对比预警，不应为了统一而变成刺眼白场。"
+    },
+    {
+      "path": "assets/ui/build_feedback/generation.json",
+      "visual_review": "非位图；按来源说明/几何源码读取核对",
+      "priority": "已接入/保留",
+      "bytes": 1856,
+      "sha256": "7be792dca7d22fcbe2ab232f0e57b0bd358e5f17d29139a967b3501ea8e0f654",
+      "direct_reference_files": [],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "import_sidecar": null,
+      "import_options": {},
+      "runtime_role": "正式构筑成功提示徽记/生成来源",
+      "source_record": "assets/ui/build_feedback/SOURCE.md",
+      "license_evidence": "内置imagegen完整prompt与指纹在generation.json",
+      "assessment": "2x2接力/病毒爆破/余势/整备图集；按实际导入尺寸/2裁，显示34px。精准连击复用接力徽记，不冒充爆破。",
+      "visual_score_10": 8.0
+    },
+    {
+      "path": "assets/ui/build_feedback/SOURCE.md",
+      "visual_review": "非位图；按来源说明/几何源码读取核对",
+      "priority": "已接入/保留",
+      "bytes": 697,
+      "sha256": "3dcb1b4e27a79d147caf856786eb044fdb361176f6c441b6b575716a16b3d444",
+      "direct_reference_files": [],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "import_sidecar": null,
+      "import_options": {},
+      "runtime_role": "正式构筑成功提示徽记/生成来源",
+      "source_record": "assets/ui/build_feedback/SOURCE.md",
+      "license_evidence": "内置imagegen完整prompt与指纹在generation.json",
+      "assessment": "2x2接力/病毒爆破/余势/整备图集；按实际导入尺寸/2裁，显示34px。精准连击复用接力徽记，不冒充爆破。",
+      "visual_score_10": 8.0
+    },
+    {
+      "path": "assets/ui/build_feedback/strategy_badges.png",
+      "visual_review": "2026-11-10直接打开源图并核对原生GUI图标",
+      "priority": "已接入/保留",
+      "bytes": 1511470,
+      "sha256": "8cab675ff33d792e520adfe83174d35f68a00f0316ae2ac7c365c364b8b7c9d3",
+      "direct_reference_files": [
+        "scripts/roguelite/presentation/build_feedback.gd"
+      ],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "import_sidecar": "assets/ui/build_feedback/strategy_badges.png.import",
+      "import_options": {
+        "compress/mode": "0",
+        "mipmaps/generate": "true",
+        "process/size_limit": "512"
+      },
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "alpha_bbox": [
+        0,
+        0,
+        1254,
+        1254
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "runtime_role": "正式构筑成功提示徽记/生成来源",
+      "source_record": "assets/ui/build_feedback/SOURCE.md",
+      "license_evidence": "内置imagegen完整prompt与指纹在generation.json",
+      "assessment": "2x2接力/病毒爆破/余势/整备图集；按实际导入尺寸/2裁，显示34px。精准连击复用接力徽记，不冒充爆破。",
+      "visual_score_10": 8.0
+    },
+    {
+      "path": "assets/ui/ds_console/button.png",
+      "bytes": 94391,
+      "sha256": "80fe0b55607f43c65f4e9f1e2eb78861c72601924a421c5ec7d49a2b4044bb31",
+      "direct_reference_files": [],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "2026-11-10 实看 contact sheet；未逐图100%像素检查，未以此声称动态实机验收",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "size": [
+        1000,
+        112
+      ],
+      "mode": "RGBA",
+      "alpha_bbox": [
+        0,
+        0,
+        1000,
+        112
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "import_options": {
+        "compress/mode": "0",
+        "mipmaps/generate": "false",
+        "process/size_limit": "0"
+      },
+      "import_sidecar": "assets/ui/ds_console/button.png.import",
+      "visual_score_10": 7,
+      "runtime_role": "正式蓝白UI/人物；button_source仅生产母版",
+      "assessment": "DS身份一致；人物八帧存在轻微构图差异，减少动态固定首帧。浅面板须用深色正文和足够间距。",
+      "source_record": "assets/ui/ds_console/SOURCE.md",
+      "priority": "P3"
+    },
+    {
+      "path": "assets/ui/ds_console/button_source.png",
+      "bytes": 503965,
+      "sha256": "ef176ba0f183e850a1344ba461d14e11755412907b551982709eb96d1551b3f4",
+      "direct_reference_files": [],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "2026-11-10 实看 contact sheet；未逐图100%像素检查，未以此声称动态实机验收",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "size": [
+        2125,
+        740
+      ],
+      "mode": "RGBA",
+      "alpha_bbox": [
+        22,
+        33,
+        2105,
+        700
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "import_options": {
+        "compress/mode": "0",
+        "mipmaps/generate": "false",
+        "process/size_limit": "0"
+      },
+      "import_sidecar": "assets/ui/ds_console/button_source.png.import",
+      "visual_score_10": 7,
+      "runtime_role": "正式蓝白UI/人物；button_source仅生产母版",
+      "assessment": "DS身份一致；人物八帧存在轻微构图差异，减少动态固定首帧。浅面板须用深色正文和足够间距。",
+      "source_record": "assets/ui/ds_console/SOURCE.md",
+      "priority": "P3"
+    },
+    {
+      "path": "assets/ui/ds_console/ds_maid_frames.png",
+      "bytes": 2572620,
+      "sha256": "9473498707cdfd3803acc45a86e9474b278a9e2a5483e89402dba2abc8decd42",
+      "direct_reference_files": [
+        "scripts/ui/ocean_motion.gd",
+        "scenes/roguelite/rest_panel.tscn"
+      ],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "2026-11-10 实看 contact sheet；未逐图100%像素检查，未以此声称动态实机验收",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "alpha_bbox": [
+        0,
+        0,
+        1535,
+        1024
+      ],
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "import_options": {
+        "compress/mode": "0",
+        "mipmaps/generate": "false",
+        "process/size_limit": "0"
+      },
+      "import_sidecar": "assets/ui/ds_console/ds_maid_frames.png.import",
+      "visual_score_10": 7,
+      "runtime_role": "正式蓝白UI/人物；button_source仅生产母版",
+      "assessment": "DS身份一致；人物八帧存在轻微构图差异，减少动态固定首帧。浅面板须用深色正文和足够间距。",
+      "source_record": "assets/ui/ds_console/SOURCE.md",
+      "priority": "P3"
+    },
+    {
+      "path": "assets/ui/ds_console/generation.json",
+      "bytes": 6861,
+      "sha256": "6dfd8037dab841a3e8a6881bca0e45304bc5bbfcbee782584b37608c5309e414",
+      "direct_reference_files": [],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "not visual media",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "import_sidecar": null,
+      "runtime_role": "正式蓝白UI/人物；button_source仅生产母版",
+      "assessment": "DS身份一致；人物八帧存在轻微构图差异，减少动态固定首帧。浅面板须用深色正文和足够间距。",
+      "source_record": "assets/ui/ds_console/SOURCE.md",
+      "priority": "P3",
+      "import_options": {}
+    },
+    {
+      "path": "assets/ui/ds_console/menu_room.png",
+      "bytes": 1590949,
+      "sha256": "57ee03cce3a7e3dbae701330d5ff081da895813a53a84a4ea6179c22fba3c03f",
+      "direct_reference_files": [],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "2026-11-10 实看 contact sheet；未逐图100%像素检查，未以此声称动态实机验收",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "size": [
+        1672,
+        940
+      ],
+      "mode": "RGB",
+      "import_options": {
+        "compress/mode": "0",
+        "mipmaps/generate": "false",
+        "process/size_limit": "0"
+      },
+      "import_sidecar": "assets/ui/ds_console/menu_room.png.import",
+      "visual_score_10": 7,
+      "runtime_role": "正式蓝白UI/人物；button_source仅生产母版",
+      "assessment": "DS身份一致；人物八帧存在轻微构图差异，减少动态固定首帧。浅面板须用深色正文和足够间距。",
+      "source_record": "assets/ui/ds_console/SOURCE.md",
+      "priority": "P3"
+    },
+    {
+      "path": "assets/ui/ds_console/panel.png",
+      "bytes": 379653,
+      "sha256": "98498e2adf233a5f467b61d095d5ca8486011b27aec4b45434fee1e2d0342f13",
+      "direct_reference_files": [],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "2026-11-10 实看 contact sheet；未逐图100%像素检查，未以此声称动态实机验收",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "size": [
+        768,
+        512
+      ],
+      "mode": "RGBA",
+      "alpha_bbox": [
+        0,
+        0,
+        768,
+        512
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "import_options": {
+        "compress/mode": "0",
+        "mipmaps/generate": "false",
+        "process/size_limit": "0"
+      },
+      "import_sidecar": "assets/ui/ds_console/panel.png.import",
+      "visual_score_10": 7,
+      "runtime_role": "正式蓝白UI/人物；button_source仅生产母版",
+      "assessment": "DS身份一致；人物八帧存在轻微构图差异，减少动态固定首帧。浅面板须用深色正文和足够间距。",
+      "source_record": "assets/ui/ds_console/SOURCE.md",
+      "priority": "P3"
+    },
+    {
+      "path": "assets/ui/ds_console/result_generation.json",
+      "bytes": 2901,
+      "sha256": "0577539d6d4f3d637cba59066c70c82dc86f6b41c391c5162c1f99c997d9d30b",
+      "direct_reference_files": [],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "not visual media",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "import_sidecar": null,
+      "runtime_role": "正式蓝白UI/人物；button_source仅生产母版",
+      "assessment": "DS身份一致；人物八帧存在轻微构图差异，减少动态固定首帧。浅面板须用深色正文和足够间距。",
+      "source_record": "assets/ui/ds_console/SOURCE.md",
+      "priority": "P3",
+      "import_options": {}
+    },
+    {
+      "path": "assets/ui/ds_console/result_retry.png",
+      "bytes": 1457955,
+      "sha256": "00a4e7049ad1c18e787f91311675561a3a704d67214d416d502af1b33b0496dc",
+      "direct_reference_files": [
+        "scripts/ui/result_body.gd"
+      ],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "2026-11-10 实看 contact sheet；未逐图100%像素检查，未以此声称动态实机验收",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "size": [
+        1144,
+        1375
+      ],
+      "mode": "RGBA",
+      "alpha_bbox": [
+        0,
+        23,
+        1128,
+        1375
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "import_options": {
+        "compress/mode": "0",
+        "mipmaps/generate": "false",
+        "process/size_limit": "0"
+      },
+      "import_sidecar": "assets/ui/ds_console/result_retry.png.import",
+      "visual_score_10": 7,
+      "runtime_role": "正式蓝白UI/人物；button_source仅生产母版",
+      "assessment": "DS身份一致；人物八帧存在轻微构图差异，减少动态固定首帧。浅面板须用深色正文和足够间距。",
+      "source_record": "assets/ui/ds_console/SOURCE.md",
+      "priority": "P3"
+    },
+    {
+      "path": "assets/ui/ds_console/result_victory.png",
+      "bytes": 1510771,
+      "sha256": "5a755cd5a4068366fec7935913d9430fd5576018124bd49f3d89bffb0297700a",
+      "direct_reference_files": [
+        "scripts/ui/result_body.gd"
+      ],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "2026-11-10 实看 contact sheet；未逐图100%像素检查，未以此声称动态实机验收",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "size": [
+        1144,
+        1375
+      ],
+      "mode": "RGBA",
+      "alpha_bbox": [
+        0,
+        27,
+        1112,
+        1359
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "import_options": {
+        "compress/mode": "0",
+        "mipmaps/generate": "false",
+        "process/size_limit": "0"
+      },
+      "import_sidecar": "assets/ui/ds_console/result_victory.png.import",
+      "visual_score_10": 7,
+      "runtime_role": "正式蓝白UI/人物；button_source仅生产母版",
+      "assessment": "DS身份一致；人物八帧存在轻微构图差异，减少动态固定首帧。浅面板须用深色正文和足够间距。",
+      "source_record": "assets/ui/ds_console/SOURCE.md",
+      "priority": "P3"
+    },
+    {
+      "path": "assets/ui/ds_console/SOURCE.md",
+      "bytes": 1843,
+      "sha256": "a1eab4e952f0103bcba2dfa5228879efea029f7a084e11c705fdc53a1562e6b0",
+      "direct_reference_files": [],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "not visual media",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "import_sidecar": null,
+      "runtime_role": "正式蓝白UI/人物；button_source仅生产母版",
+      "assessment": "DS身份一致；人物八帧存在轻微构图差异，减少动态固定首帧。浅面板须用深色正文和足够间距。",
+      "source_record": "assets/ui/ds_console/SOURCE.md",
+      "priority": "P3",
+      "import_options": {}
+    },
+    {
+      "path": "assets/ui/fat_fish_exit_button_full.png",
+      "bytes": 1065207,
+      "sha256": "6b70d23710c3b7fe3a3c13784431e49cd61d4651560929fef77c200bf44b4075",
+      "direct_reference_files": [],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "2026-11-10 实看 contact sheet；未逐图100%像素检查，未以此声称动态实机验收",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "size": [
+        1983,
+        793
+      ],
+      "mode": "RGBA",
+      "alpha_bbox": [
+        38,
+        0,
+        1950,
+        760
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "import_options": {
+        "compress/mode": "0",
+        "mipmaps/generate": "false",
+        "process/size_limit": "0"
+      },
+      "import_sidecar": "assets/ui/fat_fish_exit_button_full.png.import",
+      "visual_score_10": 7,
+      "runtime_role": "正式UI（部分旧母版/未引用）",
+      "source_record": "docs/tutorials/024-fat-fish-menu.md; docs/tutorials/026-ui-game-integration.md",
+      "priority": "P3",
+      "assessment": "出口图标与退出字样清晰；移动端退出入口应服从平台习惯。"
+    },
+    {
+      "path": "assets/ui/fat_fish_menu_background.png",
+      "bytes": 1582098,
+      "sha256": "19215d95fbbd13000b9d3bd3a4d1c878eb1bcb8cc87a1834d724da1932790b51",
+      "direct_reference_files": [],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "2026-11-10 实看 contact sheet；未逐图100%像素检查，未以此声称动态实机验收",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "size": [
+        1672,
+        940
+      ],
+      "mode": "RGB",
+      "import_options": {
+        "compress/mode": "0",
+        "mipmaps/generate": "false",
+        "process/size_limit": "0"
+      },
+      "import_sidecar": "assets/ui/fat_fish_menu_background.png.import",
+      "visual_score_10": 7,
+      "runtime_role": "正式UI（部分旧母版/未引用）",
+      "source_record": "docs/tutorials/024-fat-fish-menu.md; docs/tutorials/026-ui-game-integration.md",
+      "priority": "P3",
+      "assessment": "旧背景有动物鲸及鲸尾标记；正式main_menu已改用ds_console/menu_room，无需抹改历史。"
+    },
+    {
+      "path": "assets/ui/fat_fish_menu_character.png",
+      "bytes": 1281035,
+      "sha256": "5c8842bde0423283b425aa359fd65f052f51c61aa3e9d01e5adc08605ce95613",
+      "direct_reference_files": [
+        "scenes/ui/menu_character.tscn"
+      ],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "2026-11-10 实看 contact sheet；未逐图100%像素检查，未以此声称动态实机验收",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "size": [
+        1144,
+        1375
+      ],
+      "mode": "RGBA",
+      "alpha_bbox": [
+        0,
+        23,
+        1106,
+        1335
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "import_options": {
+        "compress/mode": "0",
+        "mipmaps/generate": "false",
+        "process/size_limit": "0"
+      },
+      "import_sidecar": "assets/ui/fat_fish_menu_character.png.import",
+      "visual_score_10": 7,
+      "runtime_role": "正式UI（部分旧母版/未引用）",
+      "source_record": "docs/tutorials/024-fat-fish-menu.md; docs/tutorials/026-ui-game-integration.md",
+      "priority": "P3",
+      "assessment": "正式静态回退参考：蓝发鳍耳女仆与鲸尾齐全，人物构图居右。"
+    },
+    {
+      "path": "assets/ui/fat_fish_menu_title.png",
+      "bytes": 1284623,
+      "sha256": "2f012ea73aabad0b32a4f5c9380d97dbeff732084b4174800b828fc37cdf928c",
+      "direct_reference_files": [],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "2026-11-10 实看 contact sheet；未逐图100%像素检查，未以此声称动态实机验收",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "size": [
+        1983,
+        793
+      ],
+      "mode": "RGBA",
+      "alpha_bbox": [
+        49,
+        21,
+        1950,
+        775
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "import_options": {
+        "compress/mode": "0",
+        "mipmaps/generate": "false",
+        "process/size_limit": "0"
+      },
+      "import_sidecar": "assets/ui/fat_fish_menu_title.png.import",
+      "visual_score_10": 7,
+      "runtime_role": "正式UI（部分旧母版/未引用）",
+      "source_record": "docs/tutorials/024-fat-fish-menu.md; docs/tutorials/026-ui-game-integration.md",
+      "priority": "P3",
+      "assessment": "高辨识蓝白标题；独立鲸尾图案是历史标志，若用户要求所有独立鱼形装饰移除，可新增人物头饰版标题。"
+    },
+    {
+      "path": "assets/ui/fat_fish_settings_button_full.png",
+      "bytes": 1071604,
+      "sha256": "12a9c5b66668591ecf060ef43da90d3206125eff3d279c5cbdec3cac08d504c1",
+      "direct_reference_files": [],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "2026-11-10 实看 contact sheet；未逐图100%像素检查，未以此声称动态实机验收",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "size": [
+        1983,
+        793
+      ],
+      "mode": "RGBA",
+      "alpha_bbox": [
+        38,
+        0,
+        1950,
+        761
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "import_options": {
+        "compress/mode": "0",
+        "mipmaps/generate": "false",
+        "process/size_limit": "0"
+      },
+      "import_sidecar": "assets/ui/fat_fish_settings_button_full.png.import",
+      "visual_score_10": 7,
+      "runtime_role": "正式UI（部分旧母版/未引用）",
+      "source_record": "docs/tutorials/024-fat-fish-menu.md; docs/tutorials/026-ui-game-integration.md",
+      "priority": "P3",
+      "assessment": "齿轮图标与设置字样清晰，透明命中遮罩由main_menu生成。"
+    },
+    {
+      "path": "assets/ui/fat_fish_start_button_full.png",
+      "bytes": 1057475,
+      "sha256": "3e776e1da69aab5f0e8a182783b9d19068cf204404b9cb23d99869f29f90967b",
+      "direct_reference_files": [],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "2026-11-10 实看 contact sheet；未逐图100%像素检查，未以此声称动态实机验收",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "size": [
+        1983,
+        793
+      ],
+      "mode": "RGBA",
+      "alpha_bbox": [
+        39,
+        9,
+        1953,
+        761
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "import_options": {
+        "compress/mode": "0",
+        "mipmaps/generate": "false",
+        "process/size_limit": "0"
+      },
+      "import_sidecar": "assets/ui/fat_fish_start_button_full.png.import",
+      "visual_score_10": 7,
+      "runtime_role": "正式UI（部分旧母版/未引用）",
+      "source_record": "docs/tutorials/024-fat-fish-menu.md; docs/tutorials/026-ui-game-integration.md",
+      "priority": "P3",
+      "assessment": "蓝白手绘开始按钮，字样烘焙；固定中文发行可用，多语言需改运行文字。"
+    },
+    {
+      "path": "assets/ui/health_skin.png",
+      "bytes": 286802,
+      "sha256": "64cec887377d5492468bb607fbf7d60dd337f3645ee97796dab53542c9c9de87",
+      "direct_reference_files": [
+        "scripts/ui/game.gd",
+        "scripts/ui/health_skin.gd"
+      ],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "2026-11-10 实看 contact sheet；未逐图100%像素检查，未以此声称动态实机验收",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "size": [
+        1672,
+        941
+      ],
+      "mode": "RGBA",
+      "alpha_bbox": [
+        34,
+        23,
+        1638,
+        898
+      ],
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "import_options": {
+        "compress/mode": "0",
+        "mipmaps/generate": "false",
+        "process/size_limit": "0"
+      },
+      "import_sidecar": "assets/ui/health_skin.png.import",
+      "visual_score_10": 7,
+      "runtime_role": "正式UI（部分旧母版/未引用）",
+      "source_record": "docs/tutorials/024-fat-fish-menu.md; docs/tutorials/026-ui-game-integration.md",
+      "priority": "P3",
+      "assessment": "红血条/白十字辨识明确，合成原图中数字不是实值；运行独立绘制实时HP。保持危险红语义。"
+    },
+    {
+      "path": "assets/ui/panel_base.png",
+      "bytes": 1308292,
+      "sha256": "3fa053a1e9fff6f45bcd296c5df6d84780d8f5742c24c44ae9ebc43959c76ec8",
+      "direct_reference_files": [],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "2026-11-10 实看 contact sheet；未逐图100%像素检查，未以此声称动态实机验收",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "alpha_bbox": [
+        0,
+        0,
+        1522,
+        1024
+      ],
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "import_options": {
+        "compress/mode": "0",
+        "mipmaps/generate": "false",
+        "process/size_limit": "0"
+      },
+      "import_sidecar": "assets/ui/panel_base.png.import",
+      "visual_score_10": 7,
+      "runtime_role": "正式UI（部分旧母版/未引用）",
+      "source_record": "docs/tutorials/024-fat-fish-menu.md; docs/tutorials/026-ui-game-integration.md",
+      "priority": "P3",
+      "assessment": "旧深色面板无直接引用，不作为当前蓝白风格。"
+    },
+    {
+      "path": "assets/ui/upgrade_card_frame_v2.png",
+      "bytes": 1341674,
+      "sha256": "9827f420e2f339043ea6e136225c882446636404337a4c5fc236acf44ef43931",
+      "direct_reference_files": [],
+      "reference_evidence": "字面扫描含project/export；动态拼接与JSON路径另据源码审查",
+      "visual_review": "2026-11-10 实看 contact sheet；未逐图100%像素检查，未以此声称动态实机验收",
+      "license_evidence": "see audit report; source sidecar inspected by group",
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "alpha_bbox": [
+        0,
+        0,
+        1023,
+        1536
+      ],
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "import_options": {
+        "compress/mode": "0",
+        "mipmaps/generate": "false",
+        "process/size_limit": "0"
+      },
+      "import_sidecar": "assets/ui/upgrade_card_frame_v2.png.import",
+      "visual_score_10": 7,
+      "runtime_role": "正式UI（部分旧母版/未引用）",
+      "source_record": "docs/tutorials/024-fat-fish-menu.md; docs/tutorials/026-ui-game-integration.md",
+      "priority": "P3",
+      "assessment": "旧深色细边框，无脚本/场景资源直接引用；正式蓝白卡走OceanUi。"
+    }
+  ],
+  "p2_handling": {
+    "date": "2026-11-10",
+    "status": "构筑读数/真实接力爆破余势事件反馈已实现，图集已实看；教程057记录专项和原生截图，非自然整局审美验收",
+    "preserved": "28张原卡与Live2D未由art_audit修改；根Agent另负责3张外包卡替换与Android前景",
+    "remaining": "本轮声音未试听；安卓系统桌面实际遮罩仍需真机核验；音乐与既有Live2D公开使用许可均由用户明确确认，Agent没有审合同，不扩大原资源用途。",
+    "new_asset": {
+      "path": "assets/ui/build_feedback/strategy_badges.png",
+      "source_size": [
+        1254,
+        1254
+      ],
+      "import_limit": 512,
+      "mipmap": true,
+      "cells": "2x2，按导入尺寸/2裁切",
+      "sha256": "8cab675ff33d792e520adfe83174d35f68a00f0316ae2ac7c365c364b8b7c9d3",
+      "review": "实际打开源图与原生反馈截图；无动物鱼角色"
+    },
+    "precision": "director.precision_rewarded仅消费实际退款成功，显示实际退款秒数，零/负退款不显示，复用单一有界提示、暂停冻结、模态隐藏、重开清零。"
+  },
+  "import_count": 74,
+  "updated": "2026-11-10 包前字体fallback纳入台账；Android前景/背景import已补齐",
+  "source_total_bytes": 132771189,
+  "font_fallback_update": {
+    "assets": [
+      "assets/fonts/noto_sans_sc/NotoSansSC.ttf",
+      "assets/fonts/noto_sans_sc/OFL.txt",
+      "assets/fonts/noto_sans_sc/SOURCE.md"
+    ],
+    "reason": "安卓候选1已复现全角标点方框",
+    "implementation_evidence": "仅main_menu/ocean_ui SystemFont新增fallback；未替换桌面首选和ZCOOL标题",
+    "status": "导入配置与本地字体证据已核对，候选2原生截图由根Agent确认",
+    "coverage": {
+      "method": "fontTools读取字体cmap：仅证明字形映射存在，不冒充安卓渲染验收",
+      "cmap_checked": {
+        "，": true,
+        "。": true,
+        "！": true,
+        "？": true,
+        "：": true,
+        "；": true,
+        "（": true,
+        "）": true,
+        "【": true,
+        "】": true,
+        "《": true,
+        "》": true,
+        "「": true,
+        "」": true,
+        "—": true,
+        "…": true,
+        "→": true,
+        "·": true,
+        "精": true,
+        "准": true,
+        "连": true,
+        "击": true,
+        "回": true,
+        "能": true,
+        "秒": true
+      },
+      "glyphs": 30890
+    }
+  }
+}

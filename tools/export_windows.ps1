@@ -1,7 +1,9 @@
 ﻿param(
     [Parameter(Mandatory = $true)][string]$GodotExe,
     [string]$BuildName = 'planner-preview',
-    [switch]$LiveTuning
+    [switch]$LiveTuning,
+    [string]$Live2DRuntime,
+    [string]$Live2DNotices
 )
 $ErrorActionPreference = 'Stop'
 $projectRoot = Split-Path -Parent $PSScriptRoot
@@ -41,6 +43,28 @@ if ([regex]::Matches($settings, '(?m)^run/main_scene=.*$').Count -ne 1) { throw 
 $entryScene = if ($LiveTuning) { 'res://scenes/roguelite/tuning_run.tscn' } else { 'res://scenes/ui/main_menu.tscn' }
 $settings = [regex]::Replace($settings, '(?m)^run/main_scene=.*$', ('run/main_scene="' + $entryScene + '"'))
 [IO.File]::WriteAllText((Join-Path $staging 'project.godot'), $settings, [Text.UTF8Encoding]::new($false))
+if ($Live2DRuntime) {
+    if ($LiveTuning) { throw 'Live2D只用于正式菜单导出。' }
+    $runtimeSource = (Resolve-Path -LiteralPath $Live2DRuntime).Path
+    foreach ($required in @('model/runtime.model3.json','native/gd_cubism.gdextension','native/bin/libgd_cubism.windows.release.x86_64.dll','menu_profile.json')) {
+        if (-not (Test-Path -LiteralPath (Join-Path $runtimeSource $required) -PathType Leaf)) { throw ('Live2D运行资源不完整：' + $required) }
+    }
+    # 只给副本增加接线autoload，源工程及原Live2D文件保持原字节。
+    $settings = $settings.Replace('[autoload]', "[autoload]`n`nReleaseMenuPaths=""*res://scripts/ui/release_menu_paths.gd""")
+    [IO.File]::WriteAllText((Join-Path $staging 'project.godot'), $settings, [Text.UTF8Encoding]::new($false))
+    $runtimeTarget = Join-Path $output 'menu_character_runtime'
+    New-Item -ItemType Directory -Force -Path $runtimeTarget | Out-Null
+    foreach ($directory in @('model','native','textures')) { Copy-Item -LiteralPath (Join-Path $runtimeSource $directory) -Destination $runtimeTarget -Recurse }
+    Copy-Item -LiteralPath (Join-Path $runtimeSource 'menu_profile.json') -Destination $runtimeTarget
+    # preparation.json包含本机来源路径，不属于运行资源，不随包分发。
+    $runtimeManifest = Get-ChildItem -LiteralPath $runtimeTarget -Recurse -File | Sort-Object FullName | ForEach-Object {
+        [ordered]@{ path = $_.FullName.Substring($runtimeTarget.Length).TrimStart([char[]]'\/').Replace('\','/'); sha256 = (Get-FileHash -LiteralPath $_.FullName -Algorithm SHA256).Hash }
+    }
+    $runtimeManifest | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $output 'live2d_manifest.json') -Encoding utf8
+    if ($Live2DNotices) {
+        Copy-Item -LiteralPath $Live2DNotices -Destination (Join-Path $output 'Live2D_Notices') -Recurse
+    }
+}
 Copy-Item -LiteralPath (Join-Path $projectRoot 'export_presets.cfg') -Destination $staging
 if (-not $LiveTuning) {
     # 正式包保留动态加载的玩法资源，但不携带调参/评估入口或生成提示词个人路径。
@@ -89,18 +113,28 @@ $metadata = [ordered]@{
     platform = 'Windows x86_64 Compatibility'
     scene = $entryScene
     live_tuning = [bool]$LiveTuning
+    live2d = [bool]$Live2DRuntime
     base_commit = $commit
     runtime_source_sha256 = $sourceHash
     exe_sha256 = (Get-FileHash -LiteralPath $exePath -Algorithm SHA256).Hash
-    note = '本地游戏预览，包含本轮未提交资源；源指纹是含导出过滤规则的暂存输入，实际包内容见package_manifest.json。'
+    note = 'Release模板本地构建；源指纹是含导出过滤规则的暂存输入，实际包内容见package_manifest.json；不表示已上传渠道或完成人工平衡验收。'
 }
 $metadata | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $output 'build_info.json') -Encoding utf8
-$readmeFile = if ($LiveTuning) { 'docs/playtest/PLANNER_README.txt' } else { 'docs/playtest/OVERNIGHT_README.txt' }
-Copy-Item -LiteralPath (Join-Path $projectRoot $readmeFile) -Destination (Join-Path $output '试玩说明.txt')
-$feedbackFile = if ($LiveTuning) { 'docs/playtest/PLANNER_FEEDBACK.txt' } else { 'docs/playtest/OVERNIGHT_FEEDBACK.txt' }
-Copy-Item -LiteralPath (Join-Path $projectRoot $feedbackFile) -Destination (Join-Path $output '策略与成长反馈.txt')
+$notices = Join-Path $output 'Notices'
+Invoke-GodotStep 'notices' ('--headless --path "' + $staging + '" --script "' + (Join-Path $projectRoot 'tools/release_notices.gd') + '" -- "' + $notices + '"')
+Copy-Item -LiteralPath (Join-Path $projectRoot 'assets/fonts/zcool_kuaile/OFL.txt') -Destination (Join-Path $notices 'ZCOOL_OFL.txt')
+Copy-Item -LiteralPath (Join-Path $projectRoot 'assets/fonts/noto_sans_sc/OFL.txt') -Destination (Join-Path $notices 'Noto_OFL.txt')
+Copy-Item -LiteralPath (Join-Path $projectRoot 'assets/ui/aim_kenney/KENNEY_PARTICLE_LICENSE.txt') -Destination (Join-Path $notices 'Kenney_CC0.txt')
+Copy-Item -LiteralPath (Join-Path $projectRoot 'assets/music/SOURCE.md') -Destination (Join-Path $notices 'Music_Credits.md')
+Copy-Item -LiteralPath (Join-Path $projectRoot 'docs/playtest/RELEASE_CREDITS.md') -Destination (Join-Path $output 'CREDITS.md')
+$readmeFile = if ($LiveTuning) { 'docs/playtest/PLANNER_README.txt' } else { 'docs/playtest/RELEASE_README.txt' }
+Copy-Item -LiteralPath (Join-Path $projectRoot $readmeFile) -Destination (Join-Path $output '游玩说明.txt')
+if ($LiveTuning) {
+    Copy-Item -LiteralPath (Join-Path $projectRoot 'docs/playtest/PLANNER_FEEDBACK.txt') -Destination (Join-Path $output '策略与成长反馈.txt')
+}
 $archive = $output + '.zip'
-Compress-Archive -LiteralPath (Get-ChildItem -LiteralPath $output -File).FullName -DestinationPath $archive
+# 包含旁置目录；只压顶层文件会丢失Live2D模型及Native库。
+Compress-Archive -LiteralPath (Get-ChildItem -LiteralPath $output).FullName -DestinationPath $archive
 Write-Output ('EXPORT READY: ' + $exePath)
 Write-Output ('SHARE ZIP: ' + $archive)
 Write-Output ('RUNTIME SOURCE SHA256: ' + $sourceHash)

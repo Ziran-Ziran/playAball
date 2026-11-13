@@ -6,7 +6,7 @@
 script = ExtResource("1")
 id = "relay"
 title = "接力"
-description = "至少两个外包伙伴时可选；增强已有基础传能，每球每链一次，额外冲量最多 262.5。"
+description = "至少两个伙伴时可选；强化传能（每球每链额外冲量最多262.5），第2/3代伙伴有效撞击额外+1/+2伤害。"
 max_level = 1
 category = "伙伴"
 weight = 1

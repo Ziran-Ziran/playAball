@@ -37,6 +37,8 @@ func _run() -> void:
 			if illustration != null:
 				var suffix: String = "repeat" if definition.max_level == 0 else "lv%d" % rank
 				var expected_path: String = "res://assets/cards/%s_%s.png" % [id, suffix]
+				if id == "companion":
+					expected_path = "res://assets/cards/release_r5/companion_%s.png" % suffix
 				check(illustration.texture != null and illustration.texture.resource_path == expected_path, "%s rank%d: uses next-rank asset" % [id, rank])
 			check(card.get_node("Content/Heading").text.contains(definition.title), id + ": real title")
 			check(not card.get_node("Content/Preview").text.is_empty(), id + ": actual benefit")

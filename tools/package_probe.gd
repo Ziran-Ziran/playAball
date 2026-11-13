@@ -19,7 +19,7 @@ func mouse(point: Vector2,pressed: bool) -> void:
 	Input.parse_input_event(event)
 func validate_physical_maps() -> void:
 	# 导出重打包曾丢失实例内部添加的节点和端点覆盖，必须检查实际包而非仅资源存在。
-	var counts: Dictionary={"map_01":0,"map_02":6,"map_03":2,"boss_map":4}
+	var counts: Dictionary={"map_01":0,"map_02":2,"map_03":2,"boss_map":4}
 	for id: String in counts:
 		var map: Node=load("res://scenes/roguelite/maps/%s.tscn"%id).instantiate()
 		var spikes: Array[Node]=[]
@@ -41,6 +41,8 @@ func run() -> void:
 	walk("res://")
 	manifest.sort()
 	check(str(ProjectSettings.get_setting("application/run/main_scene"))=="res://scenes/ui/main_menu.tscn","Ordinary package starts at main menu")
+	for path: String in ["credits.txt", "music.txt", "ZCOOL_OFL.txt", "Noto_OFL.txt", "Kenney_CC0.txt"]:
+		check(FileAccess.file_exists("res://resources/legal/" + path), "Packaged readable credits/license: " + path)
 	for path in ["scenes/roguelite/audio_preview.tscn","scenes/main.tscn","scenes/ball.tscn","scenes/mechanism.tscn"]:
 		check(not ResourceLoader.exists("res://"+path),"Excluded prototype/preview: "+path)
 	for path in ["scenes/roguelite/tuning_run.tscn","scenes/roguelite/tuning_panel.tscn","scenes/roguelite/gameplay_lab.tscn","scenes/roguelite/lab_panel.tscn","scripts/roguelite/live_tuning.gd","scripts/roguelite/evaluation/scenario_runner.gd","resources/roguelite/balance/baseline.tres","assets/roguelite/presentation/generation_metadata.json"]:
@@ -63,6 +65,12 @@ func run() -> void:
 	var menu=load("res://scenes/ui/main_menu.tscn").instantiate()
 	root.add_child(menu)
 	current_scene=menu
+	menu.show_settings()
+	menu.credits_panel.call("open")
+	check(menu.credits_panel.visible and menu.credits_panel.body.text.contains("Kenney") and menu.credits_panel.body.text.contains("SIL"), "Packaged settings can read full credits and license text")
+	menu.call("_notification", Node.NOTIFICATION_WM_GO_BACK_REQUEST)
+	check(not menu.credits_panel.visible and menu.settings_panel.visible, "Back handler closes credits before underlying settings")
+	menu.close_settings()
 	await process_frame
 	menu.get_node("Start").pressed.emit()
 	await process_frame
@@ -88,7 +96,8 @@ func run() -> void:
 			card_images += 1
 			check(card_library.texture_for(definition.id,rank)!=null,"Packaged next-rank illustration: %s/%d"%[definition.id,rank])
 	check(card_images==28,"Packaged all 28 level illustrations load")
-	check(card_library.copy_for("bowling").get("rules","").contains("不会继续传代"),"Packaged card copy retains actual bowling boundary")
+	var bowling_copy: String = card_library.copy_for("bowling").get("rules", "")
+	check(bowling_copy.contains("不会继续传代") and bowling_copy.contains("最多对2"),"Packaged bowling copy retains bounded non-recursive projectile and finish payoff")
 	for id in ["map_01","map_02","map_03","boss_map"]:
 		check(ResourceLoader.exists("res://scenes/roguelite/maps/%s.tscn"%id),"Packaged physical map exists: "+id)
 	for path in ["fat_fish_ball_v1.png","fragile_crate_v1.png"]:

@@ -97,9 +97,32 @@ jobs:
           done
           grep -qE 'PADDLE RESPONSE CHECKS PASSED: [0-9]+ failures: 0' /tmp/paddle_response.log
           grep -qE 'FEATURE ACCEPTANCE CHECKS PASSED: [0-9]+ failures: 0' /tmp/feature_acceptance.log
+      - name: Release strategy and mobile regressions
+        shell: bash
+        run: |
+          set -euo pipefail
+          GODOT=/tmp/godot/Godot_v4.7.1-stable_linux.x86_64
+          for spec in strategy_payoff build_economy build_economy_gui build_feedback pause_physics card_gestures platform_pause_order card_art; do
+            "$GODOT" --headless --path . --script "tests/roguelite_${spec}.gd" 2>&1 | tee "/tmp/release-${spec}.log"
+            ! grep -E '^(SCRIPT ERROR|ERROR):' "/tmp/release-${spec}.log"
+          done
+          grep -qE 'STRATEGY PAYOFF CHECKS: [0-9]+ failures: 0' /tmp/release-strategy_payoff.log
+          grep -qE 'BUILD ECONOMY CHECKS: [0-9]+ failures: 0' /tmp/release-build_economy.log
+          grep -qE 'BUILD ECONOMY GUI CHECKS: [0-9]+ failures: 0' /tmp/release-build_economy_gui.log
+          grep -qE 'BUILD FEEDBACK CHECKS PASSED: [0-9]+ failures: 0' /tmp/release-build_feedback.log
+          grep -qE 'PAUSE PHYSICS CHECKS: [0-9]+ failures: 0' /tmp/release-pause_physics.log
+          grep -qE 'CARD GESTURE CHECKS [0-9]+ failures 0' /tmp/release-card_gestures.log
+          grep -qE 'PLATFORM PAUSE ORDER CHECKS: [0-9]+ failures: 0' /tmp/release-platform_pause_order.log
+          grep -qE 'CARD ART CHECKS: [0-9]+ checks, 0 failures' /tmp/release-card_art.log
+          "$GODOT" --headless --path . --script tests/platform_mobile.gd 2>&1 | tee /tmp/release-platform-mobile.log
+          ! grep -E '^(SCRIPT ERROR|ERROR):' /tmp/release-platform-mobile.log
+          grep -qE 'PLATFORM MOBILE CHECKS [0-9]+ failures 0' /tmp/release-platform-mobile.log
       - name: UI integration
         run: |
           set -euo pipefail
+          /tmp/godot/Godot_v4.7.1-stable_linux.x86_64 --headless --path . --script tests/ocean_ui.gd 2>&1 | tee /tmp/ocean-ui.log
+          ! grep -E '^(SCRIPT ERROR|ERROR):' /tmp/ocean-ui.log
+          grep -qE 'OCEAN UI CHECKS: [0-9]+ checks, 0 failures' /tmp/ocean-ui.log
           /tmp/godot/Godot_v4.7.1-stable_linux.x86_64 --headless --path . --script tests/ui_integration.gd 2>&1 | tee /tmp/ui-integration.log
           ! grep -E "^(SCRIPT ERROR|ERROR):" /tmp/ui-integration.log
           grep -q "UI INTEGRATION CHECKS PASSED" /tmp/ui-integration.log

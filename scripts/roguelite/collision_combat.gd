@@ -3,6 +3,9 @@ extends Node
 signal hit(point: Vector2, speed: float)
 signal relay(point: Vector2, generation: int)
 signal explosion_triggered(point: Vector2, radius: float)
+signal bowling_surged(point: Vector2, hit_count: int)
+## 三名不同普通敌人的真实主球直伤；监听者校验当前局/链后才处理冷却。
+signal precision_chain_completed(source_id: int, chain: int, source_revision: int, combat_revision: int)
 ## 逻辑判定证据；实验室只消费，不重新执行伤害或去重。
 signal contact_outcome(event: Dictionary)
 @export var minimum_speed: float = 180.0
@@ -16,13 +19,15 @@ var pairs: Dictionary = {}
 var events: Array[Dictionary] = []
 var longest_chain: int = 0
 var build: DemoBuild
-var rice_bonus: Node
 var exploded_chains: Dictionary = {}
 var relay_bonuses: Dictionary = {}
 var projectile_targets: Dictionary = {}
 var echo_history: Dictionary = {}
 var pending_echoes: Array[Dictionary] = []
 var _echo_revision: int = 0
+var _precision_chain: int = 0
+var _precision_targets: Dictionary = {}
+var _precision_paid: bool = false
 
 func _physics_process(delta: float) -> void:
 	elapsed += delta
@@ -85,13 +90,31 @@ func resolve(actor: DemoBody, other: Node, speed: float, point: Vector2) -> void
 	var amount: int = base_damage
 	if actor is DemoPlayer and build != null:
 		amount += clampi(int(build.levels.get("heavy", 0)), 0, 3)
-	# 饱饭只属于吃饭后发起的新链，敌人投射物/爆炸不提前消费它。
-	if is_instance_valid(rice_bonus) and (actor is DemoPlayer or actor is DemoCompanion):
-		amount += int(rice_bonus.consume_bonus(actor.chain_id))
+	if actor is DemoCompanion and build != null:
+		amount += build.relay_damage_bonus(actor.generation)
+	# hurt/died可同步重开；调用前保存链与物理方向，返回后必须复核生命周期。
+	var revision: int = _echo_revision
+	var source_revision: int = actor._reset_revision
+	var source_id: int = actor.get_instance_id()
+	var chain: int = actor.chain_id
+	var generation: int = actor.generation
+	var before_hp: int = _remaining_health(other)
+	var target_id: int = other.get_instance_id()
+	var killed_enemy: bool = other is DemoEnemy
+	var impact_origin: Vector2 = other.global_position if other is Node2D else point
+	var incoming: Vector2 = actor.incoming_velocity
+	if incoming.is_zero_approx():
+		incoming = impact_origin - actor.global_position
 	if other.has_method("hurt_at"):
 		other.call("hurt_at", amount, point)
 	else:
 		other.call("hurt", amount)
+	if not _source_current(actor, revision, source_revision) or not is_instance_valid(other) or not other.is_inside_tree():
+		return
+	var effective: int = maxi(0, before_hp - _remaining_health(other))
+	if effective <= 0:
+		_report_outcome(actor, other, speed, point, "rejected", "no_effective_damage")
+		return
 	if actor is DemoPlayer and other is DemoEnemy:
 		actor.sustain_enemy_impact(other.get_instance_id(), other.global_position - actor.global_position)
 	# 冲量只作为一次明确击退，速度上限仍由刚体基类控制。
@@ -100,17 +123,98 @@ func resolve(actor: DemoBody, other: Node, speed: float, point: Vector2) -> void
 		other.apply_central_impulse(direction * minf(speed * other.mass * 0.25, 260.0))
 		if not enemy_projectile and (actor is DemoPlayer or actor is DemoCompanion) and upgraded("bowling") and other.has_method("make_projectile"):
 			other.call("make_projectile", actor.chain_id)
-	record({"chain": actor.chain_id, "source": actor.get_instance_id(), "target": other.get_instance_id(), "generation": actor.generation, "damage": amount})
+	record({"chain": chain, "source": source_id, "target": other.get_instance_id(), "generation": generation, "damage": amount, "effective_damage": effective})
 	_report_outcome(actor, other, speed, point, "accepted", "valid_damage", amount)
+	if not _source_current(actor, revision, source_revision):
+		return
+	if actor is DemoPlayer and killed_enemy:
+		_register_precision_hit(actor, target_id, chain, source_revision, revision)
+	if not _source_current(actor, revision, source_revision):
+		return
 	hit.emit(point, speed)
+	if not _source_current(actor, revision, source_revision):
+		return
 	if actor is DemoPlayer:
 		actor.visual_event.emit(&"damage", {"speed": speed, "amount": amount})
-	if (actor is DemoPlayer or actor is DemoCompanion) and upgraded("echo"):
+	if not _source_current(actor, revision, source_revision):
+		return
+	if is_instance_valid(other) and (actor is DemoPlayer or actor is DemoCompanion) and upgraded("echo"):
 		_schedule_echo(actor, other, speed)
+	if is_instance_valid(other) and (actor is DemoPlayer or actor is DemoCompanion) and killed_enemy and bool(other.get("dead")) and upgraded("bowling"):
+		_bowling_finish(impact_origin, incoming.normalized(), source_id, chain, generation, revision, source_revision)
+	if not _source_current(actor, revision, source_revision):
+		return
 	if actor is DemoCompanion and upgraded("explosion") and not exploded_chains.has(actor.chain_id):
 		exploded_chains[actor.chain_id] = true
 		trim_history(exploded_chains)
 		explode(actor, point)
+
+func _register_precision_hit(actor: DemoPlayer, target_id: int, chain: int, source_revision: int, revision: int) -> void:
+	if actor.chain_id != chain or chain <= 0:
+		return
+	if _precision_chain != chain:
+		_precision_chain = chain
+		_precision_targets.clear()
+		_precision_paid = false
+	if _precision_paid:
+		return
+	_precision_targets[target_id] = true
+	if _precision_targets.size() >= 3:
+		# 先消费本链资格再发只读事件；监听者可同步重开，不能重入领奖。
+		_precision_paid = true
+		precision_chain_completed.emit(actor.get_instance_id(), chain, source_revision, revision)
+
+func _source_current(actor: Variant, revision: int, source_revision: int) -> bool:
+	# Variant允许先检查已free的引用；强类型参数会在进入守卫前就触发类型错误。
+	return revision == _echo_revision and is_instance_valid(actor) and actor.is_inside_tree() and not actor.is_queued_for_deletion() and not actor.reset_pending and actor._reset_revision == source_revision
+
+func _remaining_health(target: Node) -> int:
+	# 首领模块属于独立受伤部位；把模块与核心一起求差，避免漏报真实模块命中。
+	var total: int = int(target.get("hp"))
+	if target is DemoBoss:
+		for hp: int in target.module_hp:
+			total += hp
+	return total
+
+func _bowling_finish(origin: Vector2, direction: Vector2, source_id: int, chain: int, generation: int, revision: int, source_revision: int) -> void:
+	if direction.is_zero_approx():
+		return
+	var candidates: Array[DemoEnemy] = []
+	for target: Node in get_tree().get_nodes_in_group("demo_damageable"):
+		if target is not DemoEnemy or not damageable(target) or target.is_queued_for_deletion():
+			continue
+		var offset: Vector2 = target.global_position - origin
+		if offset.length_squared() <= 120.0 * 120.0 and not offset.is_zero_approx() and direction.dot(offset.normalized()) >= 0.5:
+			candidates.append(target)
+	candidates.sort_custom(func(a: DemoEnemy, b: DemoEnemy):
+		var da: float = a.global_position.distance_squared_to(origin)
+		var db: float = b.global_position.distance_squared_to(origin)
+		return a.get_instance_id() < b.get_instance_id() if is_equal_approx(da, db) else da < db)
+	var affected: int = 0
+	for target: DemoEnemy in candidates:
+		var source: DemoBody = instance_from_id(source_id) as DemoBody
+		if not _source_current(source, revision, source_revision):
+			return
+		if not is_instance_valid(target) or target.is_queued_for_deletion() or not damageable(target):
+			continue
+		# 只查询墙/挡板实体，不把待清理尸体和其他球当视线墙。
+		var ray := PhysicsRayQueryParameters2D.create(origin, target.global_position, 17)
+		if not target.get_world_2d().direct_space_state.intersect_ray(ray).is_empty():
+			continue
+		var target_id: int = target.get_instance_id()
+		var before: int = target.hp
+		target.hurt(1)
+		if not _source_current(source, revision, source_revision):
+			return
+		var dealt: int = before - target.hp if is_instance_valid(target) else mini(before, 1)
+		if dealt <= 0:
+			continue
+		affected += 1
+		record({"chain": chain, "source": source_id, "target": target_id, "generation": generation, "damage": 1, "effective_damage": dealt, "effect": "bowling_finish"})
+		if affected >= 2:
+			break
+	if affected > 0:
+		bowling_surged.emit(origin, affected)
 
 func _schedule_echo(actor: DemoBody, target: Node, speed: float) -> void:
 	if not target.is_inside_tree() or target.is_queued_for_deletion() or not damageable(target):
@@ -157,15 +261,27 @@ func upgraded(id: String) -> bool:
 	return build != null and build.has_upgrade(id)
 
 func damageable(target: Node) -> bool:
-	return (target is DemoTarget or target.is_in_group("demo_damageable")) and target.has_method("hurt") and not bool(target.get("dead"))
+	return is_instance_valid(target) and target.is_inside_tree() and not target.is_queued_for_deletion() and (target is DemoTarget or target.is_in_group("demo_damageable")) and target.has_method("hurt") and not bool(target.get("dead"))
 
 func explode(actor: DemoBody, point: Vector2) -> void:
 	# 直接结算一次额外伤害，不重新进入 resolve，避免爆破递归或保龄球传代。
+	var radius: float = build.explosion_radius(actor.generation) if build != null else 80.0
+	var revision: int = _echo_revision
+	var chain: int = actor.chain_id
+	var source_id: int = actor.get_instance_id()
+	var generation: int = actor.generation
+	var source_revision: int = actor._reset_revision
 	for target: Node in get_tree().get_nodes_in_group("demo_damageable"):
-		if target is Node2D and damageable(target) and target.global_position.distance_to(point) <= 80.0:
+		if target is Node2D and damageable(target) and target.global_position.distance_to(point) <= radius:
+			var before: int = _remaining_health(target)
+			var target_id: int = target.get_instance_id()
 			target.call("hurt", 1)
-			record({"chain": actor.chain_id, "source": actor.get_instance_id(), "target": target.get_instance_id(), "generation": actor.generation, "damage": 1, "effect": "explosion"})
-	explosion_triggered.emit(point, 80.0)
+			if not _source_current(actor, revision, source_revision):
+				return
+			var effective: int = before - _remaining_health(target) if is_instance_valid(target) else mini(before, 1)
+			if effective > 0:
+				record({"chain": chain, "source": source_id, "target": target_id, "generation": generation, "damage": 1, "effective_damage": effective, "effect": "explosion"})
+	explosion_triggered.emit(point, radius)
 
 func trim_history(history: Dictionary) -> void:
 	# 活跃小兵仅持续3秒；保留最近256个链路标记足够且不会随整局无限增长。
@@ -217,6 +333,9 @@ func _report_outcome(actor: Node, other: Node, speed: float, point: Vector2, res
 	})
 
 func reset_combat() -> void:
+	_precision_chain = 0
+	_precision_targets.clear()
+	_precision_paid = false
 	_echo_revision += 1
 	pending_echoes.clear()
 	echo_history.clear()

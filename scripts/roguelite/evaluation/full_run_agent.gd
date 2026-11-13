@@ -31,6 +31,10 @@ var _module_hp: Dictionary = {}
 var choices: Array[Dictionary] = []
 var stage_events: Array[Dictionary] = []
 var recoveries: Array[Dictionary] = []
+var paid_actions: Array[Dictionary] = []
+var source_damage: Dictionary = {}
+var _pending_damage: Dictionary = {}
+var _last_combat_record: Dictionary = {}
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 func _process(delta: float) -> void:
@@ -71,6 +75,7 @@ func drive(time: float, delta: float) -> void:
 	elapsed = time
 	metrics.elapsed = time
 	poll_boss_damage()
+	collect_source_damage()
 	bounds = director.maps.definition.bounds
 	match director.state:
 		director.State.BATTLE:
@@ -96,10 +101,60 @@ func drive(time: float, delta: float) -> void:
 			card.pressed.emit()
 			apply_profile()
 		director.State.SHOP:
-			if health.hp <= 3: director.buy_shop("heal", director.rest_revision)
-			if not director.buy_shop("upgrade", director.rest_revision): director.continue_stage(director.rest_revision)
+			if health.hp <= 3: _try_paid("heal", "shop")
+			if not _try_paid("upgrade", "shop"): director.continue_stage(director.rest_revision)
 		director.State.EVENT:
-			director.resolve_event("heal" if health.hp <= 3 else "upgrade", director.rest_revision)
+			drive_event_supply()
+
+func drive_event_supply() -> void:
+	# 新策略v4：真实预算允许时先成长；返回补给后才尝试低血治疗及免费补给。
+	# 老基线没有付费入口，仍按同一策略的兼容分支走原免费选择。
+	if director.has_method("buy_event_supply"):
+		if _try_paid("upgrade", "event"):
+			return
+		if health.hp <= 3:
+			_try_paid("heal", "event")
+	director.resolve_event("heal" if health.hp <= 3 else "upgrade", director.rest_revision)
+
+func _try_paid(item: String, location: String) -> bool:
+	var before: int = director.wallet.balance
+	var success: bool = director.buy_shop(item, director.rest_revision) if location == "shop" else director.buy_event_supply(item, director.rest_revision)
+	if success:
+		paid_actions.append({"time": elapsed, "wave": director.wave, "location": location, "item": item, "balance_before": before, "balance_after": director.wallet.balance, "spent": before - director.wallet.balance})
+	return success
+
+func collect_source_damage() -> void:
+	# 消费同一份Combat记录的对象引用；记录上限256，不用可重复的内容拼假唯一ID。
+	var start: int = 0
+	if not _last_combat_record.is_empty():
+		for index in range(combat.events.size() - 1, -1, -1):
+			if is_same(combat.events[index], _last_combat_record):
+				start = index + 1
+				break
+	for index in range(start, combat.events.size()):
+		var event: Dictionary = combat.events[index]
+		var target: int = int(event.target)
+		# 旧基线没有effective_damage字段；与真实hurt观察的剩余HP损失核销，绝不直接把请求量当实伤。
+		var available: int = int(_pending_damage.get(target, 0))
+		var actual: int = mini(available, int(event.get("effective_damage", event.damage)))
+		if actual <= 0:
+			continue
+		_pending_damage[target] = available - actual
+		var category: String = str(event.get("effect", ""))
+		if category == "":
+			var actor: Object = instance_from_id(int(event.source))
+			category = "player_direct" if actor is DemoPlayer else ("partner_direct_gen%d" % int(event.generation) if actor is DemoCompanion else "projectile_or_retired_direct")
+		source_damage[category] = int(source_damage.get(category, 0)) + actual
+	if not combat.events.is_empty():
+		_last_combat_record = combat.events[-1]
+
+func source_damage_snapshot() -> Dictionary:
+	var snapshot: Dictionary = source_damage.duplicate()
+	var unattributed: int = 0
+	for loss: int in _pending_damage.values():
+		unattributed += loss
+	snapshot["unattributed"] = unattributed
+	return snapshot
 func _on_health(hp: int) -> void:
 	hp_lost += maxi(0, _last_hp - hp)
 	_last_hp = hp
@@ -118,6 +173,7 @@ func _enemy_event(event: StringName, payload: Dictionary, id: int) -> void:
 	var lost: int = maxi(0, int(_enemy_hp.get(id, remaining)) - remaining)
 	_enemy_hp[id] = remaining
 	effective_damage += lost
+	_pending_damage[id] = int(_pending_damage.get(id, 0)) + lost
 	metrics.raw.append({"kind": "effective_damage", "time": elapsed, "amount": lost, "remaining_hp": remaining, "target": id})
 func poll_boss_damage() -> void:
 	for enemy in enemies.get_children():
@@ -132,5 +188,6 @@ func poll_boss_damage() -> void:
 		for index in modules.size(): lost_modules += maxi(0, int(modules[index]) - int(enemy.module_hp[index]))
 		_module_hp[id] = enemy.module_hp.duplicate()
 		module_damage += lost_modules
+		_pending_damage[id] = int(_pending_damage.get(id, 0)) + lost + lost_modules
 		if lost > 0 or lost_modules > 0:
 			metrics.raw.append({"kind": "boss_damage", "time": elapsed, "core_loss": lost, "module_loss": lost_modules})

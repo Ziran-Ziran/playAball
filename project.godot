@@ -11,10 +11,12 @@ config_version=5
 [application]
 
 config/name="玩个球"
+config/version="1.0.0"
 run/main_scene="res://scenes/ui/main_menu.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 config/icon="res://assets/ui/app_icon/playaball.png"
 config/windows_native_icon="res://assets/ui/app_icon/playaball.ico"
+config/quit_on_go_back=false
 
 [autoload]
 
@@ -27,6 +29,8 @@ window/size/viewport_height=720
 window/size/window_width_override=1280
 window/size/window_height_override=720
 window/stretch/mode="canvas_items"
+window/stretch/aspect="keep"
+window/handheld/orientation=0
 
 [layer_names]
 
@@ -43,3 +47,4 @@ common/physics_ticks_per_second=120
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
 environment/defaults/default_clear_color=Color(0.025, 0.04, 0.075, 1)
+textures/vram_compression/import_etc2_astc=true

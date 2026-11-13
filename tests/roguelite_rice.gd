@@ -35,12 +35,16 @@ func run() -> void:
 	launcher.set_process(false)
 	var enemies := Node2D.new()
 	arena.add_child(enemies)
-	var manager = load("res://scripts/roguelite/rice_manager.gd").new()
-	manager.configure(player, launcher, enemies)
+	var health := DemoHealth.new()
+	arena.add_child(health)
+	var manager := RiceManager.new()
+	manager.configure(player, health, enemies)
 	arena.add_child(manager)
 	manager.set_physics_process(false)
-	manager.bind_launch(1)
-	check(manager.consume_bonus(1) == 0, "No food means no launch damage bonus")
+	check(not manager.spawn_rice(), "Full health blocks direct rice spawning")
+	manager._physics_process(12.1)
+	check(manager.get_child_count() == 0 and manager.elapsed == 0.0, "Full health blocks periodic spawning and clears timer")
+	health.hp = 3
 	check(manager.process_mode == Node.PROCESS_MODE_PAUSABLE, "Rice manager explicitly pauses with battle tree")
 	manager._physics_process(11.9)
 	check(manager.get_child_count() == 0, "Rice does not spawn before twelve battle seconds")
@@ -80,34 +84,41 @@ func run() -> void:
 	await frames(10)
 	check(companion.position.distance_to(companion_start) < 0.1, "Rice does not attract default companion")
 	launcher.remaining = 1.5
-	manager.bind_launch(8)
 	var meals: Array = []
+	var changes: Array = []
+	var damage_events: Array = []
 	manager.eaten.connect(func(point): meals.append(point))
+	health.changed.connect(func(hp): changes.append(hp))
+	health.damaged.connect(func(amount): damage_events.append(amount))
 	player.reset_body(rice.global_position)
 	await frames(5)
-	check(manager.stored_bonus and meals.size() == 1 and manager.get_child_count() == 0, "Player overlap consumes bowl exactly once")
-	if launcher.has_method("refund_cooldown"):
-		check(is_equal_approx(launcher.remaining, 0.9), "Eating refunds exactly 0.6 seconds cooldown")
-	else:
-		check(false, "Launcher exposes refund_cooldown integration")
-	check(manager.consume_bonus(8) == 0, "Old flying chain cannot spend newly eaten bonus")
-	manager.bind_launch(9)
-	check(manager.consume_bonus(8) == 0, "Bonus binds only to new launch chain")
-	manager.bind_launch(10)
-	check(manager.consume_bonus(9) == 0 and manager.consume_bonus(10) == 1, "Unspent bonus rebinds to next launch without being lost")
-	check(manager.consume_bonus(10) == 0, "Bonus adds one damage only once")
-	manager.stored_bonus = true
-	manager.bind_launch(11)
-	launcher.cancel()
-	check(manager.stored_bonus and manager.bound_chain == 11, "Cancelling aim preserves bound bonus")
-	manager.spawn_rice()
-	var second_rice = manager.rice
-	player.reset_body(second_rice.global_position)
+	check(health.hp == 4 and meals.size() == 1 and manager.get_child_count() == 0, "Overlap consumes once and heals one HP")
+	check(changes == [4] and damage_events.is_empty(), "Healing updates health UI without damage events")
+	check(is_equal_approx(launcher.remaining, 1.5), "Eating does not refund launch cooldown")
+	player.reset_body(Vector2(640, 540))
+	await frames(3)
+	manager.heal_amount = 3
+	check(manager.spawn_rice(), "Injured player can receive another bowl")
+	player.reset_body(manager.rice.global_position)
 	await frames(5)
-	manager.bind_launch(12)
-	check(manager.consume_bonus(12) == 1 and manager.consume_bonus(12) == 0, "Two meals never stack more than one reinforcement")
+	check(health.hp == health.max_hp, "Healing clamps to maximum HP")
+	check(not manager.spawn_rice(), "Healing to full suppresses further bowls")
 	manager.reset_rice()
-	check(not manager.stored_bonus and manager.bound_chain == 0 and manager.elapsed == 0, "Restart clears rice timer and reinforcement")
+	check(manager.rice == null and manager.elapsed == 0, "Restart clears bowl and timer")
+	health.hp = 4
+	player.reset_body(Vector2(640, 540))
+	await frames(3)
+	check(manager.spawn_rice(), "Bowl can exist before another source heals player")
+	health.hp = health.max_hp
+	manager.rice._on_body_entered(player)
+	await frames(2)
+	check(health.hp == health.max_hp and meals.size() == 2, "Existing bowl collected at full HP grants no extra health or heal cue")
+	health.hp = 0
+	check(not manager.spawn_rice(), "Dead player cannot spawn healing rice")
+	manager.health = null
+	check(not manager.spawn_rice(), "Missing health binding fails closed")
+	manager.health = health
+	health.hp = 3
 	player.reset_body(Vector2(640, 540))
 	await frames(3)
 	var enemy = load("res://scenes/roguelite/enemy.tscn").instantiate()
@@ -146,13 +157,11 @@ func run() -> void:
 	var stale = manager.rice
 	manager.remove_child(stale)
 	stale._on_body_entered(player)
-	check(not manager.stored_bonus, "Removed bowl callback cannot grant a new-run bonus")
+	check(health.hp == 3, "Removed bowl callback cannot heal a new run")
 	stale.free()
 	manager.spawn_rice()
-	manager.stored_bonus = true
-	manager.bind_launch(20)
 	arena.remove_child(manager)
-	check(manager.get_child_count() == 0 and not manager.stored_bonus and manager.bound_chain == 0 and manager.elapsed == 0, "Removing manager clears bowl force source, timer and bound bonus")
+	check(manager.get_child_count() == 0 and manager.rice == null and manager.elapsed == 0, "Removing manager clears bowl force source, and timer")
 	manager.free()
 	arena.queue_free()
 	await frames(2)

@@ -8,6 +8,8 @@
 
 ## 工程约定
 
+- **角色身份固定**：凡与鱼、鲸、大肥鱼有关的角色、头像、UI装饰或动画，均使用 DS（DeepSeek）鲸鱼娘的人物形象：蓝发蓝瞳、鲸鳍耳饰、白色女仆头饰、深蓝白女仆裙与鲸尾；允许同一人物的Q版/团子化，不得替换成普通蓝鲸、鱼类动物或其他吉祥物。生成前对照 `assets/ui/fat_fish_menu_character.png`、`assets/roguelite/ball_art_r4/hero.png` 与 `docs/art/mascot_references_r4.md`。水纹等环境图案不作为角色替代。
+
 - 固定 Godot **4.7.1 stable 标准版**，2D、GDScript、Compatibility；使用内置节点和物理。
 - 小功能、小脚本、小 PR。文件名 snake_case；节点 PascalCase；类型明确；中文注释解释原因。
 - 用 RigidBody2D 与冲量发射，不逐帧修改刚体位置假装物理。复位集中到物理状态接口。

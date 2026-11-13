@@ -126,10 +126,10 @@ func launch_with_drag(drag: Vector2) -> bool:
 	fired.emit(shots)
 	return true
 
-func cancel() -> void:
+func cancel(release_owned_pause: bool = true) -> void:
 	aim_cancelled.emit()
 	# 外部阻塞已接管暂停；取消瞄准不能解除菜单或成长暂停。
-	if _owns_aim_pause and is_inside_tree() and not blocked:
+	if release_owned_pause and _owns_aim_pause and is_inside_tree() and not blocked:
 		get_tree().paused = false
 	_owns_aim_pause = false
 	aiming = false
@@ -150,4 +150,5 @@ func reset_launch() -> void:
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_WM_WINDOW_FOCUS_OUT:
-		cancel()
+		# Android父Arena会在正常idle消费挂起意图；子节点不能抢先恢复一次物理。
+		cancel(not OS.has_feature("android"))

@@ -25,6 +25,8 @@ func run() -> void:
 		quit(1)
 		return
 	var arena = load("res://scenes/roguelite/run.tscn").instantiate()
+	# 此夹具依赖首批敌人数；正式默认随机后，显式保留旧基线以复现奖励门槛。
+	arena.get_node("RunDirector").run_seed = 31030
 	root.add_child(arena)
 	current_scene = arena
 	await frames(3)
@@ -98,18 +100,16 @@ func run() -> void:
 	var target: DemoTarget = load("res://scenes/roguelite/destructible.tscn").instantiate()
 	target.position = Vector2(300, 300)
 	arena.add_child(target)
-	director.rice.stored_bonus = true
-	director.rice.bound_chain = 0
+	director.health.hp = 3
+	director.rice.spawn_rice()
+	check(is_instance_valid(director.rice.rice), "Formal run wires injured health to rice manager")
+	director.rice._on_collected(director.rice.rice)
+	check(director.health.hp == 4, "Formal run rice restores one HP")
 	arena.player.chain_id = 42
 	arena.combat.resolve(arena.player, target, 180.0, target.position)
-	check(target.hp == 2 and director.rice.stored_bonus, "Existing flying chain cannot consume newly eaten rice bonus")
-	arena.launcher.fired.emit(43)
-	arena.player.chain_id = 43
-	arena.combat.elapsed += 0.2
-	arena.combat.resolve(arena.player, target, 180.0, target.position)
-	check(target.hp == 0 and not director.rice.stored_bonus, "Next active launch receives exactly one extra rice damage")
+	check(target.hp == 2, "Eating rice leaves collision damage unchanged")
 	director.restart()
-	check(not director.rice.stored_bonus and director.rice.bound_chain == 0 and director.rice.rice == null, "Restart clears rice, bonus and bound launch")
+	check(director.rice.rice == null and director.rice.elapsed == 0, "Restart clears rice and timer")
 	target.queue_free()
 	# 完全占用场地时必须等待，而不是把新增伙伴塞进墙或主球。
 	var wall := StaticBody2D.new()

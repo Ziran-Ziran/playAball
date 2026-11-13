@@ -5,8 +5,8 @@
 [ext_resource type="FontFile" path="res://assets/fonts/zcool_kuaile/ZCOOLKuaiLe-Regular.ttf" id="3"]
 
 [sub_resource type="StyleBoxFlat" id="Frame"]
-bg_color = Color(0.035,0.105,0.085,1)
-border_color = Color(0.42,0.62,0.48,1)
+bg_color = Color(1,1,1,1)
+border_color = Color(0.79,0.83,0.93,1)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
@@ -22,7 +22,7 @@ border_width_left = 2
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
-border_color = Color(0.82, 1, 0.87, 1)
+border_color = Color(0.32,0.42,0.86,1)
 corner_radius_top_left = 15
 corner_radius_top_right = 15
 corner_radius_bottom_left = 15
@@ -49,17 +49,17 @@ mouse_filter = 2
 
 [node name="Category" type="Label" parent="Content"]
 mouse_filter = 2
-theme_override_colors/font_color = Color(0.62, 0.8, 0.77, 1)
+theme_override_colors/font_color = Color(0.40,0.48,0.64,1)
 theme_override_font_sizes/font_size = 12
 horizontal_alignment = 1
 
 [node name="Heading" type="Label" parent="Content"]
 mouse_filter = 2
-theme_override_colors/font_color = Color(1, 0.94, 0.81, 1)
+theme_override_colors/font_color = Color(0.14,0.22,0.42,1)
 theme_override_fonts/font = ExtResource("3")
-theme_override_colors/font_outline_color = Color(0.055, 0.13, 0.105, 0.9)
+theme_override_colors/font_outline_color = Color(0.14,0.22,0.42,0)
 theme_override_constants/outline_size = 2
-theme_override_colors/font_shadow_color = Color(0.025, 0.07, 0.055, 0.65)
+theme_override_colors/font_shadow_color = Color(0.14,0.22,0.42,0)
 theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 2
 theme_override_font_sizes/font_size = 24
@@ -75,13 +75,13 @@ stretch_mode = 5
 
 [node name="Level" type="Label" parent="Content"]
 mouse_filter = 2
-theme_override_colors/font_color = Color(0.7, 0.83, 0.78, 1)
+theme_override_colors/font_color = Color(0.40,0.48,0.64,1)
 theme_override_font_sizes/font_size = 12
 horizontal_alignment = 1
 
 [node name="Preview" type="Label" parent="Content"]
 mouse_filter = 2
-theme_override_colors/font_color = Color(0.72, 0.96, 0.83, 1)
+theme_override_colors/font_color = Color(0.22,0.32,0.64,1)
 theme_override_font_sizes/font_size = 16
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -89,12 +89,12 @@ autowrap_mode = 3
 
 [node name="Detail" type="Label" parent="Content"]
 mouse_filter = 2
-theme_override_colors/font_color = Color(0.88, 0.92, 0.9, 1)
+theme_override_colors/font_color = Color(0.25,0.31,0.43,1)
 theme_override_font_sizes/font_size = 14
 autowrap_mode = 3
 
 [node name="Flavor" type="Label" parent="Content"]
 mouse_filter = 2
-theme_override_colors/font_color = Color(0.66, 0.76, 0.71, 1)
+theme_override_colors/font_color = Color(0.48,0.52,0.62,1)
 theme_override_font_sizes/font_size = 11
 horizontal_alignment = 1

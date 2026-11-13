@@ -1,0 +1,14 @@
+{
+  "tool": "built-in image_gen",
+  "date": "2026-11-10",
+  "source_output": "exec-24b622ff-635a-4851-8ed0-540555cff441.png",
+  "path": "assets/ui/build_feedback/strategy_badges.png",
+  "size": [
+    1254,
+    1254
+  ],
+  "mode": "RGBA",
+  "sha256": "8cab675ff33d792e520adfe83174d35f68a00f0316ae2ac7c365c364b8b7c9d3",
+  "layout": "2x2; top-left relay, top-right viral explosion, bottom-left bowling surge, bottom-right rice repair supply",
+  "prompt": "Create a polished production-ready 2x2 square sprite atlas for a premium cozy anime 2D physics roguelite UI. Transparent background. Exact four equal square cells in a 1024x1024 image, each icon centered with generous transparent margins, no overlapping across cells. Consistent hand-painted cel illustration, crisp dark navy outlines, luminous icy-blue and white highlights, soft lavender secondary detail. Top-left: three distinct small chibi energy orbs mint-white, warm peach, violet, linked in an ascending relay arc with three bright nodes; orbs are magical glass spheres not animals or human faces. Top-right: cute stylized spiky virus shell being shattered in a controlled circular blue blast, recognizable virus, clear broken shell and three outward sparks. Bottom-left: two small spiky virus shells caught by a forward icy-blue comet shockwave, directional momentum, a satisfying finishing surge. Bottom-right: a beautiful small white rice bowl and a blue repair wrench crossed behind, tiny supply sparkle. These are informative strategy icons used at 32-52px so strong silhouettes and restrained detail. No text, letters, numbers, panels, card frames, borders, ground, background glow outside the icons, ordinary whales, fish, people, or branding. All four icons have equal apparent scale and match blue-white maid game UI art. Preserve alpha transparency around every icon."
+}

@@ -1,6 +1,11 @@
 extends SceneTree
 var failures: int = 0
 var checks: int = 0
+class LegacyEventDirector extends Node:
+	var rest_revision: int = 7
+	var selected: String = ""
+	func resolve_event(id: String, revision: int) -> void:
+		if revision == rest_revision: selected = id
 func _initialize() -> void:
 	call_deferred("run")
 func check(ok: bool, message: String) -> void:
@@ -135,5 +140,67 @@ func run() -> void:
 	await process_frame
 	paused=false
 	await create_timer(0.2).timeout
+	await full_agent_v4_cases()
 	print("BALANCE METRIC CHECKS PASSED: ", checks) if failures == 0 else print("BALANCE METRIC FAILURES: ", failures)
 	quit(0 if failures == 0 else 1)
+
+func full_agent_v4_cases() -> void:
+	var game = load("res://scenes/roguelite/run.tscn").instantiate()
+	root.add_child(game)
+	await process_frame
+	var director = game.director
+	director.set_process(false)
+	director.clear_container(director.enemies)
+	director.pending.clear()
+	director.wave = 4
+	director.enter_rest("event")
+	# 资金仅由事务测试夹具准备；代理本身只能调用正式购买，不注入钱或生命。
+	director.wallet.balance = 30
+	director.health.hp = 2
+	var agent = load("res://scripts/roguelite/evaluation/full_run_agent.gd").new()
+	game.add_child(agent)
+	agent.bind(game, load("res://resources/roguelite/balance/baseline.tres"), "partners")
+	agent.set_process(false)
+	agent.drive_event_supply()
+	check(director.reward_source == "event_paid" and director.wallet.balance == 18, "V4 event agent buys affordable growth before low-health heal")
+	check(agent.paid_actions.size() == 1 and agent.paid_actions[0].spent == 12, "V4 records only successful real paid transactions")
+	director.choose_upgrade(director.current_choices[0].id, director._choice_revision)
+	agent.drive_event_supply()
+	check(director.health.hp >= 4 and director.wallet.balance == 12 and agent.paid_actions.size() == 2, "V4 return purchases one low-health heal with real balance")
+	check(director.reward_source == "event", "V4 proceeds to original free supply after paid stock is consumed")
+	director.choose_upgrade(director.current_choices[0].id, director._choice_revision)
+	check(director.state == director.State.TRANSITION, "V4 event strategy exits rather than cycling paid menu")
+	paused = false
+	director.debug_wave(1)
+	director.pending.clear()
+	await physics_frame
+	await physics_frame
+	var victim: DemoEnemy = load("res://scenes/roguelite/enemy.tscn").instantiate()
+	victim.position = Vector2(800, 400)
+	director.enemies.add_child(victim)
+	victim.hp = 10
+	victim.freeze = true
+	victim.set_physics_process(false)
+	agent._watch_enemy(victim.get_instance_id())
+	director.player.chain_id = 55
+	director.build.levels = {"echo": 1}
+	director.combat.resolve(director.player, victim, 900, victim.position)
+	director.combat._advance_echoes(0.13)
+	agent.collect_source_damage()
+	var attribution: Dictionary = agent.source_damage_snapshot()
+	check(attribution.get("player_direct", 0) == 3 and attribution.get("echo", 0) == 1, "V4 source attribution separates direct and extra real HP loss")
+	check(attribution.unattributed == 0 and agent.effective_damage == 4, "V4 attributed contributions reconcile to observed actual HP")
+	game.queue_free()
+	await process_frame
+	var legacy := LegacyEventDirector.new()
+	var legacy_health := DemoHealth.new()
+	root.add_child(legacy)
+	root.add_child(legacy_health)
+	var old_agent = load("res://scripts/roguelite/evaluation/full_run_agent.gd").new()
+	old_agent.director = legacy
+	old_agent.health = legacy_health
+	old_agent.drive_event_supply()
+	check(legacy.selected == "upgrade", "V4 gracefully supports old director without paid-supply method")
+	old_agent.free()
+	legacy.free()
+	legacy_health.free()

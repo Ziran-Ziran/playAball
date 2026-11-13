@@ -1,31 +1,34 @@
 class_name RiceManager
 extends Node2D
 signal eaten(point: Vector2)
+@export_range(1, 20) var heal_amount: int = 1
 @export var spawn_interval: float = 12.0
 @export var safe_bounds: Rect2 = Rect2(140, 190, 1000, 430)
 @export var player_clearance: float = 180.0
 @export var spawn_points: Array[Vector2] = [Vector2(400, 250), Vector2(880, 550), Vector2(880, 250), Vector2(400, 550), Vector2(640, 250), Vector2(640, 400)]
 var player: DemoPlayer
-var launcher: DemoLaunch
+var health: DemoHealth
 var enemies: Node2D
 var map_provider: Node
 var rice: DemoRice
 var elapsed: float = 0.0
-var stored_bonus: bool = false
-var bound_chain: int = 0
 var _spawn_cursor: int = 0
 const RICE_SCENE: PackedScene = preload("res://scenes/roguelite/rice_lure.tscn")
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_PAUSABLE
 
-func configure(new_player: DemoPlayer, new_launcher: DemoLaunch, new_enemies: Node2D) -> void:
+func configure(new_player: DemoPlayer, new_health: DemoHealth, new_enemies: Node2D) -> void:
 	player = new_player
-	launcher = new_launcher
+	health = new_health
 	enemies = new_enemies
 
 func _physics_process(delta: float) -> void:
 	if not is_instance_valid(player) or player.reset_pending:
+		return
+	# 满血/死亡不积攒生成时间，重新受伤后再等一个完整周期。
+	if not _needs_healing():
+		elapsed = 0.0
 		return
 	elapsed += delta
 	if elapsed >= maxf(0.1, spawn_interval):
@@ -33,7 +36,7 @@ func _physics_process(delta: float) -> void:
 		spawn_rice()
 
 func spawn_rice() -> bool:
-	if not is_inside_tree() or not is_instance_valid(player) or (is_instance_valid(rice) and rice.is_inside_tree()):
+	if not _needs_healing() or not is_inside_tree() or not is_instance_valid(player) or (is_instance_valid(rice) and rice.is_inside_tree()):
 		return false
 	for index in spawn_points.size():
 		var candidate: Vector2 = spawn_points[(_spawn_cursor + index) % spawn_points.size()]
@@ -79,26 +82,16 @@ func _in_warning_lane(offset: Vector2, direction: Vector2, width: float, distanc
 	var forward: float = offset.dot(direction)
 	return forward >= -60.0 and forward <= distance and absf(offset.cross(direction)) < width
 
+func _needs_healing() -> bool:
+	return is_instance_valid(health) and health.hp > 0 and health.hp < health.max_hp
+
 func _on_collected(bowl: DemoRice) -> void:
-	if not is_inside_tree() or bowl != rice or not bowl.is_inside_tree():
+	if not is_inside_tree() or bowl != rice or not bowl.is_inside_tree() or not _needs_healing():
 		return
-	# 再吃一碗刷新待绑定强化，不叠层，也不把新强化交给旧飞行链。
-	stored_bonus = true
-	bound_chain = 0
-	if is_instance_valid(launcher) and launcher.has_method("refund_cooldown"):
-		launcher.call("refund_cooldown", 0.6)
+	# 治疗只发布生命变化，不触发受伤事件，也不修改冷却或碰撞伤害。
+	health.hp = mini(health.max_hp, health.hp + maxi(1, heal_amount))
+	health.changed.emit(health.hp)
 	eaten.emit(bowl.global_position)
-
-func bind_launch(chain: int) -> void:
-	if stored_bonus and chain > 0:
-		bound_chain = chain
-
-func consume_bonus(chain: int) -> int:
-	if not stored_bonus or chain <= 0 or chain != bound_chain:
-		return 0
-	stored_bonus = false
-	bound_chain = 0
-	return 1
 
 func reset_rice() -> void:
 	for child in get_children():
@@ -106,8 +99,6 @@ func reset_rice() -> void:
 		child.queue_free()
 	rice = null
 	elapsed = 0.0
-	stored_bonus = false
-	bound_chain = 0
 	_spawn_cursor = 0
 
 func _exit_tree() -> void:

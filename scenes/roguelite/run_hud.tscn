@@ -1,6 +1,7 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene load_steps=7 format=3]
 [ext_resource type="Script" path="res://scripts/roguelite/run_hud.gd" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/roguelite/presentation/health_view.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://scenes/ui/result_body.tscn" id="result"]
 [sub_resource type="SystemFont" id="Font"]
 font_names = PackedStringArray("Microsoft YaHei", "PingFang SC", "Noto Sans CJK SC", "WenQuanYi Zen Hei")
 [sub_resource type="Theme" id="Theme"]
@@ -53,12 +54,18 @@ layout_mode = 2
 size_flags_vertical = 3
 alignment = 1
 theme_override_constants/separation = 14
-[node name="Restart" type="Button" parent="Overlay/Panel/Content"]
+[node name="ResultBody" parent="Overlay/Panel/Content" instance=ExtResource("result")]
+[node name="ResultActions" type="HBoxContainer" parent="Overlay/Panel/Content"]
+visible = false
+theme_override_constants/separation = 14
+[node name="Restart" type="Button" parent="Overlay/Panel/Content/ResultActions"]
 layout_mode = 2
 text = "重新开局"
 custom_minimum_size = Vector2(0, 54)
-[node name="Home" type="Button" parent="Overlay/Panel/Content"]
+size_flags_horizontal = 3
+[node name="Home" type="Button" parent="Overlay/Panel/Content/ResultActions"]
 visible = false
 layout_mode = 2
 text = "返回主菜单"
 custom_minimum_size = Vector2(0, 54)
+size_flags_horizontal = 3

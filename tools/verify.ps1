@@ -10,6 +10,12 @@ if (-not $GodotExe -or -not (Test-Path -LiteralPath $GodotExe -PathType Leaf)) {
 $projectRoot = Split-Path -Parent $PSScriptRoot
 $logDirectory = Join-Path $projectRoot '.local'
 New-Item -ItemType Directory -Force -Path $logDirectory | Out-Null
+$originalAppData = $env:APPDATA
+# 音频回归会保存静音偏好；每次整批使用新用户目录，既不污染玩家设置也不继承上次测试状态。
+$verificationProfile = Join-Path $logDirectory ('verify-profile-' + [Guid]::NewGuid().ToString('N'))
+New-Item -ItemType Directory -Force -Path $verificationProfile | Out-Null
+$env:APPDATA = $verificationProfile
+try {
 foreach ($step in @(
     @{ Name = 'version'; Arguments = '--version' },
     @{ Name = 'import'; Arguments = '--headless --path "' + $projectRoot + '" --editor --import' },
@@ -18,6 +24,14 @@ foreach ($step in @(
     @{ Name = 'input_feedback'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_input_feedback.gd' },
     @{ Name = 'enemies'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_enemies.gd' },
     @{ Name = 'build'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_build.gd' },
+    @{ Name = 'strategy_payoff'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_strategy_payoff.gd' },
+    @{ Name = 'build_economy'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_build_economy.gd' },
+    @{ Name = 'build_economy_gui'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_build_economy_gui.gd' },
+    @{ Name = 'card_gestures'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_card_gestures.gd' },
+    @{ Name = 'build_feedback'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_build_feedback.gd' },
+    @{ Name = 'pause_physics'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_pause_physics.gd' },
+    @{ Name = 'platform_mobile'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/platform_mobile.gd' },
+    @{ Name = 'platform_pause_order'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_platform_pause_order.gd' },
     @{ Name = 'boss'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_boss.gd' },
     @{ Name = 'run'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_run.gd' },
     @{ Name = 'rice'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_rice.gd' },
@@ -42,6 +56,7 @@ foreach ($step in @(
     @{ Name = 'live_tuning'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_live_tuning.gd' },
     @{ Name = 'full_tuning'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_full_tuning.gd' },
     @{ Name = 'ui_integration'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/ui_integration.gd' },
+    @{ Name = 'ocean_ui'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/ocean_ui.gd' },
     @{ Name = 'map_mechanisms'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_map_mechanisms.gd' },
     @{ Name = 'portals'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_portals.gd' },
     @{ Name = 'maps'; Arguments = '--headless --path "' + $projectRoot + '" --script tests/roguelite_maps.gd' },
@@ -89,12 +104,21 @@ foreach ($step in @(
     }
     $completionMarkers = @{ enemies = 'ENEMY CHECKS PASSED'; build = 'BUILD CHECKS PASSED'; boss = 'ROGUELITE BOSS: \d+ checks, 0 failures'; run = 'RUN CHECKS PASSED'; rice = 'RICE CHECKS PASSED'; theme = 'ROGUELITE THEME: \d+ checks, 0 failures' }
     $completionMarkers.kill_rewards = 'KILL REWARD CHECKS PASSED'
+    $completionMarkers.strategy_payoff = 'STRATEGY PAYOFF CHECKS: \d+ failures: 0'
+    $completionMarkers.build_economy = 'BUILD ECONOMY CHECKS: \d+ failures: 0'
+    $completionMarkers.build_economy_gui = 'BUILD ECONOMY GUI CHECKS: \d+ failures: 0'
+    $completionMarkers.card_gestures = 'CARD GESTURE CHECKS \d+ failures 0'
+    $completionMarkers.build_feedback = 'BUILD FEEDBACK CHECKS PASSED: \d+ failures: 0'
+    $completionMarkers.pause_physics = 'PAUSE PHYSICS CHECKS: \d+ failures: 0'
+    $completionMarkers.platform_mobile = 'PLATFORM MOBILE CHECKS \d+ failures 0'
+    $completionMarkers.platform_pause_order = 'PLATFORM PAUSE ORDER CHECKS: \d+ failures: 0'
     $completionMarkers.card_art = 'CARD ART CHECKS: \d+ checks, 0 failures'
     $completionMarkers.kill_run = 'KILL RUN CHECKS PASSED'
     $completionMarkers.launch_rewards = 'ROGUELITE LAUNCH REWARDS: \d+ checks, 0 failures'
     $completionMarkers.reward_effects = 'REWARD EFFECTS CHECKS PASSED'
     $completionMarkers.audio = 'Audio checks: \d+, failures: 0'
     $completionMarkers.hud = 'HUD CHECKS PASSED'
+    $completionMarkers.ocean_ui = 'OCEAN UI CHECKS: \d+ checks, 0 failures'
     $completionMarkers.feedback_integration = 'FEEDBACK INTEGRATION CHECKS PASSED'
     $completionMarkers.stage_flow = 'STAGE FLOW CHECKS PASSED'
     $completionMarkers.shop_events = 'SHOP EVENT CHECKS PASSED'
@@ -138,4 +162,7 @@ foreach ($step in @(
         throw '未获得目录检查完成标志。'
     }
 }
-Write-Output 'VERIFIED: import + map + all 52 behavior suites including persistent music, continuous hero motion and card content flow'
+Write-Output 'VERIFIED: import + map + all 61 behavior suites including build reroll, precision payoff, touch card gestures and platform pause order'
+} finally {
+    $env:APPDATA = $originalAppData
+}

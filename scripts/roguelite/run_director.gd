@@ -1,9 +1,13 @@
 extends Node2D
 signal run_event(event: String)
+signal precision_refunded(chain: int, seconds: float)
+signal precision_rewarded(point: Vector2, refunded_seconds: float)
 enum State { BATTLE, UPGRADE, PAUSED, VICTORY, DEFEAT, SHOP, EVENT, TRANSITION }
 @export var enable_stage_breaks: bool = true
 @export var heal_price: int = 4
 @export var upgrade_price: int = 8
+@export var event_heal_price: int = 6
+@export var event_upgrade_price: int = 12
 @export var transition_duration: float = 3.0
 @export var split_enabled: bool = false
 var flow = preload("res://scripts/roguelite/stage_flow.gd").new()
@@ -26,7 +30,9 @@ var _rest_kind: String = ""
 var _wave_queued: int = 0
 var _wave_heavies: int = 0
 var _wave_turrets: int = 0
-@export var run_seed: int = 31030
+## 正数种子可复现；0让正式重玩抽取新序列，测试/评估显式设置正数。
+@export var run_seed: int = 0
+var _active_run_seed: int = 0
 @export var reward_first: int = 6
 @export var reward_increment: int = 2
 @export var reward_cap: int = 16
@@ -47,6 +53,8 @@ var maps: Node
 var build
 var rewards = preload("res://scripts/roguelite/kill_rewards.gd").new()
 var chosen_rewards: int = 0
+@export var reroll_prices: PackedInt32Array = PackedInt32Array([6, 10, 14])
+var rerolls_used: int = 0
 var _run_revision: int = 0
 var _choice_revision: int = 0
 var _pulse_left: float = 0.0
@@ -77,6 +85,7 @@ func setup(owner_arena: Node2D) -> void:
 	hud = arena.get_node("RunHUD")
 	build = load("res://scripts/roguelite/run_build.gd").new()
 	combat.build = build
+	combat.precision_chain_completed.connect(_on_precision_chain_completed)
 	health = load("res://scripts/roguelite/player_health.gd").new()
 	health.process_mode = Node.PROCESS_MODE_PAUSABLE
 	add_child(health)
@@ -85,12 +94,10 @@ func setup(owner_arena: Node2D) -> void:
 	maps.player_health = health
 	rice = load("res://scripts/roguelite/rice_manager.gd").new()
 	rice.player = player
-	rice.launcher = launcher
+	rice.health = health
 	rice.enemies = enemies
 	rice.map_provider = maps
 	add_child(rice)
-	combat.rice_bonus = rice
-	launcher.fired.connect(rice.bind_launch)
 	rice.eaten.connect(arena.feedback.play_cue)
 	assists = load("res://scripts/roguelite/assist_effects.gd").new()
 	assists.player = player
@@ -103,6 +110,7 @@ func setup(owner_arena: Node2D) -> void:
 		_pulse_left = 0.3
 	)
 	hud.upgrade_selected.connect(choose_upgrade)
+	hud.reroll_requested.connect(reroll_upgrade)
 	hud.restart_requested.connect(request_restart)
 	rest_panel = load("res://scenes/roguelite/rest_panel.tscn").instantiate()
 	arena.add_child(rest_panel)
@@ -114,6 +122,7 @@ func clear_container(container: Node) -> void:
 		child.queue_free()
 
 func restart() -> void:
+	rerolls_used = 0
 	run_event.emit("reset")
 	rest_revision += 1
 	wallet.reset_wallet()
@@ -147,7 +156,13 @@ func restart() -> void:
 	health.reset_health()
 	companions.set_follow_enabled(false)
 	companions.set_count(build.companion_count())
-	rng.seed = run_seed
+	if run_seed > 0:
+		rng.seed = run_seed
+	else:
+		rng.randomize()
+		# randomize的uint64种子可能以负int64显示；规范后回填，反馈种子才能按正数复现。
+		rng.seed = maxi(1, rng.seed & 0x7FFFFFFFFFFFFFFF)
+	_active_run_seed = rng.seed
 	kills = 0
 	rewards.first_target = reward_first
 	rewards.increment = reward_increment
@@ -163,6 +178,9 @@ func request_restart() -> bool:
 		return false
 	restart()
 	return true
+
+func active_seed_value() -> int:
+	return _active_run_seed
 
 func start_wave(number: int, force_map: bool = false) -> void:
 	if is_instance_valid(maps):
@@ -406,7 +424,65 @@ func open_upgrade() -> void:
 	current_choices = build.candidates(rng, chosen_rewards == 0, health.hp, health.max_hp)
 	_choice_revision += 1
 	hud.show_choices(current_choices, build.levels, rewards.pending, _choice_revision)
+	_refresh_reroll()
 	get_tree().paused = true
+
+func _reroll_alternatives() -> Array[DemoUpgrade]:
+	var alternatives: Array[DemoUpgrade] = []
+	for card: DemoUpgrade in build.eligible_upgrades(health.hp, health.max_hp):
+		if not current_choices.any(func(old): return old.id == card.id):
+			alternatives.append(card)
+	return alternatives
+
+func _reroll_limit() -> int:
+	return mini(3, reroll_prices.size())
+
+func _refresh_reroll() -> void:
+	var remaining_count: int = maxi(0, _reroll_limit() - rerolls_used)
+	var price: int = maxi(0, reroll_prices[rerolls_used]) if remaining_count > 0 else 0
+	hud.show_reroll(wallet.balance, price, remaining_count, state == State.UPGRADE and health.hp > 0 and remaining_count > 0 and wallet.balance >= price and not _reroll_alternatives().is_empty())
+
+func reroll_upgrade(offer_id: int) -> bool:
+	# 玩法再验一次入场锁，不能仅依赖按钮disabled；同帧双击没有第二笔扣费。
+	if state != State.UPGRADE or health.hp <= 0 or offer_id != _choice_revision or not hud.choices_ready(offer_id) or rerolls_used >= _reroll_limit():
+		return false
+	var alternatives: Array[DemoUpgrade] = _reroll_alternatives()
+	var price: int = maxi(0, reroll_prices[rerolls_used])
+	if alternatives.is_empty() or wallet.balance < price:
+		return false
+	var first_guarantee: bool = reward_source == "kill" and chosen_rewards == 0
+	var replacement: Array[DemoUpgrade] = build.candidates(rng, first_guarantee, health.hp, health.max_hp)
+	if not replacement.any(func(card): return alternatives.has(card)):
+		# 一次有界生成后强制加入不同合法ID，保留首奖外包；没有循环抽卡。
+		replacement[replacement.size() - 1] = build.weighted_pick(alternatives, rng)
+	if not wallet.spend(price):
+		return false
+	rerolls_used += 1
+	_choice_revision += 1
+	current_choices = replacement
+	var old_title: String = hud.title.text
+	var old_summary: String = hud.summary.text
+	hud.show_choices(current_choices, build.levels, rewards.pending if reward_source == "kill" else 1, _choice_revision)
+	hud.title.text = old_title
+	hud.summary.text = old_summary
+	_refresh_reroll()
+	return true
+
+func _on_precision_chain_completed(source_id: int, chain: int, source_revision: int, combat_revision: int) -> void:
+	if state != State.BATTLE or health.hp <= 0 or launcher.blocked or not is_instance_valid(player) or player.is_queued_for_deletion() or player.reset_pending:
+		return
+	if player.get_instance_id() != source_id or player.chain_id != chain or player._reset_revision != source_revision or combat._echo_revision != combat_revision:
+		return
+	var refunded: float = minf(0.5, maxf(0.0, launcher.remaining))
+	if refunded <= 0.0:
+		return
+	var run_revision: int = _run_revision
+	launcher.refund_cooldown(0.5)
+	# recharged可同步更改场景/重开；只对仍在原局的真实结算发反馈。
+	if run_revision == _run_revision and state == State.BATTLE and health.hp > 0 and is_instance_valid(player) and combat._source_current(player, combat_revision, source_revision) and player.chain_id == chain:
+		precision_refunded.emit(chain, refunded)
+		if run_revision == _run_revision and state == State.BATTLE and health.hp > 0 and is_instance_valid(player) and combat._source_current(player, combat_revision, source_revision) and player.chain_id == chain:
+			precision_rewarded.emit(player.global_position, refunded)
 
 func choose_upgrade(id: String, offer_id: int = -1) -> void:
 	if state != State.UPGRADE:
@@ -431,6 +507,11 @@ func choose_upgrade(id: String, offer_id: int = -1) -> void:
 		reward_source = "kill"
 		state = State.EVENT
 		continue_stage(rest_revision)
+		return
+	if reward_source == "event_paid":
+		reward_source = "kill"
+		state = State.EVENT
+		refresh_rest()
 		return
 	if reward_source == "shop":
 		reward_source = "kill"
@@ -544,8 +625,6 @@ func debug_wave(number: int) -> void:
 
 func status_text() -> String:
 	var energy: String = "%d/%d次可发" % [launcher.charges, launcher.capacity] if launcher.available() else "冷却 %.1f" % (ceilf(launcher.remaining * 10.0) / 10.0)
-	if rice.stored_bonus:
-		energy += " · 饱饭"
 	return "生命%d/%d · %s · %s波 · 发射%d · 敌%d · 击杀%d · 奖励%d/%d（待选%d）" % [health.hp, health.max_hp, energy, "首领" if wave == 6 else str(wave), launcher.shots, alive_count(), kills, rewards.progress, rewards.next_target(), rewards.pending]
 
 func enter_rest(kind: String) -> void:
@@ -585,9 +664,11 @@ func refresh_rest() -> void:
 			{"id": "continue", "text": "继续下一阶段", "enabled": true}]
 	elif state == State.EVENT:
 		offers = [{"id": "heal", "text": "补给：恢复2点生命" + ("（满血）" if health.hp >= health.max_hp else ""), "enabled": health.hp < health.max_hp}, {"id": "upgrade", "text": "补给：免费选一次成长奖励", "enabled": true}, {"id": "skip", "text": "跳过并继续", "enabled": true}]
+		offers.insert(2, {"id": "paid_heal", "text": "整备：恢复2点生命 · %d币%s" % [event_heal_price, "（已购）" if shop_bought.has("paid_heal") else ""], "enabled": health.hp < health.max_hp and wallet.balance >= event_heal_price and not shop_bought.has("paid_heal")})
+		offers.insert(3, {"id": "paid_upgrade", "text": "整备：选一次成长 · %d币%s" % [event_upgrade_price, "（已购）" if shop_bought.has("paid_upgrade") else ""], "enabled": wallet.balance >= event_upgrade_price and not shop_bought.has("paid_upgrade")})
 	else:
 		return
-	var guidance: String = "每项限购一次，可直接继续。" if state == State.SHOP else "选择一项补给，或跳过继续。"
+	var guidance: String = "每项限购一次，可直接继续。" if state == State.SHOP else "可先用金币整备（各限一次），再选免费补给；也可直接继续。"
 	rest_panel.show_rest("阶段商店" if state == State.SHOP else "路边补给摊", "当前 %d币 · 生命%d/%d\n休息中，战斗与冷却暂停。%s" % [wallet.balance, health.hp, health.max_hp, guidance], offers, rest_revision)
 
 func _rest_action(action: String, revision: int) -> void:
@@ -626,12 +707,16 @@ func buy_shop(id: String, revision: int) -> bool:
 		_choice_revision += 1
 		rest_panel.hide()
 		hud.show_choices(current_choices, build.levels, 1, _choice_revision)
+		_refresh_reroll()
 		hud.title.text = "商店成长 · 选择一项"
 		hud.summary.text = "已支付 · 不消耗击杀奖励 · 选完返回商店"
 	return true
 
 func resolve_event(id: String, revision: int) -> void:
 	if state != State.EVENT or revision != rest_revision or health.hp <= 0:
+		return
+	if id in ["paid_heal", "paid_upgrade"]:
+		buy_event_supply(id.trim_prefix("paid_"), revision)
 		return
 	if id == "heal":
 		if health.hp >= health.max_hp:
@@ -645,6 +730,7 @@ func resolve_event(id: String, revision: int) -> void:
 		_choice_revision += 1
 		rest_panel.hide()
 		hud.show_choices(current_choices, build.levels, 1, _choice_revision)
+		_refresh_reroll()
 		hud.title.text = "补给成长 · 选择一项"
 		hud.summary.text = "免费补给 · 不消耗击杀奖励 · 选完进入下一阶段"
 		return
@@ -652,6 +738,34 @@ func resolve_event(id: String, revision: int) -> void:
 		return
 	run_event.emit("upgrade")
 	continue_stage(revision)
+
+func buy_event_supply(id: String, revision: int) -> bool:
+	# 付费整备不消耗免费补给；选卡后回到同一节点，库存绑定本次休息。
+	if state != State.EVENT or revision != rest_revision or health.hp <= 0 or id not in ["heal", "upgrade"]:
+		return false
+	var stock: String = "paid_" + id
+	if shop_bought.has(stock) or (id == "heal" and health.hp >= health.max_hp):
+		return false
+	var price: int = maxi(0, event_heal_price if id == "heal" else event_upgrade_price)
+	if not wallet.spend(price):
+		return false
+	shop_bought[stock] = true
+	if id == "heal":
+		health.hp = mini(health.max_hp, health.hp + 2)
+		health.changed.emit(health.hp)
+		run_event.emit("upgrade")
+		refresh_rest()
+	else:
+		reward_source = "event_paid"
+		state = State.UPGRADE
+		current_choices = build.candidates(rng, false, health.hp, health.max_hp)
+		_choice_revision += 1
+		rest_panel.hide()
+		hud.show_choices(current_choices, build.levels, 1, _choice_revision)
+		_refresh_reroll()
+		hud.title.text = "整备成长 · 选择一项"
+		hud.summary.text = "已支付 · 免费补给保留 · 选完返回补给摊"
+	return true
 
 func continue_stage(revision: int) -> void:
 	if state not in [State.SHOP, State.EVENT] or revision != rest_revision:

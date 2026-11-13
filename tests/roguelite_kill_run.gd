@@ -17,6 +17,8 @@ func frames(count: int) -> void:
 	await process_frame
 func run() -> void:
 	var arena = load("res://scenes/roguelite/run.tscn").instantiate()
+	# 奖励断言依赖固定首批数量，正式随机重玩不应让回归夹具随机失效。
+	arena.get_node("RunDirector").run_seed = 31030
 	root.add_child(arena)
 	current_scene = arena
 	await frames(3)
