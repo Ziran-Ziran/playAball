@@ -291,6 +291,8 @@ playAball/
 │   │   ├── 2026-11-10-release-final.md  # 发布前整批最终Review：自查、独立审查、全量与实际包证据、授权和明确未测项。
 │   │   ├── 2026-11-10-release-playtest-results.md  # 同v4评估器18独立局的真实结果、完整策略复评分与未通过的体验条件。
 │   │   ├── 2026-11-10-rice-map-ds-ui.md  # 本批白饭/地图/DS蓝白UI的Git前最终Review、独立审查、新鲜测试与commit/push授权边界。
+│   │   ├── 2026-11-13-cleanup-release-independent.md  # 未参与整理实现Agent对隔离映射、原字节与正式成品、文档/目录的独立Review。
+│   │   ├── 2026-11-13-cleanup-release.md  # 本轮本机归档整理、成品哈希与验证、公开推送/合并/Release授权和已知边界自查。
 │   │   └── collision-demo-final.md  # 当前Demo最终独立Review、首领真实接触修复、验证与人工未测证据。
 │   ├── tutorials/  # 每个功能的实现原理和手动修改教程
 │   │   ├── 001-prototype.md  # 球发射、碰撞表现、机关、目标和手动调参的初始教程。
@@ -357,7 +359,8 @@ playAball/
 │   │   ├── 059-query-safe-map-pause.md  # 真实危险球致死暴露的翻板物理锁问题、revision延后模式修复和四图复现。
 │   │   ├── 060-rerolls-and-precision-chain.md  # 有限金币重选事务、候选保证、入场防重复与真实三敌精准回能的开发者教程。
 │   │   ├── 061-release-packaging.md  # 双平台release构建、旁置Live2D新增路径接线、来源通知、签名备份与包探针教程。
-│   │   └── 062-platform-pause-order.md  # Android暂停恢复的间歇性原生错误、最小通知交易修正、基线对照与原生验收限制。
+│   │   ├── 062-platform-pause-order.md  # Android暂停恢复的间歇性原生错误、最小通知交易修正、基线对照与原生验收限制。
+│   │   └── 063-cleanup-and-public-release.md  # 可再生文件与私有资源边界、保留式隔离/证据追溯及PR合并和Release维护教程。
 │   ├── .gdignore  # 让 Godot 跳过文档目录的资源导入，避免把交接图当作游戏素材。
 │   ├── FILE_MAP.md  # 自动生成的项目文件树、每个文件的用途及主要调用关系。
 │   ├── PROJECT.md  # 已采纳的游戏目标、技术选择、原型范围与模块边界。

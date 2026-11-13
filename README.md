@@ -2,6 +2,8 @@
 
 俯视2D物理碰撞游戏：反向拖拽发射肥鱼球，撞击敌人、培养伙伴，经过三个阶段与Boss关。
 
+Windows和安卓安装包、校验与已知限制见[GitHub Releases](https://github.com/Ziran-Ziran/playAball/releases)。文件整理和发布维护见[教程063](docs/tutorials/063-cleanup-and-public-release.md)。
+
 ## 运行
 
 使用 **Godot 4.7.1 stable 标准版、Compatibility** 打开 `project.godot`，按 **F5** 进入主菜单。源码包含地图、美术、卡牌和用户提供的背景音乐。

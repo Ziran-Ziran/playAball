@@ -843,6 +843,9 @@
     "tests/roguelite_card_gestures.gd.uid": "同名GDScript的Godot稳定资源UID，随脚本提交。",
     "tests/roguelite_platform_pause_order.gd": "Android系统Back/挂起意图在正常idle原子消费、输入屏障及旧局失效的13项顺序回归。",
     "tests/roguelite_platform_pause_order.gd.uid": "同名GDScript的Godot稳定资源UID，随脚本提交。",
-    "docs/tutorials/062-platform-pause-order.md": "Android暂停恢复的间歇性原生错误、最小通知交易修正、基线对照与原生验收限制。"
+    "docs/tutorials/062-platform-pause-order.md": "Android暂停恢复的间歇性原生错误、最小通知交易修正、基线对照与原生验收限制。",
+    "docs/tutorials/063-cleanup-and-public-release.md": "可再生文件与私有资源边界、保留式隔离/证据追溯及PR合并和Release维护教程。",
+    "docs/reviews/2026-11-13-cleanup-release.md": "本轮本机归档整理、成品哈希与验证、公开推送/合并/Release授权和已知边界自查。",
+    "docs/reviews/2026-11-13-cleanup-release-independent.md": "未参与整理实现Agent对隔离映射、原字节与正式成品、文档/目录的独立Review。"
   }
 }
